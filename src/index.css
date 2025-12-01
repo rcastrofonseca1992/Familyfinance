@@ -2098,6 +2098,10 @@
     font-size: 10px;
   }
 
+  .text-\[40px\] {
+    font-size: 40px;
+  }
+
   .leading-none {
     --tw-leading: 1;
     line-height: 1;
@@ -2160,6 +2164,10 @@
 
   .whitespace-nowrap {
     white-space: nowrap;
+  }
+
+  .text-\[rgb\(255\,76\,0\)\] {
+    color: #ff4c00;
   }
 
   .text-blue-500 {
