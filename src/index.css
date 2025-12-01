@@ -2166,8 +2166,8 @@
     white-space: nowrap;
   }
 
-  .text-\[rgb\(15\,58\,50\)\] {
-    color: #0f3a32;
+  .text-\[rgb\(255\,0\,0\)\] {
+    color: red;
   }
 
   .text-blue-500 {
