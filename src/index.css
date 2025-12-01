@@ -2098,8 +2098,8 @@
     font-size: 10px;
   }
 
-  .text-\[40px\] {
-    font-size: 40px;
+  .text-\[32px\] {
+    font-size: 32px;
   }
 
   .leading-none {
@@ -2166,8 +2166,8 @@
     white-space: nowrap;
   }
 
-  .text-\[rgb\(255\,76\,0\)\] {
-    color: #ff4c00;
+  .text-\[rgb\(15\,58\,50\)\] {
+    color: #0f3a32;
   }
 
   .text-blue-500 {
