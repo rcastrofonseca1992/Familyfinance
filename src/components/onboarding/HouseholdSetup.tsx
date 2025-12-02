@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -9,9 +8,11 @@ import { PremiumCard } from '../ui/PremiumCard';
 import { useFinance, Household } from '../store/FinanceContext';
 import { toast } from 'sonner@2.0.3';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 export const HouseholdSetup: React.FC = () => {
   const { createHousehold, joinHousehold, logout, data, checkServerHousehold, enterHousehold } = useFinance();
+  const { t } = useLanguage();
   const [mode, setMode] = useState<'choose' | 'create' | 'join'>('choose');
   const [name, setName] = useState('My Family');
   const [code, setCode] = useState('');
@@ -116,8 +117,8 @@ export const HouseholdSetup: React.FC = () => {
                 className="w-full max-w-2xl"
             >
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold tracking-tight mb-[16px] mt-[80px] mr-[0px] ml-[0px]">Welcome to Family Finance</h1>
-                    <p className="text-xl text-muted-foreground">Are you setting up a new household or joining an existing one?</p>
+                    <h1 className="text-4xl font-bold tracking-tight mb-[16px] mt-[80px] mr-[0px] ml-[0px]">{t('household.welcomeTitle')}</h1>
+                    <p className="text-xl text-muted-foreground">{t('household.chooseOption')}</p>
                 </div>
 
                 {foundHousehold && (
@@ -133,10 +134,10 @@ export const HouseholdSetup: React.FC = () => {
                             <div className="h-12 w-12 bg-primary/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/30 transition-colors">
                                 <Home className="h-6 w-6 text-primary" />
                             </div>
-                            <h3 className="text-xl font-bold mb-2">Household Found</h3>
-                            <p className="text-muted-foreground mb-6">You are already a member of <span className="font-medium text-foreground">{foundHousehold.name}</span></p>
+                            <h3 className="text-xl font-bold mb-2">{t('household.householdFound') || 'Household Found'}</h3>
+                            <p className="text-muted-foreground mb-6">{t('household.alreadyMember') || 'You are already a member of'} <span className="font-medium text-foreground">{foundHousehold.name}</span></p>
                             <Button onClick={handleEnterFoundHousehold} className="w-full group-hover:bg-primary group-hover:text-primary-foreground" size="lg" disabled={isLoading}>
-                                {isLoading ? "Loading..." : "Enter Dashboard"} <ArrowUpRight className="ml-2 h-4 w-4" />
+                                {isLoading ? t('common.loading') || "Loading..." : t('household.enterDashboard') || "Enter Dashboard"} <ArrowUpRight className="ml-2 h-4 w-4" />
                             </Button>
                         </PremiumCard>
                     </motion.div>
@@ -151,10 +152,10 @@ export const HouseholdSetup: React.FC = () => {
                         <div className="h-12 w-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
                             <Home className="h-6 w-6 text-primary" />
                         </div>
-                        <h3 className="text-xl font-bold mb-2">Create Household</h3>
-                        <p className="text-muted-foreground mb-6">Start fresh. Invite your partner later with a unique code.</p>
+                        <h3 className="text-xl font-bold mb-2">{t('household.createHousehold')}</h3>
+                        <p className="text-muted-foreground mb-6">{t('household.createNew')}</p>
                         <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground">
-                            Get Started
+                            {t('household.createButton')}
                         </Button>
                     </PremiumCard>
 
@@ -166,10 +167,10 @@ export const HouseholdSetup: React.FC = () => {
                         <div className="h-12 w-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
                             <Users className="h-6 w-6 text-blue-500" />
                         </div>
-                        <h3 className="text-xl font-bold mb-2">Join Household</h3>
-                        <p className="text-muted-foreground mb-6">Enter the invite code shared by your partner to sync up.</p>
+                        <h3 className="text-xl font-bold mb-2">{t('household.joinHousehold')}</h3>
+                        <p className="text-muted-foreground mb-6">{t('household.joinExisting')}</p>
                         <Button variant="outline" className="w-full group-hover:bg-blue-500 group-hover:text-white">
-                            Enter Code
+                            {t('household.joinButton')}
                         </Button>
                     </PremiumCard>
                 </div>
@@ -187,37 +188,37 @@ export const HouseholdSetup: React.FC = () => {
         className="w-full max-w-md"
       >
         <Button variant="ghost" onClick={() => setMode('choose')} className="mb-4 pl-0 hover:pl-2 transition-all">
-            ← Back
+            ← {t('common.back')}
         </Button>
         
         <PremiumCard glow className="p-8 space-y-6">
             <div>
                 <h2 className="text-2xl font-bold mb-2">
-                    {mode === 'create' ? 'Name your household' : 'Enter Invite Code'}
+                    {mode === 'create' ? t('household.nameYourHousehold') || 'Name your household' : t('household.enterInviteCode') || 'Enter Invite Code'}
                 </h2>
                 <p className="text-muted-foreground">
-                    {mode === 'create' ? 'Give your shared space a name.' : 'Ask your partner for their unique join code.'}
+                    {mode === 'create' ? t('household.giveSharedSpaceName') || 'Give your shared space a name.' : t('household.askPartnerForCode') || 'Ask your partner for their unique join code.'}
                 </p>
             </div>
 
             {mode === 'create' ? (
                 <div className="space-y-4">
                     <div className="space-y-2">
-                        <Label>Household Name</Label>
-                        <Input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. The Smiths" />
+                        <Label>{t('household.householdName')}</Label>
+                        <Input value={name} onChange={e => setName(e.target.value)} placeholder={t('household.householdNamePlaceholder')} />
                     </div>
                     <Button onClick={handleCreate} className="w-full" size="lg" disabled={isLoading}>
-                        {isLoading ? "Creating..." : "Create & Continue"} <ArrowRight className="ml-2 h-4 w-4" />
+                        {isLoading ? t('common.loading') || "Creating..." : t('household.createAndContinue') || "Create & Continue"} <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                 </div>
             ) : (
                 <div className="space-y-4">
                     <div className="space-y-2">
-                        <Label>Invite Code</Label>
-                        <Input value={code} onChange={e => setCode(e.target.value)} placeholder="e.g. RM2025" className="uppercase tracking-widest font-mono" />
+                        <Label>{t('household.inviteCode') || 'Invite Code'}</Label>
+                        <Input value={code} onChange={e => setCode(e.target.value)} placeholder={t('household.joinCodePlaceholder')} className="uppercase tracking-widest font-mono" />
                     </div>
                     <Button onClick={handleJoin} className="w-full" size="lg" disabled={isLoading}>
-                        {isLoading ? "Joining..." : "Join Household"} <ArrowRight className="ml-2 h-4 w-4" />
+                        {isLoading ? t('common.loading') || "Joining..." : t('household.joinHouseholdButton') || "Join Household"} <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                 </div>
             )}

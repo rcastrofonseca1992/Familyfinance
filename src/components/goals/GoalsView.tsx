@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { useFinance, Goal } from '../store/FinanceContext';
 import { PremiumCard } from '../ui/PremiumCard';
@@ -16,6 +15,7 @@ import { Switch } from '../ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { cn } from '../ui/utils';
 import { toast } from 'sonner@2.0.3';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 const DEFAULT_APY_ESTIMATE = 3.0; // 3% Conservative estimate
 
@@ -73,6 +73,10 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
+  
+  // Delete confirmation state
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [goalToDelete, setGoalToDelete] = useState<Goal | null>(null);
 
   const activeTabName = activeTab; // avoid lint unused var if needed, or activeTab is used in Tabs value prop
   
@@ -215,6 +219,8 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
            setNewGoal(prev => ({ ...prev, targetAmount: price * CASH_RATIO_FOR_HOUSE }));
       }
   };
+
+  const { t } = useLanguage();
 
   return (
     <div className="space-y-8 pb-24">
@@ -492,7 +498,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                 
                 <button 
                     onClick={() => setIsAddOpen(true)}
-                    className="group border-2 border-dashed border-muted-foreground/20 rounded-2xl p-6 flex flex-col items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-all min-h-[200px]"
+                    className="group border-2 border-dashed border-muted-foreground/20 rounded-2xl p-6 flex flex-col items-center justify-center text-muted-foreground hover:text-emerald-700 hover:border-emerald-500/50 transition-all min-h-[200px]"
                 >
                     <Plus size={32} className="mb-3 opacity-50 group-hover:opacity-100 transition-opacity" />
                     <span className="font-medium">Create New Goal</span>
@@ -633,9 +639,8 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
 
                             <div className="flex gap-2 pt-4 border-t w-full">
                                  <Button variant="destructive" className="flex-1" onClick={() => {
-                                     deleteGoal(selectedGoal.id);
-                                     setIsEditOpen(false);
-                                     toast.success("Goal deleted");
+                                     setDeleteConfirmOpen(true);
+                                     setGoalToDelete(selectedGoal);
                                  }}>
                                     <Trash2 size={16} className="mr-2" /> Delete Goal
                                 </Button>
@@ -657,6 +662,33 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                 )}
             </SheetContent>
         </Sheet>
+
+        {/* Delete Confirmation Dialog */}
+        <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>Are you sure?</DialogTitle>
+                    <DialogDescription>
+                        This action cannot be undone. This will permanently delete the goal.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="destructive" onClick={() => {
+                        if (goalToDelete) {
+                            deleteGoal(goalToDelete.id);
+                            setIsEditOpen(false);
+                            toast.success("Goal deleted");
+                        }
+                        setDeleteConfirmOpen(false);
+                    }}>
+                        Delete
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </div>
   );
 };

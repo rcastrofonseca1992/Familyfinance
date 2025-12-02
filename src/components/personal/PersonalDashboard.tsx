@@ -14,6 +14,7 @@ import { motion } from 'motion/react';
 import { cn } from '../ui/utils';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { toast } from 'sonner';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 const SPANISH_BANKS = [
     "Imagin", "CaixaBank", "BBVA", "Santander", "Sabadell", "Bankinter", "ING", "Openbank", "Abanca", "Revolut", "N26", "Trade Republic", "MyInvestor", "Indexa Capital", "Binance", "Coinbase"
@@ -192,17 +193,19 @@ export const PersonalDashboard: React.FC = () => {
       }
   };
 
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-8 md:space-y-12 pb-24">
        {/* Account Edit Dialog */}
        <Dialog open={!!editingAccount} onOpenChange={(open) => !open && setEditingAccount(null)}>
           <DialogContent>
               <DialogHeader>
-                  <DialogTitle>Edit Account Balance</DialogTitle>
-                  <DialogDescription>Update the current balance for {editingAccount?.name}.</DialogDescription>
+                  <DialogTitle>{t('personal.editAccountBalance')}</DialogTitle>
+                  <DialogDescription>{t('personal.updateBalanceFor', { name: editingAccount?.name || '' })}</DialogDescription>
               </DialogHeader>
               <div className="py-4">
-                  <Label>Current Balance</Label>
+                  <Label>{t('personal.currentBalance')}</Label>
                   <div className="relative mt-2">
                       <Input 
                           type="number" 
@@ -214,7 +217,7 @@ export const PersonalDashboard: React.FC = () => {
                   </div>
               </div>
               <DialogFooter>
-                  <Button onClick={saveAccountEdit}>Save Changes</Button>
+                  <Button onClick={saveAccountEdit}>{t('common.save')} Changes</Button>
               </DialogFooter>
           </DialogContent>
        </Dialog>
@@ -223,28 +226,28 @@ export const PersonalDashboard: React.FC = () => {
        <Dialog open={!!editingCost} onOpenChange={(open) => !open && setEditingCost(null)}>
           <DialogContent>
               <DialogHeader>
-                  <DialogTitle>Edit Subscription</DialogTitle>
-                  <DialogDescription>Update the details for {editingCost?.name}.</DialogDescription>
+                  <DialogTitle>{t('personal.editSubscription')}</DialogTitle>
+                  <DialogDescription>{t('personal.updateDetailsFor', { name: editingCost?.name || '' })}</DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
-                      <Label>Name</Label>
+                      <Label>{t('personal.name')}</Label>
                       <Input value={editingCostData.name} onChange={e => setEditingCostData({...editingCostData, name: e.target.value})} />
                   </div>
                   <div className="grid gap-2">
-                      <Label>Monthly Cost</Label>
+                      <Label>{t('personal.monthlyCost')}</Label>
                       <div className="relative">
                         <Input type="number" value={isNaN(editingCostData.amount || 0) ? '' : editingCostData.amount} onChange={e => setEditingCostData({...editingCostData, amount: parseFloat(e.target.value)})} />
                         <span className="absolute right-3 top-2.5 text-muted-foreground">€</span>
                       </div>
                   </div>
                   <div className="grid gap-2">
-                      <Label>Category</Label>
+                      <Label>{t('personal.category')}</Label>
                       <Input value={editingCostData.category} onChange={e => setEditingCostData({...editingCostData, category: e.target.value})} />
                   </div>
               </div>
               <DialogFooter>
-                  <Button onClick={saveCostEdit}>Save Changes</Button>
+                  <Button onClick={saveCostEdit}>{t('common.save')} Changes</Button>
               </DialogFooter>
           </DialogContent>
        </Dialog>

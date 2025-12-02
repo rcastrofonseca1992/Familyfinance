@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FinanceProvider, useFinance } from './components/store/FinanceContext';
+import { LanguageProvider } from './src/contexts/LanguageContext';
 import { AppShell } from './components/layout/AppShell';
 import { HomeDashboard } from './components/dashboard/HomeDashboard';
 import { InvestmentForecastView } from './components/dashboard/InvestmentForecastView';
@@ -17,12 +18,18 @@ import { Toaster } from 'sonner';
 import { Calendar, Plus } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { formatCurrency } from './lib/finance';
+import { getLanguage } from './src/utils/i18n';
 
 const MainApp: React.FC = () => {
   const { data, getPersonalNetWorth } = useFinance();
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [authView, setAuthView] = useState<'login' | 'signup'>('login');
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
+
+  // Initialize language on app startup
+  useEffect(() => {
+    document.documentElement.setAttribute("lang", getLanguage());
+  }, []);
 
   // 1. Auth Layer
   if (!data.user) {
@@ -122,8 +129,10 @@ export default function App() {
   return (
     <ErrorBoundary>
       <FinanceProvider>
-        <MainApp />
-        <Toaster />
+        <LanguageProvider>
+          <MainApp />
+          <Toaster />
+        </LanguageProvider>
       </FinanceProvider>
     </ErrorBoundary>
   );

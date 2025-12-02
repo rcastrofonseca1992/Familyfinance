@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useFinance } from '../store/FinanceContext';
 import { cn } from '../ui/utils';
@@ -13,6 +12,7 @@ import { Label } from '../ui/label';
 import { ProgressCurve } from '../ui/ProgressCurve';
 import { Switch } from '../ui/switch';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 interface HomeDashboardProps {
     onNavigate: (page: string) => void;
@@ -20,6 +20,7 @@ interface HomeDashboardProps {
 
 export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
   const { data, updateData, getHouseholdIncome, getPersonalTotalIncome, getHouseholdFixedCosts, getHouseholdNetWorth, getHouseholdTotalCash, getMonthlyComparison, viewMode, setViewMode } = useFinance();
+  const { t } = useLanguage();
   const [isEmergencyEditOpen, setIsEmergencyEditOpen] = useState(false);
   const [newEmergencyTarget, setNewEmergencyTarget] = useState(data.emergencyFundGoal);
   const [isVariableIncomeLocal, setIsVariableIncomeLocal] = useState(data.isVariableIncome);
@@ -154,7 +155,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
         <div className="relative z-10 flex justify-between items-start">
             <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
-                    {viewMode === 'personal' ? 'Personal Net Worth' : 'Household Net Worth'}
+                    {viewMode === 'personal' ? t('dashboard.personalNetWorth') : t('dashboard.householdNetWorth')}
                 </p>
                 <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tighter">
                     {formatCurrency(netWorth)}
@@ -176,14 +177,14 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                          <ArrowRight size={16} />}
                     </div>
                     <span className="font-bold">{percentChange > 0 ? '+' : ''}{percentChange.toFixed(1)}%</span>
-                    <span className="text-muted-foreground text-sm">vs last month</span>
+                    <span className="text-muted-foreground text-sm">{t('dashboard.vsLastMonth')}</span>
                 </div>
                 ) : (
                 <div className="flex items-center gap-2 mt-2 text-muted-foreground">
                     <div className="p-1 rounded-full bg-muted/50">
                         <ArrowRight size={16} />
                     </div>
-                    <span className="text-sm">No comparison data yet</span>
+                    <span className="text-sm">{t('dashboard.noComparisonData')}</span>
                 </div>
                 )}
             </div>
@@ -208,15 +209,15 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
             <DialogTrigger asChild>
                 <div className="cursor-pointer hover:opacity-80 transition-opacity">
                     <PremiumCard className="space-y-2 bg-muted/30 border-none shadow-none h-full">
-                        <p className="text-xs text-muted-foreground uppercase">Total Cash</p>
+                        <p className="text-xs text-muted-foreground uppercase">{t('dashboard.totalCash')}</p>
                         <p className="text-xl font-bold">{formatCurrency(totalCash)}</p>
                     </PremiumCard>
                 </div>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Total Cash Breakdown</DialogTitle>
-                    <DialogDescription>Sum of all cash and savings accounts.</DialogDescription>
+                    <DialogTitle>{t('dashboard.totalCashBreakdown')}</DialogTitle>
+                    <DialogDescription>{t('dashboard.sumOfCashSavings')}</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                     {data.accounts.filter(a => {
@@ -229,7 +230,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                         </div>
                     ))}
                      <div className="flex justify-between font-bold pt-2 border-t border-border">
-                        <span>Total</span>
+                        <span>{t('dashboard.total')}</span>
                         <span>{formatCurrency(totalCash)}</span>
                     </div>
                 </div>
@@ -241,7 +242,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                 <div className="cursor-pointer hover:opacity-80 transition-opacity">
                     <PremiumCard className="space-y-2 bg-muted/30 border-none shadow-none h-full">
                         <div className="flex items-center justify-between">
-                            <p className="text-xs text-muted-foreground uppercase">{viewMode === 'personal' ? 'Your Income' : 'Combined Income'}</p>
+                            <p className="text-xs text-muted-foreground uppercase">{viewMode === 'personal' ? t('dashboard.yourIncome') : t('dashboard.combinedIncome')}</p>
                         </div>
                         <p className="text-xl font-bold">{formatCurrency(currentIncome)}</p>
                     </PremiumCard>
@@ -249,8 +250,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Income Breakdown</DialogTitle>
-                    <DialogDescription>Monthly net income sources.</DialogDescription>
+                    <DialogTitle>{t('dashboard.incomeBreakdown')}</DialogTitle>
+                    <DialogDescription>{t('dashboard.monthlyNetIncome')}</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                      {(viewMode === 'personal' || !data.household) ? (
@@ -272,7 +273,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                          })
                      )}
                      <div className="flex justify-between font-bold pt-2 border-t border-border">
-                        <span>Total</span>
+                        <span>{t('dashboard.total')}</span>
                         <span>{formatCurrency(currentIncome)}</span>
                     </div>
                 </div>
@@ -284,7 +285,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                 <div className="cursor-pointer hover:opacity-80 transition-opacity">
                     <PremiumCard className="space-y-2 bg-muted/30 border-none shadow-none h-full">
                         <div className="flex items-center justify-between">
-                            <p className="text-xs text-muted-foreground uppercase">Savings Rate</p>
+                            <p className="text-xs text-muted-foreground uppercase">{t('dashboard.savingsRate')}</p>
                         </div>
                         <p className="text-xl font-bold text-green-600">
                             {currentIncome > 0 ? ((monthlySavings / currentIncome) * 100).toFixed(1) : 0}%
@@ -294,34 +295,34 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Savings Rate Calculation</DialogTitle>
+                    <DialogTitle>{t('dashboard.savingsRateCalc')}</DialogTitle>
                     <DialogDescription>
-                        Your savings rate shows the percentage of your income that remains after expenses.
+                        {t('dashboard.savingsRateDesc')}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                     <div className="p-4 bg-muted/50 rounded-lg space-y-3">
                         <div className="flex justify-between text-sm">
-                            <span>Total Income</span>
+                            <span>{t('dashboard.totalIncome')}</span>
                             <span className="font-mono text-green-600">+{formatCurrency(currentIncome)}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                            <span>Fixed Costs</span>
+                            <span>{t('dashboard.fixedCosts')}</span>
                             <span className="font-mono text-red-500">-{formatCurrency(fixedCosts)}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                            <span>Variable Spending</span>
+                            <span>{t('dashboard.variableSpending')}</span>
                             <span className="font-mono text-red-500">-{formatCurrency(data.variableSpending)}</span>
                         </div>
                         <div className="h-px bg-border my-2" />
                         <div className="flex justify-between font-semibold">
-                            <span>Monthly Savings</span>
+                            <span>{t('dashboard.monthlySavings')}</span>
                             <span className="font-mono">{formatCurrency(monthlySavings)}</span>
                         </div>
                     </div>
                     
                     <div className="text-center p-4 border rounded-lg">
-                        <p className="text-sm text-muted-foreground mb-1">Formula</p>
+                        <p className="text-sm text-muted-foreground mb-1">{t('dashboard.formula')}</p>
                         <p className="font-mono text-sm sm:text-base font-medium">
                             (Savings ÷ Income) × 100 = <span className="text-primary">{currentIncome > 0 ? ((monthlySavings / currentIncome) * 100).toFixed(1) : 0}%</span>
                         </p>
@@ -334,33 +335,33 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
             <DialogTrigger asChild>
                 <div className="cursor-pointer hover:opacity-80 transition-opacity">
                     <PremiumCard className="space-y-2 bg-muted/30 border-none shadow-none h-full">
-                        <p className="text-xs text-muted-foreground uppercase">Free Cash Flow</p>
+                        <p className="text-xs text-muted-foreground uppercase">{t('dashboard.freeCashFlow')}</p>
                         <p className="text-xl font-bold">{formatCurrency(monthlySavings)}</p>
                     </PremiumCard>
                 </div>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Free Cash Flow</DialogTitle>
-                    <DialogDescription>Money left over after all expenses.</DialogDescription>
+                    <DialogTitle>{t('dashboard.freeCashFlow')}</DialogTitle>
+                    <DialogDescription>{t('dashboard.moneyLeftOverExpenses')}</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                     <div className="p-4 bg-muted/50 rounded-lg space-y-3">
                         <div className="flex justify-between text-sm">
-                            <span>Total Income</span>
+                            <span>{t('dashboard.totalIncome')}</span>
                             <span className="font-mono text-green-600">+{formatCurrency(currentIncome)}</span>
                         </div>
                          <div className="flex justify-between text-sm">
-                            <span>Fixed Costs</span>
+                            <span>{t('dashboard.fixedCosts')}</span>
                             <span className="font-mono text-red-500">-{formatCurrency(fixedCosts)}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                            <span>Variable Spending</span>
+                            <span>{t('dashboard.variableSpending')}</span>
                             <span className="font-mono text-red-500">-{formatCurrency(data.variableSpending)}</span>
                         </div>
                          <div className="h-px bg-border my-2" />
                         <div className="flex justify-between font-semibold">
-                            <span>Net Cash Flow</span>
+                            <span>{t('dashboard.netCashFlow')}</span>
                             <span className="font-mono">{formatCurrency(monthlySavings)}</span>
                         </div>
                     </div>
@@ -379,26 +380,26 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                         <AlertCircle size={20} />
                     </div>
                     <div>
-                        <h3 className="font-semibold">Emergency Fund</h3>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wider">Safety Net</p>
+                        <h3 className="font-semibold">{t('dashboard.emergencyFund')}</h3>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider">{t('dashboard.safetyNet')}</p>
                     </div>
                 </div>
                 <Dialog open={isEmergencyEditOpen} onOpenChange={setIsEmergencyEditOpen}>
                     <DialogTrigger asChild>
                         <Button variant="ghost" size="sm" className="h-8 px-2 text-muted-foreground">
-                            Edit
+                            {t('dashboard.edit')}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Emergency Fund Target</DialogTitle>
+                            <DialogTitle>{t('dashboard.emergencyFundTarget')}</DialogTitle>
                             <DialogDescription>
-                                Set the amount you want to reserve as a safety net.
+                                {t('dashboard.setReserveAmount')}
                             </DialogDescription>
                         </DialogHeader>
                         <div className="py-4 space-y-6">
                             <div className="space-y-2">
-                                <Label>Target Amount</Label>
+                                <Label>{t('dashboard.targetAmount')}</Label>
                                 <div className="relative">
                                     <Input 
                                         type="number" 
@@ -412,8 +413,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                             
                             <div className="flex items-center justify-between bg-muted/50 p-3 rounded-lg">
                                 <div className="space-y-0.5">
-                                    <Label>My income varies month to month</Label>
-                                    <p className="text-xs text-muted-foreground">Increases recommended safety net.</p>
+                                    <Label>{t('dashboard.incomeVariesMonthly')}</Label>
+                                    <p className="text-xs text-muted-foreground">{t('dashboard.increasesRecommendedSafetyNet')}</p>
                                 </div>
                                 <Switch 
                                     checked={isVariableIncomeLocal}
@@ -422,23 +423,23 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                             </div>
                             
                             <div className="space-y-3 pt-2 border-t">
-                                <p className="text-sm font-medium text-muted-foreground uppercase">Recommended Range</p>
+                                <p className="text-sm font-medium text-muted-foreground uppercase">{t('dashboard.recommendedRange')}</p>
                                 <div className="flex gap-2">
                                     <div 
                                         className="flex-1 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800 cursor-pointer hover:bg-blue-100 transition-colors"
                                         onClick={() => setNewEmergencyTarget(emergencyMin)}
                                     >
-                                        <p className="text-xs text-blue-600 dark:text-blue-400 font-bold mb-1">MINIMUM</p>
+                                        <p className="text-xs text-blue-600 dark:text-blue-400 font-bold mb-1">{t('dashboard.minimum')}</p>
                                         <p className="text-lg font-bold text-blue-700 dark:text-blue-300">{formatCurrency(emergencyMin)}</p>
-                                        <p className="text-[10px] text-muted-foreground">3 months expenses</p>
+                                        <p className="text-[10px] text-muted-foreground">3 {t('dashboard.monthsExpenses')}</p>
                                     </div>
                                     <div 
                                         className="flex-1 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-100 dark:border-purple-800 cursor-pointer hover:bg-purple-100 transition-colors"
                                         onClick={() => setNewEmergencyTarget(emergencyMax)}
                                     >
-                                        <p className="text-xs text-purple-600 dark:text-purple-400 font-bold mb-1">MAXIMUM</p>
+                                        <p className="text-xs text-purple-600 dark:text-purple-400 font-bold mb-1">{t('dashboard.maximum')}</p>
                                         <p className="text-lg font-bold text-purple-700 dark:text-purple-300">{formatCurrency(emergencyMax)}</p>
-                                        <p className="text-[10px] text-muted-foreground">6 months expenses</p>
+                                        <p className="text-[10px] text-muted-foreground">6 {t('dashboard.monthsExpenses')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -450,7 +451,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                                     isVariableIncome: isVariableIncomeLocal
                                 });
                                 setIsEmergencyEditOpen(false);
-                            }}>Save Settings</Button>
+                            }}>{t('dashboard.saveSettings')}</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
@@ -470,29 +471,29 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
             {isEmergencyFullyFunded ? (
                  <div className="text-xs text-green-800 dark:text-green-300 bg-green-50 dark:bg-green-900/20 p-3 rounded-lg flex items-start gap-2">
                     <TrendingUp size={14} className="mt-0.5 shrink-0" />
-                    <span>Fully funded! Surplus is allocated to goals.</span>
+                    <span>{t('dashboard.fullyFunded')}</span>
                 </div>
             ) : (
                 <div className="text-xs text-orange-800 dark:text-orange-300 bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg flex items-start gap-2">
                     <TrendingUp size={14} className="mt-0.5 shrink-0" />
-                    <span>Gap of {formatCurrency(data.emergencyFundGoal - currentEmergencyAmount)}. Suggest adding €500/mo.</span>
+                    <span>{t('dashboard.gapSuggestAdding', { gap: formatCurrency(data.emergencyFundGoal - currentEmergencyAmount) })}</span>
                 </div>
             )}
         </PremiumCard>
 
         {/* Forecast Card */}
-        <PremiumCard onClick={() => onNavigate('forecast')} className="flex flex-col gap-4 cursor-pointer hover:border-primary/50 transition-colors group overflow-hidden">
+        <PremiumCard onClick={() => onNavigate('forecast')} className="flex flex-col gap-4 cursor-pointer hover:border-purple-500/50 transition-colors group overflow-hidden border-l-4 border-l-purple-500">
              <div className="flex items-center justify-between pb-3 border-b border-border/50">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-purple-100 dark:bg-purple-900/20 text-purple-600 rounded-lg group-hover:bg-purple-200 transition-colors">
+                    <div className="p-2 bg-purple-100 dark:bg-purple-900/20 text-purple-600 rounded-lg group-hover:bg-purple-200 dark:group-hover:bg-purple-900/30 transition-colors">
                         <TrendingUp size={20} />
                     </div>
                     <div>
-                        <h3 className="font-semibold">Wealth Forecast</h3>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wider">25-Year Projection</p>
+                        <h3 className="font-semibold">{t('dashboard.wealthForecast')}</h3>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider">{t('dashboard.25YearProjection')}</p>
                     </div>
                 </div>
-                <ArrowRight size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                <ArrowRight size={16} className="text-muted-foreground group-hover:text-purple-600 transition-colors" />
             </div>
             
             <div className="h-[100px] w-full mt-2">
@@ -518,15 +519,15 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
 
             <div className="grid grid-cols-3 gap-2 pt-2 border-t border-border/50">
                 <div>
-                    <p className="text-[10px] text-muted-foreground uppercase">Now</p>
+                    <p className="text-[10px] text-muted-foreground uppercase">{t('dashboard.now')}</p>
                     <p className="font-bold text-xs">{formatCurrency(investmentAssets, 'EUR', 0)}</p>
                 </div>
                  <div className="text-center">
-                    <p className="text-[10px] text-muted-foreground uppercase">10 Years</p>
+                    <p className="text-[10px] text-muted-foreground uppercase">10 {t('dashboard.years')}</p>
                     <p className="font-bold text-xs">{formatCurrency(investmentAssets * Math.pow(1.07, 10), 'EUR', 0)}</p>
                 </div>
                  <div className="text-right">
-                    <p className="text-[10px] text-muted-foreground uppercase">25 Years</p>
+                    <p className="text-[10px] text-muted-foreground uppercase">25 {t('dashboard.years')}</p>
                     <p className="font-bold text-xs text-primary">{formatCurrency(investmentAssets * Math.pow(1.07, 25), 'EUR', 0)}</p>
                 </div>
             </div>
@@ -540,20 +541,20 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                         <Flame size={20} />
                     </div>
                     <div>
-                        <h3 className="font-semibold">Financial Freedom</h3>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wider">Household Goal</p>
+                        <h3 className="font-semibold">{t('dashboard.financialFreedom')}</h3>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider">{t('dashboard.householdGoal')}</p>
                     </div>
                 </div>
             </div>
             
             <div className="space-y-1 relative z-10">
                 <p className="text-3xl font-bold tracking-tight">{fireYearStr}</p>
-                <p className="text-sm text-muted-foreground">Estimated Retirement</p>
+                <p className="text-sm text-muted-foreground">{t('dashboard.estimatedRetirement')}</p>
             </div>
             
             <div className="relative z-10 mt-auto pt-2">
                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-muted-foreground text-xs font-medium uppercase tracking-wider">Target</span>
+                    <span className="text-muted-foreground text-xs font-medium uppercase tracking-wider">{t('dashboard.target')}</span>
                     <span className="font-bold text-xs">{formatCurrency(fireNumber)}</span>
                 </div>
                  <div className="h-2 w-full bg-muted/50 rounded-full overflow-hidden mb-1">
@@ -563,7 +564,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                     />
                 </div>
                 <div className="flex justify-end">
-                    <span className="text-xs text-muted-foreground">{((fireLiquidAssets / fireNumber) * 100).toFixed(1)}% Achieved</span>
+                    <span className="text-xs text-muted-foreground">{((fireLiquidAssets / fireNumber) * 100).toFixed(1)}% {t('dashboard.achieved')}</span>
                 </div>
             </div>
 
@@ -582,8 +583,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                         <PiggyBank size={20} />
                     </div>
                     <div>
-                        <h3 className="font-semibold">Household Accounts</h3>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wider">Assets Overview</p>
+                        <h3 className="font-semibold">{t('dashboard.householdAccounts')}</h3>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider">{t('dashboard.assetsOverview')}</p>
                     </div>
                 </div>
                 <Button variant="ghost" size="icon" onClick={() => onNavigate('personal')} className="text-muted-foreground hover:text-primary">
@@ -615,8 +616,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                 {householdAccounts.length === 0 && (
                     <div className="text-center text-muted-foreground text-sm py-8 bg-muted/20 rounded-xl border-dashed border-2 border-muted">
                         {viewMode === 'personal' 
-                           ? "No personal accounts found. Add one in the Personal tab."
-                           : "No shared accounts yet. Go to Personal to share accounts."}
+                           ? t('dashboard.noPersonalAccounts')
+                           : t('dashboard.noSharedAccounts')}
                     </div>
                 )}
             </div>

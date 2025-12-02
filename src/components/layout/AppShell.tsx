@@ -3,6 +3,7 @@ import { useFinance } from '../store/FinanceContext';
 import { LayoutDashboard, User, Target, Settings, LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
 import { cn } from '../ui/utils';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ interface AppShellProps {
 
 export const AppShell: React.FC<AppShellProps> = ({ children, currentTab, onTabChange, title, subtitle, headerAction }) => {
   const { data, logout } = useFinance();
+  const { t } = useLanguage();
   const mainRef = useRef<HTMLElement>(null);
 
   // Reset scroll position when tab changes
@@ -25,9 +27,9 @@ export const AppShell: React.FC<AppShellProps> = ({ children, currentTab, onTabC
   }, [currentTab]);
   
   const navItems = [
-    { id: 'dashboard', label: 'Household', icon: LayoutDashboard },
-    { id: 'personal', label: 'Personal', icon: User },
-    { id: 'goals', label: 'Goals', icon: Target },
+    { id: 'dashboard', label: t('nav.household'), icon: LayoutDashboard },
+    { id: 'personal', label: t('nav.personal'), icon: User },
+    { id: 'goals', label: t('nav.goals'), icon: Target },
   ];
 
   const getPageTitle = () => {
@@ -39,7 +41,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children, currentTab, onTabC
 
   const mobileNavItems = [
     ...navItems,
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: 'settings', label: t('nav.settings'), icon: Settings }
   ];
 
   return (
@@ -72,11 +74,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children, currentTab, onTabC
                 onClick={() => onTabChange('settings')}
             >
                 <Settings size={20} />
-                Settings
+                {t('nav.settings')}
             </Button>
             <Button variant="ghost" onClick={logout} className="w-full justify-start gap-3 text-red-500 hover:text-red-600 hover:bg-red-500/10">
                 <LogOut size={20} />
-                Log Out
+                {t('nav.logout')}
             </Button>
         </div>
       </aside>

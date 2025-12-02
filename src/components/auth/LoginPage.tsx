@@ -1,12 +1,14 @@
-
 import React, { useState } from 'react';
 import { useFinance } from '../store/FinanceContext';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
 import { PremiumCard } from '../ui/PremiumCard';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 interface LoginPageProps {
   onNavigate: (page: 'signup' | 'dashboard') => void;
@@ -14,10 +16,17 @@ interface LoginPageProps {
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
   const { login } = useFinance();
+  const { language, setLanguage, t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const handleLanguageChange = (lang: string) => {
+    setLanguage(lang);
+    // Store pending language for syncing to DB after login
+    localStorage.setItem('pendingLanguage', lang);
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,23 +35,51 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
     
     try {
       await login(email, password);
+      
+      // Sync pending language to DB if exists - handled in FinanceContext
     } catch (err: any) {
-      setError(err.message || "Failed to sign in");
+      setError(err.message || t('login.error') || "Failed to sign in");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative">
+      {/* Language Switcher - Fixed Top Right */}
+      <div className="fixed top-4 right-4 z-50">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Select value={language} onValueChange={handleLanguageChange}>
+            <SelectTrigger className="w-[180px] bg-card/80 backdrop-blur-md border-border/50 shadow-sm hover:bg-card transition-colors">
+              <Globe className="mr-2 h-4 w-4 text-primary" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="end">
+              {AVAILABLE_LANGUAGES.map(lang => (
+                <SelectItem key={lang.code} value={lang.code}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{lang.flag}</span>
+                    <span>{lang.name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </motion.div>
+      </div>
+
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <h1 className="text-3xl tracking-tight mb-2 text-[32px] text-[rgb(62,75,75)] font-bold">Welcome Back</h1>
-          <p className="text-muted-foreground">Sign in to manage your family wealth.</p>
+          <h1 className="text-3xl tracking-tight mb-2 text-[32px] text-[rgb(62,75,75)] font-bold">{t('login.title')}</h1>
+          <p className="text-muted-foreground">{t('login.subtitle')}</p>
         </div>
 
         <PremiumCard glow className="space-y-6 p-8">
@@ -53,7 +90,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
           )}
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('login.email')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input 
@@ -68,7 +105,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('login.password')}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input 
@@ -84,18 +121,18 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
             </div>
 
             <Button type="submit" className="w-full" size="lg" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? t('login.button') + '...' : t('login.button')}
               {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
             </Button>
           </form>
 
           <div className="text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            {t('login.noAccount')}{" "}
             <button 
               onClick={() => onNavigate('signup')}
               className="text-primary font-medium hover:underline"
             >
-              Sign up
+              {t('login.signUp')}
             </button>
           </div>
         </PremiumCard>

@@ -935,4 +935,42 @@ app.post("/make-server-d9780f4d/migrate", async (c) => {
   }
 });
 
+// ===========================================
+// USER SETTINGS
+// ===========================================
+
+app.post("/make-server-d9780f4d/user-settings", async (c) => {
+  try {
+    const user = await getAuthUser(c);
+    if (!user) return c.json({ error: "Unauthorized" }, 401);
+
+    const { userId, language } = await c.req.json();
+    
+    if (user.id !== userId) return c.json({ error: "User ID mismatch" }, 403);
+    if (!language) return c.json({ error: "Language is required" }, 400);
+
+    const supabase = getAdminClient();
+
+    // Update user settings with language preference
+    const { error } = await supabase
+      .from('user_settings')
+      .upsert({
+        user_id: userId,
+        language: language
+      }, {
+        onConflict: 'user_id'
+      });
+
+    if (error) {
+      console.error("Update user settings error:", error);
+      return c.json({ error: "Failed to update language setting" }, 500);
+    }
+
+    return c.json({ success: true, language });
+  } catch (e) {
+    console.error("Update user settings error:", e);
+    return c.json({ error: "Failed to update language setting" }, 500);
+  }
+});
+
 Deno.serve(app.fetch);
