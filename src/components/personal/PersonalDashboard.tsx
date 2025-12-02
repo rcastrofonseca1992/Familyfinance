@@ -58,6 +58,7 @@ export const PersonalDashboard: React.FC = () => {
   const personalAccounts = data.accounts.filter(a => a.ownerId === user.id);
   const cashAccounts = personalAccounts.filter(a => a.type === 'cash' || a.type === 'savings');
   const investmentAccounts = personalAccounts.filter(a => a.type === 'investment');
+  const debtAccounts = personalAccounts.filter(a => a.type === 'debt');
   
   const personalCosts = data.recurringCosts.filter(c => c.ownerId === user.id);
   const incomeSources = user.incomeSources || []; // Fallback if migration failed somehow
@@ -321,6 +322,7 @@ export const PersonalDashboard: React.FC = () => {
                                             <SelectItem value="savings">Savings</SelectItem>
                                             <SelectItem value="cash">Cash / Checking</SelectItem>
                                             <SelectItem value="investment">Investment</SelectItem>
+                                            <SelectItem value="debt">Debt</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -405,8 +407,8 @@ export const PersonalDashboard: React.FC = () => {
                        <RefreshCw size={24} />
                    </div>
                    <div>
-                       <h3 className="font-semibold">Personal Subscriptions</h3>
-                       <p className="text-sm text-muted-foreground">Recurring costs</p>
+                       <h3 className="font-semibold">Fixed Costs</h3>
+                       <p className="text-sm text-muted-foreground">Subscriptions & expenses</p>
                    </div>
                </div>
 
