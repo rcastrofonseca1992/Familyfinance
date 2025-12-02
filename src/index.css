@@ -669,6 +669,10 @@
     margin-top: calc(var(--spacing) * 6);
   }
 
+  .mt-\[80px\] {
+    margin-top: 80px;
+  }
+
   .mt-auto {
     margin-top: auto;
   }
@@ -683,6 +687,10 @@
 
   .mr-3 {
     margin-right: calc(var(--spacing) * 3);
+  }
+
+  .mr-\[0px\] {
+    margin-right: 0;
   }
 
   .mb-0\.5 {
@@ -717,8 +725,16 @@
     margin-bottom: calc(var(--spacing) * 12);
   }
 
+  .mb-\[16px\] {
+    margin-bottom: 16px;
+  }
+
   .ml-2 {
     margin-left: calc(var(--spacing) * 2);
+  }
+
+  .ml-\[0px\] {
+    margin-left: 0;
   }
 
   .ml-auto {

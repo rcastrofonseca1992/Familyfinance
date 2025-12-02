@@ -116,7 +116,7 @@ export const HouseholdSetup: React.FC = () => {
                 className="w-full max-w-2xl"
             >
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold tracking-tight mb-4">Welcome to Family Finance</h1>
+                    <h1 className="text-4xl font-bold tracking-tight mb-[16px] mt-[80px] mr-[0px] ml-[0px]">Welcome to Family Finance</h1>
                     <p className="text-xl text-muted-foreground">Are you setting up a new household or joining an existing one?</p>
                 </div>
 
