@@ -93,6 +93,9 @@ export const PersonalDashboard: React.FC = () => {
   const personalCosts = data.recurringCosts.filter(c => c.ownerId === user.id);
   const incomeSources = user.incomeSources || []; // Fallback if migration failed somehow
   
+  const totalFixedCosts = personalCosts.reduce((sum, cost) => sum + cost.amount, 0);
+  const totalDebt = debtAccounts.reduce((sum, acc) => sum + Math.abs(acc.balance), 0);
+  
   const handleAddAccount = () => {
       if (!newAccount.name || newAccount.balance === undefined) return;
       
@@ -162,7 +165,7 @@ export const PersonalDashboard: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 md:space-y-8 pb-24">
+    <div className="space-y-8 md:space-y-12 pb-24">
        {/* Account Edit Dialog */}
        <Dialog open={!!editingAccount} onOpenChange={(open) => !open && setEditingAccount(null)}>
           <DialogContent>
@@ -500,9 +503,40 @@ export const PersonalDashboard: React.FC = () => {
                        </div>
                    </div>
                ))}
+               <div className="flex justify-between items-center px-4 pt-2">
+                   <span className="text-sm font-medium text-muted-foreground">Total Monthly Costs</span>
+                   <span className="text-lg font-bold text-orange-600 dark:text-orange-400">-{formatCurrency(totalFixedCosts)}</span>
+               </div>
            </div>
        </PremiumCard>
-    </div>
+
+       {/* Debts Section - Only show if user has debt accounts */}
+       {debtAccounts.length > 0 && (
+        <PremiumCard className="p-0 border-none shadow-none bg-transparent md:p-6 md:border md:shadow-sm md:bg-card/80">
+            <div className="flex items-center justify-between mb-4 md:mb-6 px-1 md:px-0">
+                <div className="flex items-center gap-3">
+                    <div className="p-2 bg-red-500/10 rounded-lg text-red-500">
+                        <ShieldAlert size={24} />
+                    </div>
+                    <div>
+                        <h3 className="font-semibold">Debts</h3>
+                        <p className="text-sm text-muted-foreground">Loans & credit</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div className="space-y-3">
+                {debtAccounts.map((acc, i) => (
+                    <AccountItem key={acc.id} acc={acc} index={i} updateAccount={updateAccount} deleteAccount={deleteAccount} onEdit={() => handleEditAccount(acc)} />
+                ))}
+                <div className="flex justify-between items-center px-4 pt-2">
+                    <span className="text-sm font-medium text-muted-foreground">Total Debt</span>
+                    <span className="text-lg font-bold text-red-600 dark:text-red-400">-{formatCurrency(totalDebt)}</span>
+                </div>
+            </div>
+        </PremiumCard>
+       )}
+     </div>
   );
 };
 

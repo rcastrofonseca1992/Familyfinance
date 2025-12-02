@@ -60,6 +60,13 @@ export interface Goal {
   propertyValue?: number; // Full price of the property (for Home goals)
 }
 
+export interface MonthlySnapshot {
+  month: string; // Format: YYYY-MM
+  netWorth: number;
+  totalCash: number;
+  timestamp: string; // ISO date when snapshot was taken
+}
+
 export interface FinanceData {
   user: UserProfile | null;
   household: Household | null;
@@ -79,6 +86,9 @@ export interface FinanceData {
   
   // Market Data
   marketData: MarketData;
+  
+  // Historical Snapshots
+  monthlySnapshots?: MonthlySnapshot[];
 }
 
 const defaultData: FinanceData = {
@@ -92,7 +102,8 @@ const defaultData: FinanceData = {
   currency: 'EUR',
   theme: 'light',
   variableSpending: 0,
-  marketData: DEFAULT_MARKET_DATA
+  marketData: DEFAULT_MARKET_DATA,
+  monthlySnapshots: []
 };
 
 // Dev initial state - cleaned for production readiness
@@ -144,6 +155,7 @@ interface FinanceContextType {
   getHouseholdNetWorth: () => number;
   getHouseholdTotalCash: () => number;
   getWeightedInvestmentReturn: () => number;
+  getMonthlyComparison: () => { percentChange: number; hasData: boolean; previousNetWorth?: number; currentNetWorth?: number };
   
   checkServerHousehold: () => Promise<{ found: boolean; household?: Household }>;
   
@@ -207,6 +219,62 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         return () => mediaQuery.removeEventListener('change', handleChange);
     }
   }, [data.theme]);
+
+  // Monthly Snapshot Tracking
+  const snapshotTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  useEffect(() => {
+      if (!isInitialized || !data.user) return;
+      
+      const updateMonthlySnapshot = () => {
+          const now = new Date();
+          const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+          
+          const netWorth = getHouseholdNetWorth();
+          const totalCash = getHouseholdTotalCash();
+          
+          // Debounce snapshot updates to avoid excessive saves
+          if (snapshotTimeoutRef.current) clearTimeout(snapshotTimeoutRef.current);
+          snapshotTimeoutRef.current = setTimeout(() => {
+              setData(prev => {
+                  const snapshots = prev.monthlySnapshots || [];
+                  const existingSnapshotIndex = snapshots.findIndex(s => s.month === currentMonth);
+                  
+                  const newSnapshot: MonthlySnapshot = {
+                      month: currentMonth,
+                      netWorth,
+                      totalCash,
+                      timestamp: now.toISOString()
+                  };
+                  
+                  let updatedSnapshots: MonthlySnapshot[];
+                  if (existingSnapshotIndex >= 0) {
+                      // Update existing snapshot for current month
+                      updatedSnapshots = [...snapshots];
+                      updatedSnapshots[existingSnapshotIndex] = newSnapshot;
+                  } else {
+                      // Add new snapshot
+                      updatedSnapshots = [...snapshots, newSnapshot];
+                  }
+                  
+                  // Keep only last 12 months of snapshots
+                  updatedSnapshots.sort((a, b) => b.month.localeCompare(a.month));
+                  updatedSnapshots = updatedSnapshots.slice(0, 12);
+                  
+                  const next = { ...prev, monthlySnapshots: updatedSnapshots };
+                  
+                  // Save to server after updating snapshots
+                  if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+                  saveTimeoutRef.current = setTimeout(() => saveToServer(next), 2000);
+                  
+                  return next;
+              });
+          }, 500); // Debounce snapshot calculation by 500ms
+      };
+      
+      // Update snapshot whenever accounts change
+      updateMonthlySnapshot();
+  }, [data.accounts, data.user, isInitialized]);
 
   // ... Server Sync Helpers ...
 
@@ -838,6 +906,33 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       return weightedSum / totalBalance;
   }
 
+  const getMonthlyComparison = () => {
+      const snapshots = data.monthlySnapshots || [];
+      if (snapshots.length === 0) return { percentChange: 0, hasData: false };
+      
+      const now = new Date();
+      const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const lastMonthStr = `${lastMonth.getFullYear()}-${String(lastMonth.getMonth() + 1).padStart(2, '0')}`;
+      
+      const lastMonthSnapshot = snapshots.find(s => s.month === lastMonthStr);
+      if (!lastMonthSnapshot) return { percentChange: 0, hasData: false };
+      
+      const currentNetWorth = getHouseholdNetWorth();
+      const previousNetWorth = lastMonthSnapshot.netWorth;
+      
+      if (previousNetWorth === 0) return { percentChange: 0, hasData: true };
+      
+      const percentChange = ((currentNetWorth - previousNetWorth) / Math.abs(previousNetWorth)) * 100;
+      
+      return { 
+          percentChange, 
+          hasData: true,
+          previousNetWorth,
+          currentNetWorth
+      };
+  }
+
   return (
     <FinanceContext.Provider value={{ 
         data, 
@@ -869,6 +964,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         getHouseholdNetWorth,
         getHouseholdTotalCash,
         getWeightedInvestmentReturn,
+        getMonthlyComparison,
         checkServerHousehold,
         updateHouseholdMember,
         updateHouseholdSettings,

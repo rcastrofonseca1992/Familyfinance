@@ -19,7 +19,7 @@ interface HomeDashboardProps {
 }
 
 export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
-  const { data, updateData, getHouseholdIncome, getPersonalTotalIncome, getHouseholdFixedCosts, getHouseholdNetWorth, getHouseholdTotalCash, viewMode, setViewMode } = useFinance();
+  const { data, updateData, getHouseholdIncome, getPersonalTotalIncome, getHouseholdFixedCosts, getHouseholdNetWorth, getHouseholdTotalCash, getMonthlyComparison, viewMode, setViewMode } = useFinance();
   const [isEmergencyEditOpen, setIsEmergencyEditOpen] = useState(false);
   const [newEmergencyTarget, setNewEmergencyTarget] = useState(data.emergencyFundGoal);
   const [isVariableIncomeLocal, setIsVariableIncomeLocal] = useState(data.isVariableIncome);
@@ -41,6 +41,10 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
   
   const netWorth = getHouseholdNetWorth();
   const totalCash = getHouseholdTotalCash();
+  
+  // Monthly Comparison
+  const comparison = getMonthlyComparison();
+  const percentChange = comparison.percentChange;
   
   // Emergency Fund Recommendations
   const householdSize = data.household?.members.length || 1;
@@ -155,27 +159,33 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                 <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tighter">
                     {formatCurrency(netWorth)}
                 </h2>
-                {/* Comparison Logic: Only show if history exists. Currently 0% default. 
-                    Comparison Rule: Comparison is only valid if we have data from the previous month.
-                    Every month starts fresh at day 1.
-                */}
+                {/* Comparison Logic: Only show if history exists */}
+                {comparison.hasData ? (
                 <div className={cn("flex items-center gap-2 mt-2", 
-                    0 > 0 ? "text-green-600 dark:text-green-400" : 
-                    0 < 0 ? "text-red-600 dark:text-red-400" : 
+                    percentChange > 0 ? "text-green-600 dark:text-green-400" : 
+                    percentChange < 0 ? "text-red-600 dark:text-red-400" : 
                     "text-muted-foreground"
                 )}>
                     <div className={cn("p-1 rounded-full",
-                        0 > 0 ? "bg-green-500/20" : 
-                        0 < 0 ? "bg-red-500/20" : 
+                        percentChange > 0 ? "bg-green-500/20" : 
+                        percentChange < 0 ? "bg-red-500/20" : 
                         "bg-muted/50"
                     )}>
-                        {0 > 0 ? <ArrowUpRight size={16} /> : 
-                         0 < 0 ? <ArrowDownRight size={16} /> :
+                        {percentChange > 0 ? <ArrowUpRight size={16} /> : 
+                         percentChange < 0 ? <ArrowDownRight size={16} /> :
                          <ArrowRight size={16} />}
                     </div>
-                    <span className="font-bold">0%</span>
+                    <span className="font-bold">{percentChange > 0 ? '+' : ''}{percentChange.toFixed(1)}%</span>
                     <span className="text-muted-foreground text-sm">vs last month</span>
                 </div>
+                ) : (
+                <div className="flex items-center gap-2 mt-2 text-muted-foreground">
+                    <div className="p-1 rounded-full bg-muted/50">
+                        <ArrowRight size={16} />
+                    </div>
+                    <span className="text-sm">No comparison data yet</span>
+                </div>
+                )}
             </div>
             <div className="p-3 bg-primary/10 rounded-full">
                 <Wallet className="text-primary" size={24} />
