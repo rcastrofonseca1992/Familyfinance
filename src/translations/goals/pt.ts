@@ -36,7 +36,7 @@ export const goalsPt = {
   "goals.deadline": "Prazo",
   "goals.timeLeft": "Tempo Restante",
   "goals.requiredMonthly": "Necessário Mensalmente",
-  "goals.requiredPerMonth": "Necessário/Mês",
+  "goals.requiredPerMonth": "Necessário/ Mês",
   "goals.expectedAPY": "APY Esperado",
   "goals.expAPY": "APY Esperado",
   "goals.marketContext": "Contexto de Mercado",

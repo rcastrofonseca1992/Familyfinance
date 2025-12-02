@@ -230,47 +230,47 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                 {/* Hidden Trigger if controlled externally, but we keep logic here for simplicity */}
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Create New Goal</DialogTitle>
+                        <DialogTitle>{t('goals.createNewGoal')}</DialogTitle>
                         <DialogDescription>
-                            Set a target amount and deadline for your goal.
+                            {t('goals.setTargetAndDeadline')}
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid gap-2">
-                            <Label>Category</Label>
+                            <Label>{t('goals.category')}</Label>
                             <Select value={newGoal.category} onValueChange={v => setNewGoal({...newGoal, category: v as any})}>
                                 <SelectTrigger><SelectValue /></SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="home">Home (Main)</SelectItem>
-                                    <SelectItem value="trip">Travel</SelectItem>
-                                    <SelectItem value="emergency">Emergency Fund</SelectItem>
-                                    <SelectItem value="kids">Family/Kids</SelectItem>
-                                    <SelectItem value="other">Other</SelectItem>
+                                    <SelectItem value="home">{t('category.home')}</SelectItem>
+                                    <SelectItem value="trip">{t('category.trip')}</SelectItem>
+                                    <SelectItem value="emergency">{t('category.emergency')}</SelectItem>
+                                    <SelectItem value="kids">{t('category.kids')}</SelectItem>
+                                    <SelectItem value="other">{t('category.other')}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
 
                         <div className="grid gap-2">
-                            <Label>Goal Name</Label>
+                            <Label>{t('goals.goalName')}</Label>
                             <Input value={newGoal.name} onChange={e => setNewGoal({...newGoal, name: e.target.value})} placeholder={newGoal.category === 'home' ? "e.g. Dream House" : "e.g. Japan Trip"} />
                         </div>
                         
                         {newGoal.category === 'home' ? (
                             <div className="grid gap-2 p-3 bg-muted/30 rounded-lg border">
-                                <Label>Property Price</Label>
+                                <Label>{t('goals.propertyPrice')}</Label>
                                 <div className="relative">
                                     <Input type="number" value={newPropertyPrice} onChange={e => onPropertyPriceChange(e.target.value)} placeholder="500000" />
                                     <span className="absolute right-3 top-2.5 text-muted-foreground">€</span>
                                 </div>
                                 <div className="flex justify-between text-xs text-muted-foreground mt-1 px-1">
-                                    <span>Estimated Cash Needed (30%):</span>
+                                    <span>{t('goals.estimatedCashNeeded')}</span>
                                     <span className="font-bold text-foreground">{formatCurrency(Number(newGoal.targetAmount))}</span>
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mt-1 px-1">Includes 20% down payment + ~10% taxes/fees.</p>
+                                <p className="text-[10px] text-muted-foreground mt-1 px-1">{t('goals.includesTaxesFees')}</p>
                             </div>
                         ) : (
                             <div className="grid gap-2">
-                                <Label>Target Amount</Label>
+                                <Label>{t('goals.targetAmount')}</Label>
                                 <Input type="number" value={newGoal.targetAmount} onChange={e => setNewGoal({...newGoal, targetAmount: parseFloat(e.target.value)})} />
                             </div>
                         )}
@@ -280,27 +280,27 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                             <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-3 flex items-start gap-3 text-sm text-orange-700 dark:text-orange-400">
                                 <AlertTriangle size={16} className="mt-0.5 shrink-0" />
                                 <div>
-                                    <span className="font-semibold">Impact on Main Goal:</span>
-                                    <p>This expense could delay your house purchase by approximately <span className="font-bold">{delayRisk} months</span>.</p>
+                                    <span className="font-semibold">{t('goals.impactOnMainGoal')}</span>
+                                    <p>{t('goals.delayMessage', { months: delayRisk })}</p>
                                 </div>
                             </div>
                         )}
 
                         <div className="grid gap-2">
-                            <Label>Target Date</Label>
+                            <Label>{t('goals.targetDate')}</Label>
                             <Input type="date" value={newGoal.deadline} onChange={e => setNewGoal({...newGoal, deadline: e.target.value})} />
                         </div>
                         
                         <div className="flex items-center justify-between mt-2 p-3 bg-muted/50 rounded-lg">
                             <div className="space-y-0.5">
-                                <Label>Set as Main Goal?</Label>
-                                <p className="text-xs text-muted-foreground">Prioritize this goal in your financial plan.</p>
+                                <Label>{t('goals.setAsMainGoal')}</Label>
+                                <p className="text-xs text-muted-foreground">{t('goals.prioritizeGoal')}</p>
                             </div>
                             <Switch checked={newGoal.isMain} onCheckedChange={c => setNewGoal({...newGoal, isMain: c})} />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button onClick={handleAddGoal}>Create Goal</Button>
+                        <Button onClick={handleAddGoal}>{t('goals.createGoal')}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -322,11 +322,11 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                     {/* 1. Tags */}
                                     <div className="flex items-center gap-3">
                                         <span className="px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-100/60 text-emerald-700 border border-emerald-200/60 shadow-sm">
-                                            Main Goal
+                                            {t('goals.mainGoal')}
                                         </span>
                                         {getFeasibilityStatus(goal) && (
                                             <span className={cn("px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border shadow-sm", getFeasibilityStatus(goal)?.bg, getFeasibilityStatus(goal)?.color)}>
-                                                {getFeasibilityStatus(goal)?.label} Chance
+                                                {t(`goals.${getFeasibilityStatus(goal)?.label.toLowerCase()}Chance`)}
                                             </span>
                                         )}
                                     </div>
@@ -350,7 +350,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                     <div className="bg-white/60 dark:bg-black/20 rounded-2xl p-6 border border-emerald-100/50 shadow-sm space-y-6">
                                         <div className="flex justify-between items-end">
                                             <div>
-                                                <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Current Savings</p>
+                                                <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{t('goals.currentSavings')}</p>
                                                 <div className="flex items-baseline gap-2">
                                                     <span className="text-3xl font-medium text-emerald-900 dark:text-emerald-100">{formatCurrency(displayCurrentAmount)}</span>
                                                     <span className="text-sm text-muted-foreground">
@@ -365,21 +365,21 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                                 <div className="h-full bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-1000" style={{ width: `${progress}%` }} />
                                             </div>
                                             <div className="flex justify-between text-xs text-muted-foreground">
-                                                <span>*Allocated from surplus</span>
-                                                <span className="font-medium text-emerald-700 dark:text-emerald-400">{formatCurrency(Math.max(0, goal.targetAmount - displayCurrentAmount))} remaining</span>
+                                                <span>{t('goals.allocatedFromSurplus')}</span>
+                                                <span className="font-medium text-emerald-700 dark:text-emerald-400">{formatCurrency(Math.max(0, goal.targetAmount - displayCurrentAmount))} {t('goals.remaining')}</span>
                                             </div>
                                         </div>
 
                                         {/* Analysis Grid */}
                                         <div className="grid grid-cols-3 gap-4 pt-4 border-t border-emerald-100/50">
                                             <div>
-                                                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-0.5">Time Left</p>
+                                                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-0.5">{t('goals.timeLeft')}</p>
                                                 <p className="text-sm font-medium text-foreground">
-                                                    {goal.deadline ? `${getMonthsUntil(goal.deadline)} months` : 'No deadline'}
+                                                    {goal.deadline ? `${getMonthsUntil(goal.deadline)} ${t('common.months')}` : t('goals.noDeadline')}
                                                 </p>
                                             </div>
                                             <div>
-                                                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-0.5">Required/Mo</p>
+                                                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-0.5">{t('goals.requiredPerMonth')}</p>
                                                 <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
                                                     {goal.deadline 
                                                         ? formatCurrency(calculateMonthlyContribution(goal.targetAmount, displayCurrentAmount, getMonthsUntil(goal.deadline)))
@@ -387,7 +387,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                                 </p>
                                             </div>
                                             <div>
-                                                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-0.5">Exp. APY</p>
+                                                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-0.5">{t('goals.expAPY')}</p>
                                                  <p className="text-sm font-medium text-foreground">{DEFAULT_APY_ESTIMATE}%</p>
                                             </div>
                                         </div>
@@ -401,12 +401,12 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                                     <TrendingUp size={16} />
                                                 </div>
                                                 <div>
-                                                    <p className="text-[10px] uppercase text-muted-foreground font-bold leading-none mb-1">Euribor</p>
+                                                    <p className="text-[10px] uppercase text-muted-foreground font-bold leading-none mb-1">{t('goals.euribor')}</p>
                                                     <p className="text-lg font-semibold text-emerald-900 dark:text-emerald-100 leading-none">{marketData.euribor12m}%</p>
                                                 </div>
                                             </div>
                                             <div className="pl-1">
-                                                <p className="text-[10px] uppercase text-muted-foreground font-bold mb-1">Sentiment</p>
+                                                <p className="text-[10px] uppercase text-muted-foreground font-bold mb-1">{t('goals.sentiment')}</p>
                                                 <p className="text-sm font-medium text-emerald-800 dark:text-emerald-200 bg-emerald-100/30 px-2 py-0.5 rounded-md inline-block border border-emerald-200/30">
                                                     {getMarketSentiment(marketData.euribor12m)}
                                                 </p>
@@ -422,7 +422,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                             variant="ghost" 
                                             className="gap-2 text-emerald-700 hover:text-emerald-800 hover:bg-emerald-100/50 whitespace-nowrap"
                                         >
-                                            <Calculator size={16} /> Simulator
+                                            <Calculator size={16} /> {t('goals.simulator')}
                                         </Button>
                                     </div>
                                 </div>

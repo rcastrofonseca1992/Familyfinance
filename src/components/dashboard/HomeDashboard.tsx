@@ -207,9 +207,9 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
          <Dialog>
             <DialogTrigger asChild>
-                <div className="cursor-pointer hover:opacity-80 transition-opacity">
-                    <PremiumCard className="space-y-2 bg-muted/30 border-none shadow-none h-full">
-                        <p className="text-xs text-muted-foreground uppercase">{t('dashboard.totalCash')}</p>
+                <div className="cursor-pointer active:scale-[0.98] transition-transform">
+                    <PremiumCard className="space-y-2 h-full p-4 shadow-md hover:shadow-lg active:shadow-sm transition-all">
+                        <p className="text-[11px] text-muted-foreground uppercase tracking-wider">{t('dashboard.totalCash')}</p>
                         <p className="text-xl font-bold">{formatCurrency(totalCash)}</p>
                     </PremiumCard>
                 </div>
@@ -239,10 +239,10 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
 
          <Dialog>
             <DialogTrigger asChild>
-                <div className="cursor-pointer hover:opacity-80 transition-opacity">
-                    <PremiumCard className="space-y-2 bg-muted/30 border-none shadow-none h-full">
+                <div className="cursor-pointer active:scale-[0.98] transition-transform">
+                    <PremiumCard className="space-y-2 h-full p-4 shadow-md hover:shadow-lg active:shadow-sm transition-all">
                         <div className="flex items-center justify-between">
-                            <p className="text-xs text-muted-foreground uppercase">{viewMode === 'personal' ? t('dashboard.yourIncome') : t('dashboard.combinedIncome')}</p>
+                            <p className="text-[11px] text-muted-foreground uppercase tracking-wider">{viewMode === 'personal' ? t('dashboard.yourIncome') : t('dashboard.combinedIncome')}</p>
                         </div>
                         <p className="text-xl font-bold">{formatCurrency(currentIncome)}</p>
                     </PremiumCard>
@@ -282,10 +282,10 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
 
          <Dialog>
             <DialogTrigger asChild>
-                <div className="cursor-pointer hover:opacity-80 transition-opacity">
-                    <PremiumCard className="space-y-2 bg-muted/30 border-none shadow-none h-full">
+                <div className="cursor-pointer active:scale-[0.98] transition-transform">
+                    <PremiumCard className="space-y-2 h-full p-4 shadow-md hover:shadow-lg active:shadow-sm transition-all">
                         <div className="flex items-center justify-between">
-                            <p className="text-xs text-muted-foreground uppercase">{t('dashboard.savingsRate')}</p>
+                            <p className="text-[11px] text-muted-foreground uppercase tracking-wider">{t('dashboard.savingsRate')}</p>
                         </div>
                         <p className="text-xl font-bold text-green-600">
                             {currentIncome > 0 ? ((monthlySavings / currentIncome) * 100).toFixed(1) : 0}%
@@ -333,9 +333,9 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
 
          <Dialog>
             <DialogTrigger asChild>
-                <div className="cursor-pointer hover:opacity-80 transition-opacity">
-                    <PremiumCard className="space-y-2 bg-muted/30 border-none shadow-none h-full">
-                        <p className="text-xs text-muted-foreground uppercase">{t('dashboard.freeCashFlow')}</p>
+                <div className="cursor-pointer active:scale-[0.98] transition-transform">
+                    <PremiumCard className="space-y-2 h-full p-4 shadow-md hover:shadow-lg active:shadow-sm transition-all">
+                        <p className="text-[11px] text-muted-foreground uppercase tracking-wider">{t('dashboard.freeCashFlow')}</p>
                         <p className="text-xl font-bold">{formatCurrency(monthlySavings)}</p>
                     </PremiumCard>
                 </div>
