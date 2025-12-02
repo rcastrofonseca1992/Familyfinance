@@ -44,9 +44,11 @@ supabase secrets set SUPABASE_ANON_KEY=your_anon_key
 The app is **already configured** for Figma Make deployment:
 
 1. ✅ All files are in place
-2. ✅ Entry point (`/main.tsx`) configured
+2. ✅ Entry point (`/src/main.tsx`) configured
 3. ✅ Supabase credentials integrated
 4. ✅ PWA manifest ready
+5. ✅ Vite config created
+6. ✅ Node version set to 18
 
 **Simply use the Figma Make deployment button!**
 
