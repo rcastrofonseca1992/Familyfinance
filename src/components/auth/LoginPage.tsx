@@ -41,7 +41,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <h1 className="text-3xl tracking-tight mb-2 text-[32px] text-[rgb(173, 38, 226)] font-bold">Welcome Back</h1>
+          <h1 className="text-3xl tracking-tight mb-2 text-[32px] text-[rgb(62,75,75)] font-bold">Welcome Back</h1>
           <p className="text-muted-foreground">Sign in to manage your family wealth.</p>
         </div>
 
