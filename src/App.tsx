@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FinanceProvider, useFinance } from './components/store/FinanceContext';
@@ -42,13 +41,8 @@ const MainApp: React.FC = () => {
   const getHeaderInfo = () => {
       if (currentTab === 'forecast') {
         return {
-            title: 'Wealth Forecast',
-            subtitle: 'Projected Growth',
-            action: (
-                <Button variant="ghost" size="sm" onClick={() => setCurrentTab('dashboard')} className="gap-2">
-                    Back
-                </Button>
-            )
+            title: '',
+            subtitle: null
         };
       }
       if (currentTab === 'dashboard') {

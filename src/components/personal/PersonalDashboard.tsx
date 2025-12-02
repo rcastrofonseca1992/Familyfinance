@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useFinance, Account, RecurringCost, IncomeSource } from '../store/FinanceContext';
 import { PremiumCard } from '../ui/PremiumCard';
@@ -9,10 +8,12 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '../ui/dialog';
+import { DeleteConfirmation } from '../ui/delete-confirmation';
 import { Plus, Trash2, Wallet, TrendingUp, RefreshCw, Briefcase, Building2, PiggyBank, Landmark, Coins, ShieldAlert, Pencil } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '../ui/utils';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
+import { toast } from 'sonner';
 
 const SPANISH_BANKS = [
     "Imagin", "CaixaBank", "BBVA", "Santander", "Sabadell", "Bankinter", "ING", "Openbank", "Abanca", "Revolut", "N26", "Trade Republic", "MyInvestor", "Indexa Capital", "Binance", "Coinbase"
@@ -82,6 +83,10 @@ export const PersonalDashboard: React.FC = () => {
   // Edit Cost State
   const [editingCost, setEditingCost] = useState<RecurringCost | null>(null);
   const [editingCostData, setEditingCostData] = useState<Partial<RecurringCost>>({});
+
+  // Delete confirmation states
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<{type: 'account' | 'cost' | 'income', id: string, name: string} | null>(null);
 
   if (!user) return null;
 
@@ -164,6 +169,29 @@ export const PersonalDashboard: React.FC = () => {
       }
   };
 
+  const handleDelete = (type: 'account' | 'cost' | 'income', id: string, name: string) => {
+      setDeleteConfirmOpen(true);
+      setItemToDelete({type, id, name});
+  };
+
+  const confirmDelete = () => {
+      if (itemToDelete) {
+          switch (itemToDelete.type) {
+              case 'account':
+                  deleteAccount(itemToDelete.id);
+                  break;
+              case 'cost':
+                  deleteRecurringCost(itemToDelete.id);
+                  break;
+              case 'income':
+                  deleteIncomeSource(itemToDelete.id);
+                  break;
+          }
+          setDeleteConfirmOpen(false);
+          setItemToDelete(null);
+      }
+  };
+
   return (
     <div className="space-y-8 md:space-y-12 pb-24">
        {/* Account Edit Dialog */}
@@ -221,6 +249,14 @@ export const PersonalDashboard: React.FC = () => {
           </DialogContent>
        </Dialog>
 
+       {/* Delete Confirmation Dialog */}
+       <DeleteConfirmation 
+           open={deleteConfirmOpen} 
+           onOpenChange={setDeleteConfirmOpen} 
+           onConfirm={confirmDelete}
+           itemName={itemToDelete?.name}
+           description={`This will permanently delete this ${itemToDelete?.type}. This action cannot be undone.`}
+       />
 
 
        {/* Income Section */}
@@ -238,7 +274,7 @@ export const PersonalDashboard: React.FC = () => {
                
                <Dialog open={isAddIncomeOpen} onOpenChange={setIsAddIncomeOpen}>
                    <DialogTrigger asChild>
-                       <Button size="sm" variant="outline"><Plus size={16} className="mr-1" /> Add Income</Button>
+                       <Button size="sm" className="bg-[#FDFEFD] hover:bg-[#FDFEFD]/90 text-foreground border border-border shadow-sm"><Plus size={16} className="mr-1" /> Add Income</Button>
                    </DialogTrigger>
                    <DialogContent>
                        <DialogHeader>
@@ -284,7 +320,7 @@ export const PersonalDashboard: React.FC = () => {
                                />
                                <span className="absolute right-3 top-1 text-muted-foreground text-sm">€</span>
                            </div>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500 transition-colors" onClick={() => deleteIncomeSource(inc.id)}>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500 transition-colors" onClick={() => handleDelete('income', inc.id, inc.name)}>
                                <Trash2 size={14} />
                            </Button>
                        </div>
@@ -312,7 +348,7 @@ export const PersonalDashboard: React.FC = () => {
                
                <Dialog open={isAddAccountOpen} onOpenChange={setIsAddAccountOpen}>
                    <DialogTrigger asChild>
-                       <Button size="sm"><Plus size={16} className="mr-1" /> Add Account</Button>
+                       <Button size="sm" className="bg-[#FDFEFD] hover:bg-[#FDFEFD]/90 text-foreground border border-border shadow-sm"><Plus size={16} className="mr-1" /> Add Account</Button>
                    </DialogTrigger>
                    <DialogContent className="sm:max-w-[425px]">
                        <DialogHeader>
@@ -412,7 +448,7 @@ export const PersonalDashboard: React.FC = () => {
                    <div className="space-y-3">
                        {cashAccounts.length === 0 && <div className="text-sm text-muted-foreground italic pl-1">No cash accounts.</div>}
                        {cashAccounts.map((acc, i) => (
-                           <AccountItem key={acc.id} acc={acc} index={i} updateAccount={updateAccount} deleteAccount={deleteAccount} onEdit={() => handleEditAccount(acc)} />
+                           <AccountItem key={acc.id} acc={acc} index={i} updateAccount={updateAccount} onDelete={() => handleDelete('account', acc.id, acc.name)} onEdit={() => handleEditAccount(acc)} />
                        ))}
                    </div>
                </div>
@@ -425,7 +461,7 @@ export const PersonalDashboard: React.FC = () => {
                    <div className="space-y-3">
                        {investmentAccounts.length === 0 && <div className="text-sm text-muted-foreground italic pl-1">No investment accounts.</div>}
                        {investmentAccounts.map((acc, i) => (
-                           <AccountItem key={acc.id} acc={acc} index={i} updateAccount={updateAccount} deleteAccount={deleteAccount} onEdit={() => handleEditAccount(acc)} />
+                           <AccountItem key={acc.id} acc={acc} index={i} updateAccount={updateAccount} onDelete={() => handleDelete('account', acc.id, acc.name)} onEdit={() => handleEditAccount(acc)} />
                        ))}
                    </div>
                </div>
@@ -447,7 +483,7 @@ export const PersonalDashboard: React.FC = () => {
 
                <Dialog open={isAddCostOpen} onOpenChange={setIsAddCostOpen}>
                    <DialogTrigger asChild>
-                       <Button size="sm" variant="outline"><Plus size={16} className="mr-1" /> Add Cost</Button>
+                       <Button size="sm" className="bg-[#FDFEFD] hover:bg-[#FDFEFD]/90 text-foreground border border-border shadow-sm"><Plus size={16} className="mr-1" /> Add Cost</Button>
                    </DialogTrigger>
                    <DialogContent>
                        <DialogHeader>
@@ -496,7 +532,7 @@ export const PersonalDashboard: React.FC = () => {
                                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" onClick={() => handleEditCost(cost)}>
                                    <Pencil size={14} />
                                </Button>
-                               <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500" onClick={() => deleteRecurringCost(cost.id)}>
+                               <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-500" onClick={() => handleDelete('cost', cost.id, cost.name)}>
                                    <Trash2 size={14} />
                                </Button>
                            </div>
@@ -527,7 +563,7 @@ export const PersonalDashboard: React.FC = () => {
             
             <div className="space-y-3">
                 {debtAccounts.map((acc, i) => (
-                    <AccountItem key={acc.id} acc={acc} index={i} updateAccount={updateAccount} deleteAccount={deleteAccount} onEdit={() => handleEditAccount(acc)} />
+                    <AccountItem key={acc.id} acc={acc} index={i} updateAccount={updateAccount} onDelete={() => handleDelete('account', acc.id, acc.name)} onEdit={() => handleEditAccount(acc)} />
                 ))}
                 <div className="flex justify-between items-center px-4 pt-2">
                     <span className="text-sm font-medium text-muted-foreground">Total Debt</span>
@@ -541,7 +577,7 @@ export const PersonalDashboard: React.FC = () => {
 };
 
 // Sub-component for Account Item to keep clean
-const AccountItem = ({ acc, index, updateAccount, deleteAccount, onEdit }: { acc: Account, index: number, updateAccount: any, deleteAccount: any, onEdit: () => void }) => {
+const AccountItem = ({ acc, index, updateAccount, onDelete, onEdit }: { acc: Account, index: number, updateAccount: any, onDelete: () => void, onEdit: () => void }) => {
     const isInvestment = acc.type === 'investment';
     const isDebt = acc.type === 'debt';
     return (
@@ -616,7 +652,7 @@ const AccountItem = ({ acc, index, updateAccount, deleteAccount, onEdit }: { acc
                             variant="ghost" 
                             size="icon" 
                             className="h-8 w-8 text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" 
-                            onClick={() => deleteAccount(acc.id)}
+                            onClick={() => onDelete()}
                         >
                             <Trash2 size={16} />
                         </Button>

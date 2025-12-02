@@ -1534,6 +1534,10 @@
     border-left-color: var(--color-purple-500);
   }
 
+  .bg-\[\#FDFEFD\] {
+    background-color: #fdfefd;
+  }
+
   .bg-background {
     background-color: var(--background);
   }
@@ -1856,6 +1860,10 @@
     .bg-red-500\/20 {
       background-color: color-mix(in oklab, var(--color-red-500) 20%, transparent);
     }
+  }
+
+  .bg-red-600 {
+    background-color: var(--color-red-600);
   }
 
   .bg-secondary {
@@ -2883,6 +2891,12 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-\[\#FDFEFD\]\/90:hover {
+      background-color: oklab(99.5991% -.00138485 .000949562 / .9);
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:bg-accent:hover {
       background-color: var(--accent);
     }
@@ -2975,6 +2989,12 @@
       .hover\:bg-red-500\/10:hover {
         background-color: color-mix(in oklab, var(--color-red-500) 10%, transparent);
       }
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-red-700:hover {
+      background-color: var(--color-red-700);
     }
   }
 
@@ -3098,6 +3118,10 @@
   .focus\:ring-2:focus {
     --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .focus\:ring-red-600:focus {
+    --tw-ring-color: var(--color-red-600);
   }
 
   .focus\:ring-ring:focus {

@@ -18,7 +18,7 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
 
     // Default Assumptions
     const DEFAULT_RETURN_RATE = 7; // 7%
-    const [annualContribution, setAnnualContribution] = useState<number>(0);
+    const [monthlyContribution, setMonthlyContribution] = useState<number>(0);
     const [growthRate, setGrowthRate] = useState<number>(DEFAULT_RETURN_RATE);
 
     // 1. Get Investment Accounts
@@ -58,9 +58,8 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
         let totalInvested = currentAmount;
 
         for (let i = 1; i <= years; i++) {
-            // Add contribution (simplified: added at end of year)
-            // Future Value of Contribution: PMT * (((1 + r)^n - 1) / r) ?
-            // Iterative approach is easier for chart points
+            // Convert monthly contribution to annual (12 months)
+            const annualContribution = monthlyContribution * 12;
             
             const interestEarned = currentAmount * r;
             currentAmount += interestEarned + annualContribution;
@@ -75,7 +74,7 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
             });
         }
         return points;
-    }, [totalPrincipal, growthRate, annualContribution]);
+    }, [totalPrincipal, growthRate, monthlyContribution]);
 
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
@@ -180,18 +179,18 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                         <div className="space-y-4">
                             <div className="space-y-2">
                                 <div className="flex justify-between">
-                                    <Label>Annual Contribution</Label>
-                                    <span className="font-mono font-bold">{formatCurrency(annualContribution)}</span>
+                                    <Label>Monthly Contribution</Label>
+                                    <span className="font-mono font-bold">{formatCurrency(monthlyContribution)}</span>
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <Input 
                                         type="number" 
-                                        value={annualContribution} 
-                                        onChange={(e) => setAnnualContribution(Number(e.target.value))}
+                                        value={monthlyContribution} 
+                                        onChange={(e) => setMonthlyContribution(Number(e.target.value))}
                                         className="font-mono"
                                     />
                                 </div>
-                                <p className="text-xs text-muted-foreground">Add to your investments each year.</p>
+                                <p className="text-xs text-muted-foreground">Add to your investments each month.</p>
                             </div>
 
                             <div className="space-y-2 pt-4 border-t border-border/50">
