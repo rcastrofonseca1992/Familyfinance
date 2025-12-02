@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FinanceProvider, useFinance } from './components/store/FinanceContext';
 import { AppShell } from './components/layout/AppShell';

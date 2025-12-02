@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useFinance } from '../store/FinanceContext';
 import { LayoutDashboard, User, Target, Settings, LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -16,6 +15,14 @@ interface AppShellProps {
 
 export const AppShell: React.FC<AppShellProps> = ({ children, currentTab, onTabChange, title, subtitle, headerAction }) => {
   const { data, logout } = useFinance();
+  const mainRef = useRef<HTMLElement>(null);
+
+  // Reset scroll position when tab changes
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTo(0, 0);
+    }
+  }, [currentTab]);
   
   const navItems = [
     { id: 'dashboard', label: 'Household', icon: LayoutDashboard },
@@ -75,7 +82,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children, currentTab, onTabC
       </aside>
 
       {/* Content Area */}
-      <main className="flex-1 relative flex flex-col h-full overflow-y-auto overflow-x-hidden overscroll-y-contain">
+      <main className="flex-1 relative flex flex-col h-full overflow-y-auto overflow-x-hidden overscroll-y-contain" ref={mainRef}>
           {/* Universal Header */}
           {(title || subtitle || headerAction) && (
               <div className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b p-4 md:p-6 flex flex-row justify-between items-center gap-2 shrink-0">
