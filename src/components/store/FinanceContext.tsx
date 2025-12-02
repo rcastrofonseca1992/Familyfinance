@@ -110,6 +110,7 @@ interface FinanceContextType {
   logout: () => Promise<void>;
   createHousehold: (name: string) => Promise<void>;
   joinHousehold: (code: string) => Promise<void>;
+  enterHousehold: (household: Household) => Promise<void>;
   
   // CRUD Helpers
   addAccount: (account: Omit<Account, 'id'>) => void;
@@ -247,7 +248,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       }
   };
 
-  const loadFromServer = async (userId: string) => {
+  const loadFromServer = async (userId: string, options = { skipHousehold: false }) => {
       try {
           // Use load-household to get data from ALL members
           const { data: { session } } = await supabase.auth.getSession();
@@ -276,6 +277,8 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
                            ...prev,
                            ...serverData,
                            user: mergedUser,
+                           // Don't auto-set household - require explicit user action
+                           household: options.skipHousehold ? null : serverData.household,
                            // Keep local market data
                            marketData: prev.marketData 
                        };
@@ -358,8 +361,8 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
               
               setIsInitialized(true);
               
-              // Load server data for this user to sync latest
-              loadFromServer(session.user.id);
+              // Load server data for this user but skip household - user must choose explicitly
+              loadFromServer(session.user.id, { skipHousehold: true });
               
           } else {
               // Logged out or session expired
@@ -452,6 +455,21 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         console.error("Error joining household:", e);
         throw e; 
     }
+  };
+
+  const enterHousehold = async (household: Household) => {
+      if (!data.user) return;
+      
+      try {
+          // Set the household in context
+          setData(prev => ({ ...prev, household }));
+          
+          // Load full household data including accounts, costs, goals
+          await loadFromServer(data.user.id, { skipHousehold: false });
+      } catch (e) {
+          console.error("Error entering household:", e);
+          throw e;
+      }
   };
 
   const checkServerHousehold = async () => {
@@ -805,6 +823,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         logout, 
         createHousehold, 
         joinHousehold,
+        enterHousehold,
         addAccount,
         updateAccount,
         deleteAccount,

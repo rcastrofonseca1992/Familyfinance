@@ -11,7 +11,7 @@ import { toast } from 'sonner@2.0.3';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 export const HouseholdSetup: React.FC = () => {
-  const { createHousehold, joinHousehold, logout, data, checkServerHousehold, updateData } = useFinance();
+  const { createHousehold, joinHousehold, logout, data, checkServerHousehold, enterHousehold } = useFinance();
   const [mode, setMode] = useState<'choose' | 'create' | 'join'>('choose');
   const [name, setName] = useState('My Family');
   const [code, setCode] = useState('');
@@ -30,10 +30,18 @@ export const HouseholdSetup: React.FC = () => {
       checkForHousehold();
   }, [data.user]);
 
-  const handleEnterFoundHousehold = () => {
+  const handleEnterFoundHousehold = async () => {
       if (foundHousehold) {
-          updateData({ household: foundHousehold });
-          toast.success(`Welcome back to ${foundHousehold.name}!`);
+          setIsLoading(true);
+          try {
+              await enterHousehold(foundHousehold);
+              toast.success(`Welcome back to ${foundHousehold.name}!`);
+          } catch (error) {
+              console.error("Error entering household:", error);
+              toast.error("Failed to enter household. Please try again.");
+          } finally {
+              setIsLoading(false);
+          }
       }
   };
 
@@ -119,7 +127,7 @@ export const HouseholdSetup: React.FC = () => {
                         className="mb-8"
                     >
                         <PremiumCard 
-                            className="p-6 border-primary/50 bg-primary/5"
+                            className="p-6 border-primary/50 bg-primary/5 p-8 cursor-pointer hover:border-primary transition-colors group"
                             glow
                         >
                             <div className="flex items-center justify-between">
@@ -132,8 +140,8 @@ export const HouseholdSetup: React.FC = () => {
                                         <p className="text-muted-foreground">You are already a member of <span className="font-medium text-foreground">{foundHousehold.name}</span></p>
                                     </div>
                                 </div>
-                                <Button onClick={handleEnterFoundHousehold} size="lg">
-                                    Enter Dashboard <ArrowUpRight className="ml-2 h-4 w-4" />
+                                <Button onClick={handleEnterFoundHousehold} size="lg" disabled={isLoading}>
+                                    {isLoading ? "Loading..." : "Enter Dashboard"} <ArrowUpRight className="ml-2 h-4 w-4" />
                                 </Button>
                             </div>
                         </PremiumCard>
