@@ -111,6 +111,7 @@ interface FinanceContextType {
   createHousehold: (name: string) => Promise<void>;
   joinHousehold: (code: string) => Promise<void>;
   enterHousehold: (household: Household) => Promise<void>;
+  leaveHousehold: () => void;
   
   // CRUD Helpers
   addAccount: (account: Omit<Account, 'id'>) => void;
@@ -340,10 +341,14 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
           if (session?.user) {
               // User authenticated - Load strictly from server (No Local Storage)
               setData(prev => {
-                  // If user ID hasn't changed, don't trigger reload
-                  if (prev.user?.id === session.user.id) return prev;
+                  // If user ID hasn't changed, don't trigger reload (session refresh)
+                  if (prev.user?.id === session.user.id) {
+                      console.log("Auth state change detected but user ID unchanged - keeping existing data");
+                      return prev;
+                  }
                   
-                  // Initialize with authenticated user but EMPTY data until server responds
+                  // New user login - Initialize with authenticated user but EMPTY data until server responds
+                  console.log("New user detected - initializing with empty data");
                   return { 
                       ...defaultData, 
                       theme: prev.theme,
@@ -359,10 +364,17 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
                   };
               });
               
-              setIsInitialized(true);
-              
-              // Load server data for this user but skip household - user must choose explicitly
-              loadFromServer(session.user.id, { skipHousehold: true });
+              // Only load server data if this is a NEW user (not a session refresh)
+              setData(prev => {
+                  if (prev.user?.id !== session.user.id) {
+                      setIsInitialized(true);
+                      // Load server data for this user but skip household - user must choose explicitly
+                      loadFromServer(session.user.id, { skipHousehold: true });
+                  } else {
+                      setIsInitialized(true);
+                  }
+                  return prev;
+              });
               
           } else {
               // Logged out or session expired
@@ -470,6 +482,18 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
           console.error("Error entering household:", e);
           throw e;
       }
+  };
+
+  const leaveHousehold = () => {
+      // Clear household but keep user data
+      setData(prev => ({
+          ...prev,
+          household: null,
+          accounts: [],
+          recurringCosts: [],
+          goals: []
+      }));
+      toast.success("Left household. You can now join or create a new one.");
   };
 
   const checkServerHousehold = async () => {
@@ -824,6 +848,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         createHousehold, 
         joinHousehold,
         enterHousehold,
+        leaveHousehold,
         addAccount,
         updateAccount,
         deleteAccount,

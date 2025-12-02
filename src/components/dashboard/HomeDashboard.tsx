@@ -521,10 +521,9 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                 </div>
             </div>
         </PremiumCard>
-        </div>
 
         {/* FIRE Card */}
-        <PremiumCard className="md:col-span-1 flex flex-col gap-4 border-l-4 border-l-orange-500 relative overflow-hidden">
+        <PremiumCard className="flex flex-col gap-4 border-l-4 border-l-orange-500 relative overflow-hidden">
              <div className="flex items-center justify-between pb-3 border-b border-border/50 relative z-10">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-orange-100 dark:bg-orange-900/20 text-orange-600 rounded-lg">
@@ -563,9 +562,10 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                 <Sunrise size={120} />
              </div>
         </PremiumCard>
+        </div>
 
         {/* Accounts Summary */}
-        <PremiumCard className="md:col-span-1 flex flex-col gap-4">
+        <PremiumCard className="md:col-span-2 md:self-start flex flex-col gap-4">
              <div className="flex items-center justify-between pb-3 border-b border-border/50">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-100 dark:bg-blue-900/20 text-blue-600 rounded-lg">

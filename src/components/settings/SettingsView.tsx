@@ -13,7 +13,7 @@ interface SettingsViewProps {
 }
 
 export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
-  const { data, updateData, logout, updateHouseholdSettings } = useFinance();
+  const { data, updateData, logout, updateHouseholdSettings, leaveHousehold } = useFinance();
   const [householdName, setHouseholdName] = useState(data.household?.name || '');
   const isOwner = data.user?.role === 'owner';
 
@@ -136,6 +136,21 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
                         onClick={() => onNavigate('household-management')}
                     >
                         {isOwner ? "Manage" : "View Members"}
+                    </Button>
+                </div>
+
+                <div className="pt-4 border-t border-border flex items-center justify-between">
+                     <div>
+                        <p className="font-medium">Switch Household</p>
+                        <p className="text-xs text-muted-foreground">
+                            Leave current household to join or create another
+                        </p>
+                    </div>
+                    <Button 
+                        variant="outline" 
+                        onClick={leaveHousehold}
+                    >
+                        Switch
                     </Button>
                 </div>
             </PremiumCard>
