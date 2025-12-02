@@ -2600,6 +2600,18 @@
   }
 
   @media (hover: hover) {
+    .group-hover\:bg-primary\/30:is(:where(.group):hover *) {
+      background-color: var(--primary);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .group-hover\:bg-primary\/30:is(:where(.group):hover *) {
+        background-color: color-mix(in oklab, var(--primary) 30%, transparent);
+      }
+    }
+  }
+
+  @media (hover: hover) {
     .group-hover\:bg-purple-200:is(:where(.group):hover *) {
       background-color: var(--color-purple-200);
     }

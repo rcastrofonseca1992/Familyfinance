@@ -127,23 +127,17 @@ export const HouseholdSetup: React.FC = () => {
                         className="mb-8"
                     >
                         <PremiumCard 
-                            className="p-6 border-primary/50 bg-primary/5 p-8 cursor-pointer hover:border-primary transition-colors group"
+                            className="p-8 border-primary/50 bg-primary/5 cursor-pointer hover:border-primary transition-colors group"
                             glow
                         >
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    <div className="h-12 w-12 bg-primary/20 rounded-xl flex items-center justify-center">
-                                        <Home className="h-6 w-6 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg font-bold">Household Found</h3>
-                                        <p className="text-muted-foreground">You are already a member of <span className="font-medium text-foreground">{foundHousehold.name}</span></p>
-                                    </div>
-                                </div>
-                                <Button onClick={handleEnterFoundHousehold} size="lg" disabled={isLoading}>
-                                    {isLoading ? "Loading..." : "Enter Dashboard"} <ArrowUpRight className="ml-2 h-4 w-4" />
-                                </Button>
+                            <div className="h-12 w-12 bg-primary/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/30 transition-colors">
+                                <Home className="h-6 w-6 text-primary" />
                             </div>
+                            <h3 className="text-xl font-bold mb-2">Household Found</h3>
+                            <p className="text-muted-foreground mb-6">You are already a member of <span className="font-medium text-foreground">{foundHousehold.name}</span></p>
+                            <Button onClick={handleEnterFoundHousehold} className="w-full group-hover:bg-primary group-hover:text-primary-foreground" size="lg" disabled={isLoading}>
+                                {isLoading ? "Loading..." : "Enter Dashboard"} <ArrowUpRight className="ml-2 h-4 w-4" />
+                            </Button>
                         </PremiumCard>
                     </motion.div>
                 )}
