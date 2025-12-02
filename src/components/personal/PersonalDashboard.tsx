@@ -217,8 +217,8 @@ export const PersonalDashboard: React.FC = () => {
                   </div>
               </div>
               <DialogFooter>
-                  <Button onClick={saveAccountEdit}>{t('common.save')} Changes</Button>
-              </DialogFooter>
+                   <Button onClick={saveAccountEdit}>{t('common.save')}</Button>
+               </DialogFooter>
           </DialogContent>
        </Dialog>
 
@@ -230,25 +230,25 @@ export const PersonalDashboard: React.FC = () => {
                   <DialogDescription>{t('personal.updateDetailsFor', { name: editingCost?.name || '' })}</DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                  <div className="grid gap-2">
-                      <Label>{t('personal.name')}</Label>
-                      <Input value={editingCostData.name} onChange={e => setEditingCostData({...editingCostData, name: e.target.value})} />
-                  </div>
-                  <div className="grid gap-2">
-                      <Label>{t('personal.monthlyCost')}</Label>
-                      <div className="relative">
-                        <Input type="number" value={isNaN(editingCostData.amount || 0) ? '' : editingCostData.amount} onChange={e => setEditingCostData({...editingCostData, amount: parseFloat(e.target.value)})} />
-                        <span className="absolute right-3 top-2.5 text-muted-foreground">€</span>
-                      </div>
-                  </div>
-                  <div className="grid gap-2">
-                      <Label>{t('personal.category')}</Label>
-                      <Input value={editingCostData.category} onChange={e => setEditingCostData({...editingCostData, category: e.target.value})} />
-                  </div>
-              </div>
-              <DialogFooter>
-                  <Button onClick={saveCostEdit}>{t('common.save')} Changes</Button>
-              </DialogFooter>
+                   <div className="grid gap-2">
+                       <Label>{t('personal.name')}</Label>
+                       <Input value={editingCostData.name} onChange={e => setEditingCostData({...editingCostData, name: e.target.value})} />
+                   </div>
+                   <div className="grid gap-2">
+                       <Label>{t('personal.monthlyCost')}</Label>
+                       <div className="relative">
+                         <Input type="number" value={isNaN(editingCostData.amount || 0) ? '' : editingCostData.amount} onChange={e => setEditingCostData({...editingCostData, amount: parseFloat(e.target.value)})} />
+                         <span className="absolute right-3 top-2.5 text-muted-foreground">€</span>
+                       </div>
+                   </div>
+                   <div className="grid gap-2">
+                       <Label>{t('personal.category')}</Label>
+                       <Input value={editingCostData.category} onChange={e => setEditingCostData({...editingCostData, category: e.target.value})} />
+                   </div>
+               </div>
+               <DialogFooter>
+                   <Button onClick={saveCostEdit}>{t('common.save')}</Button>
+               </DialogFooter>
           </DialogContent>
        </Dialog>
 
@@ -270,27 +270,27 @@ export const PersonalDashboard: React.FC = () => {
                        <Wallet size={24} />
                    </div>
                    <div>
-                       <h3 className="font-semibold">Income Sources</h3>
-                       <p className="text-sm text-muted-foreground">Monthly net income</p>
+                       <h3 className="font-semibold">{t('personal.income')}</h3>
+                       <p className="text-sm text-muted-foreground">{t('personal.incomeSubtitle')}</p>
                    </div>
                </div>
                
                <Dialog open={isAddIncomeOpen} onOpenChange={setIsAddIncomeOpen}>
                    <DialogTrigger asChild>
-                       <Button size="sm" className="bg-[#FDFEFD] hover:bg-[#FDFEFD]/90 text-foreground border border-border shadow-sm"><Plus size={16} className="mr-1" /> Add Income</Button>
+                       <Button size="sm" className="bg-[#FDFEFD] hover:bg-[#FDFEFD]/90 text-foreground border border-border shadow-sm"><Plus size={16} className="mr-1" /> {t('personal.addIncome')}</Button>
                    </DialogTrigger>
                    <DialogContent>
                        <DialogHeader>
-                           <DialogTitle>Add Income Source</DialogTitle>
-                           <DialogDescription>Enter the details of your new income source.</DialogDescription>
+                           <DialogTitle>{t('personal.addIncomeSource')}</DialogTitle>
+                           <DialogDescription>{t('personal.enterIncomeDetails')}</DialogDescription>
                        </DialogHeader>
                        <div className="grid gap-4 py-4">
                            <div className="grid gap-2">
-                               <Label>Source Name</Label>
-                               <Input value={newIncome.name} onChange={e => setNewIncome({...newIncome, name: e.target.value})} placeholder="e.g. Salary, Freelance" />
+                               <Label>{t('personal.sourceName')}</Label>
+                               <Input value={newIncome.name} onChange={e => setNewIncome({...newIncome, name: e.target.value})} placeholder={t('personal.sourceNamePlaceholder')} />
                            </div>
                            <div className="grid gap-2">
-                               <Label>Monthly Net Amount</Label>
+                               <Label>{t('personal.monthlyNetAmount')}</Label>
                                <div className="relative">
                                    <Input type="number" value={isNaN(newIncome.amount || 0) ? '' : newIncome.amount} onChange={e => setNewIncome({...newIncome, amount: parseFloat(e.target.value)})} />
                                    <span className="absolute right-3 top-2.5 text-muted-foreground">€</span>
@@ -298,7 +298,7 @@ export const PersonalDashboard: React.FC = () => {
                            </div>
                        </div>
                        <DialogFooter>
-                           <Button onClick={handleAddIncome}>Add Income</Button>
+                           <Button onClick={handleAddIncome}>{t('personal.addIncome')}</Button>
                        </DialogFooter>
                    </DialogContent>
                </Dialog>
@@ -330,7 +330,7 @@ export const PersonalDashboard: React.FC = () => {
                    </div>
                ))}
                <div className="flex justify-between items-center px-4 pt-2">
-                   <span className="text-sm font-medium text-muted-foreground">Total Monthly Income</span>
+                   <span className="text-sm font-medium text-muted-foreground">{t('personal.totalMonthlyIncome')}</span>
                    <span className="text-lg font-bold">{formatCurrency(user.netIncome)}</span>
                </div>
            </div>
@@ -344,42 +344,42 @@ export const PersonalDashboard: React.FC = () => {
                        <TrendingUp size={24} />
                    </div>
                    <div>
-                       <h3 className="font-semibold">My Accounts</h3>
-                       <p className="text-sm text-muted-foreground">Assets & Investments</p>
+                       <h3 className="font-semibold">{t('personal.myAccounts')}</h3>
+                       <p className="text-sm text-muted-foreground">{t('personal.assetsInvestments')}</p>
                    </div>
                </div>
                
                <Dialog open={isAddAccountOpen} onOpenChange={setIsAddAccountOpen}>
                    <DialogTrigger asChild>
-                       <Button size="sm" className="bg-[#FDFEFD] hover:bg-[#FDFEFD]/90 text-foreground border border-border shadow-sm"><Plus size={16} className="mr-1" /> Add Account</Button>
+                       <Button size="sm" className="bg-[#FDFEFD] hover:bg-[#FDFEFD]/90 text-foreground border border-border shadow-sm"><Plus size={16} className="mr-1" /> {t('personal.addAccount')}</Button>
                    </DialogTrigger>
                    <DialogContent className="sm:max-w-[425px]">
                        <DialogHeader>
-                           <DialogTitle>Add Personal Account</DialogTitle>
-                           <DialogDescription>Connect a new bank account or manually track an asset.</DialogDescription>
+                           <DialogTitle>{t('personal.addPersonalAccount')}</DialogTitle>
+                           <DialogDescription>{t('personal.connectBankAccount')}</DialogDescription>
                        </DialogHeader>
                        <div className="grid gap-4 py-4">
                            <div className="grid gap-2">
-                               <Label>Account Name</Label>
-                               <Input value={newAccount.name} onChange={e => setNewAccount({...newAccount, name: e.target.value})} placeholder="e.g. Main Savings" />
+                               <Label>{t('personal.accountName')}</Label>
+                               <Input value={newAccount.name} onChange={e => setNewAccount({...newAccount, name: e.target.value})} placeholder={t('personal.accountNamePlaceholder')} />
                            </div>
                            
                            <div className="grid gap-2">
-                               <Label>Institution</Label>
+                               <Label>{t('personal.institution')}</Label>
                                <Select value={newAccount.institution} onValueChange={v => setNewAccount({...newAccount, institution: v})}>
-                                   <SelectTrigger><SelectValue placeholder="Select Bank" /></SelectTrigger>
+                                   <SelectTrigger><SelectValue placeholder={t('personal.selectBank')} /></SelectTrigger>
                                    <SelectContent>
                                        {SPANISH_BANKS.map(bank => (
                                            <SelectItem key={bank} value={bank}>{bank}</SelectItem>
                                        ))}
-                                       <SelectItem value="Other">Other (Custom)</SelectItem>
+                                       <SelectItem value="Other">{t('personal.custom')}</SelectItem>
                                    </SelectContent>
                                </Select>
                                {newAccount.institution === 'Other' && (
                                    <Input 
                                         value={customBank} 
                                         onChange={e => setCustomBank(e.target.value)} 
-                                        placeholder="Enter bank name" 
+                                        placeholder={t('personal.enterBankName')} 
                                         className="mt-2"
                                    />
                                )}
@@ -387,26 +387,26 @@ export const PersonalDashboard: React.FC = () => {
 
                            <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label>Type</Label>
+                                    <Label>{t('personal.type')}</Label>
                                     <Select value={newAccount.type} onValueChange={v => setNewAccount({...newAccount, type: v as any})}>
                                         <SelectTrigger><SelectValue /></SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="savings">Savings</SelectItem>
-                                            <SelectItem value="cash">Cash / Checking</SelectItem>
-                                            <SelectItem value="investment">Investment</SelectItem>
-                                            <SelectItem value="debt">Debt</SelectItem>
+                                            <SelectItem value="savings">{t('accountType.savings')}</SelectItem>
+                                            <SelectItem value="cash">{t('accountType.cash')} / {t('accountType.checking')}</SelectItem>
+                                            <SelectItem value="investment">{t('accountType.investment')}</SelectItem>
+                                            <SelectItem value="debt">{t('accountType.debt')}</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label>Currency</Label>
+                                    <Label>{t('personal.currency')}</Label>
                                     <Input value="EUR" disabled />
                                 </div>
                            </div>
 
                            {newAccount.type === 'investment' && (
                                <div className="grid gap-2">
-                                   <Label className="text-blue-500">Expected Annual Return (%)</Label>
+                                   <Label className="text-blue-500">{t('personal.expectedAnnualReturn')}</Label>
                                    <div className="relative">
                                        <Input 
                                             type="number" 
@@ -417,12 +417,12 @@ export const PersonalDashboard: React.FC = () => {
                                         />
                                        <span className="absolute right-3 top-2.5 text-muted-foreground">%</span>
                                    </div>
-                                   <p className="text-[10px] text-muted-foreground">Used for goal forecasting.</p>
+                                   <p className="text-[10px] text-muted-foreground">{t('personal.usedForGoalForecasting')}</p>
                                </div>
                            )}
 
                            <div className="grid gap-2">
-                               <Label>Current Balance</Label>
+                               <Label>{t('personal.currentBalance')}</Label>
                                <div className="relative">
                                     <Input type="number" value={isNaN(newAccount.balance || 0) ? '' : newAccount.balance} onChange={e => setNewAccount({...newAccount, balance: parseFloat(e.target.value)})} />
                                     <span className="absolute right-3 top-2.5 text-muted-foreground">€</span>
@@ -431,14 +431,14 @@ export const PersonalDashboard: React.FC = () => {
                            
                            <div className="flex items-center justify-between mt-2 p-3 bg-muted/50 rounded-lg">
                                <div className="space-y-0.5">
-                                   <Label>Include in Household</Label>
-                                   <p className="text-xs text-muted-foreground">Visible to partner & used in goals.</p>
+                                   <Label>{t('personal.includeInHousehold')}</Label>
+                                   <p className="text-xs text-muted-foreground">{t('personal.visibleToPartner')}</p>
                                </div>
                                <Switch checked={newAccount.includeInHousehold} onCheckedChange={c => setNewAccount({...newAccount, includeInHousehold: c})} />
                            </div>
                        </div>
                        <DialogFooter>
-                           <Button onClick={handleAddAccount}>Add Account</Button>
+                           <Button onClick={handleAddAccount}>{t('personal.addAccount')}</Button>
                        </DialogFooter>
                    </DialogContent>
                </Dialog>
@@ -447,9 +447,9 @@ export const PersonalDashboard: React.FC = () => {
            <div className="space-y-6">
                {/* Cash & Savings Group */}
                <div>
-                   <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 pl-1">Cash & Savings</h4>
+                   <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 pl-1">{t('personal.cashSavings')}</h4>
                    <div className="space-y-3">
-                       {cashAccounts.length === 0 && <div className="text-sm text-muted-foreground italic pl-1">No cash accounts.</div>}
+                       {cashAccounts.length === 0 && <div className="text-sm text-muted-foreground italic pl-1">{t('personal.noCashAccounts')}</div>}
                        {cashAccounts.map((acc, i) => (
                            <AccountItem key={acc.id} acc={acc} index={i} updateAccount={updateAccount} onDelete={() => handleDelete('account', acc.id, acc.name)} onEdit={() => handleEditAccount(acc)} />
                        ))}
@@ -459,10 +459,10 @@ export const PersonalDashboard: React.FC = () => {
                {/* Investments Group */}
                <div>
                    <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 pl-1 flex items-center gap-2">
-                       Investments <TrendingUp size={12} />
+                       {t('personal.investments')} <TrendingUp size={12} />
                    </h4>
                    <div className="space-y-3">
-                       {investmentAccounts.length === 0 && <div className="text-sm text-muted-foreground italic pl-1">No investment accounts.</div>}
+                       {investmentAccounts.length === 0 && <div className="text-sm text-muted-foreground italic pl-1">{t('personal.noInvestmentAccounts')}</div>}
                        {investmentAccounts.map((acc, i) => (
                            <AccountItem key={acc.id} acc={acc} index={i} updateAccount={updateAccount} onDelete={() => handleDelete('account', acc.id, acc.name)} onEdit={() => handleEditAccount(acc)} />
                        ))}
@@ -479,40 +479,40 @@ export const PersonalDashboard: React.FC = () => {
                        <RefreshCw size={24} />
                    </div>
                    <div>
-                       <h3 className="font-semibold">Fixed Costs</h3>
-                       <p className="text-sm text-muted-foreground">Subscriptions & expenses</p>
+                       <h3 className="font-semibold">{t('personal.fixedCosts')}</h3>
+                       <p className="text-sm text-muted-foreground">{t('personal.subscriptionsExpenses')}</p>
                    </div>
                </div>
 
                <Dialog open={isAddCostOpen} onOpenChange={setIsAddCostOpen}>
                    <DialogTrigger asChild>
-                       <Button size="sm" className="bg-[#FDFEFD] hover:bg-[#FDFEFD]/90 text-foreground border border-border shadow-sm"><Plus size={16} className="mr-1" /> Add Cost</Button>
+                       <Button size="sm" className="bg-[#FDFEFD] hover:bg-[#FDFEFD]/90 text-foreground border border-border shadow-sm"><Plus size={16} className="mr-1" /> {t('personal.addCost')}</Button>
                    </DialogTrigger>
                    <DialogContent>
                        <DialogHeader>
-                           <DialogTitle>Add Subscription</DialogTitle>
-                           <DialogDescription>Track a new recurring expense or subscription.</DialogDescription>
+                           <DialogTitle>{t('personal.addSubscription')}</DialogTitle>
+                           <DialogDescription>{t('personal.trackRecurringExpense')}</DialogDescription>
                        </DialogHeader>
                        <div className="grid gap-4 py-4">
                            <div className="grid gap-2">
-                               <Label>Name</Label>
-                               <Input value={newCost.name} onChange={e => setNewCost({...newCost, name: e.target.value})} placeholder="e.g. Spotify" />
+                               <Label>{t('personal.name')}</Label>
+                               <Input value={newCost.name} onChange={e => setNewCost({...newCost, name: e.target.value})} placeholder={t('personal.subscriptionNamePlaceholder')} />
                            </div>
                            <div className="grid gap-2">
-                               <Label>Monthly Cost</Label>
+                               <Label>{t('personal.monthlyCost')}</Label>
                                <Input type="number" value={isNaN(newCost.amount || 0) ? '' : newCost.amount} onChange={e => setNewCost({...newCost, amount: parseFloat(e.target.value)})} />
                            </div>
                            <div className="grid gap-2">
-                               <Label>Category</Label>
-                               <Input value={newCost.category} onChange={e => setNewCost({...newCost, category: e.target.value})} placeholder="e.g. Entertainment" />
+                               <Label>{t('personal.category')}</Label>
+                               <Input value={newCost.category} onChange={e => setNewCost({...newCost, category: e.target.value})} placeholder={t('personal.categoryPlaceholder')} />
                            </div>
                            <div className="flex items-center justify-between mt-2">
-                               <Label>Share cost with Household?</Label>
+                               <Label>{t('personal.shareCostWithHousehold')}</Label>
                                <Switch checked={newCost.includeInHousehold} onCheckedChange={c => setNewCost({...newCost, includeInHousehold: c})} />
                            </div>
                        </div>
                        <DialogFooter>
-                           <Button onClick={handleAddCost}>Add Subscription</Button>
+                           <Button onClick={handleAddCost}>{t('personal.addSubscription')}</Button>
                        </DialogFooter>
                    </DialogContent>
                </Dialog>
@@ -543,7 +543,7 @@ export const PersonalDashboard: React.FC = () => {
                    </div>
                ))}
                <div className="flex justify-between items-center px-4 pt-2">
-                   <span className="text-sm font-medium text-muted-foreground">Total Monthly Costs</span>
+                   <span className="text-sm font-medium text-muted-foreground">{t('personal.totalMonthlyCosts')}</span>
                    <span className="text-lg font-bold text-orange-600 dark:text-orange-400">-{formatCurrency(totalFixedCosts)}</span>
                </div>
            </div>
@@ -558,8 +558,8 @@ export const PersonalDashboard: React.FC = () => {
                         <ShieldAlert size={24} />
                     </div>
                     <div>
-                        <h3 className="font-semibold">Debts</h3>
-                        <p className="text-sm text-muted-foreground">Loans & credit</p>
+                        <h3 className="font-semibold">{t('personal.debts')}</h3>
+                        <p className="text-sm text-muted-foreground">{t('personal.loansCredit')}</p>
                     </div>
                 </div>
             </div>
@@ -569,7 +569,7 @@ export const PersonalDashboard: React.FC = () => {
                     <AccountItem key={acc.id} acc={acc} index={i} updateAccount={updateAccount} onDelete={() => handleDelete('account', acc.id, acc.name)} onEdit={() => handleEditAccount(acc)} />
                 ))}
                 <div className="flex justify-between items-center px-4 pt-2">
-                    <span className="text-sm font-medium text-muted-foreground">Total Debt</span>
+                    <span className="text-sm font-medium text-muted-foreground">{t('personal.totalDebt')}</span>
                     <span className="text-lg font-bold text-red-600 dark:text-red-400">-{formatCurrency(totalDebt)}</span>
                 </div>
             </div>
@@ -581,6 +581,7 @@ export const PersonalDashboard: React.FC = () => {
 
 // Sub-component for Account Item to keep clean
 const AccountItem = ({ acc, index, updateAccount, onDelete, onEdit }: { acc: Account, index: number, updateAccount: any, onDelete: () => void, onEdit: () => void }) => {
+    const { t } = useLanguage();
     const isInvestment = acc.type === 'investment';
     const isDebt = acc.type === 'debt';
     return (
@@ -647,7 +648,7 @@ const AccountItem = ({ acc, index, updateAccount, onDelete, onEdit }: { acc: Acc
                                   className="data-[state=checked]:bg-primary"
                              />
                              <Label htmlFor={`share-${acc.id}`} className="text-xs font-medium text-muted-foreground cursor-pointer md:hidden">
-                                 Share to Household
+                                 {t('personal.shareToHousehold')}
                              </Label>
                         </div>
 
