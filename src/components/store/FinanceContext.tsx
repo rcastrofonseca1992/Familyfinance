@@ -47,6 +47,7 @@ export interface Household {
   name: string;
   joinCode?: string;
   members: UserProfile[];
+  monthlySnapshots?: MonthlySnapshot[]; // Household-level tracking (owner maintains this)
 }
 
 export interface Goal {
@@ -87,7 +88,8 @@ export interface FinanceData {
   // Market Data
   marketData: MarketData;
   
-  // Historical Snapshots
+  // Historical Snapshots (DEPRECATED - now stored in household.monthlySnapshots)
+  // Kept for backward compatibility during migration
   monthlySnapshots?: MonthlySnapshot[];
 }
 
@@ -220,11 +222,15 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   }, [data.theme]);
 
-  // Monthly Snapshot Tracking
+  // Monthly Snapshot Tracking (Household-level, Owner only)
   const snapshotTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   useEffect(() => {
-      if (!isInitialized || !data.user) return;
+      if (!isInitialized || !data.user || !data.household) return;
+      
+      // Only the household owner should track/update snapshots
+      const isOwner = data.user.role === 'owner';
+      if (!isOwner) return;
       
       const updateMonthlySnapshot = () => {
           const now = new Date();
@@ -237,7 +243,9 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
           if (snapshotTimeoutRef.current) clearTimeout(snapshotTimeoutRef.current);
           snapshotTimeoutRef.current = setTimeout(() => {
               setData(prev => {
-                  const snapshots = prev.monthlySnapshots || [];
+                  if (!prev.household) return prev;
+                  
+                  const snapshots = prev.household.monthlySnapshots || [];
                   const existingSnapshotIndex = snapshots.findIndex(s => s.month === currentMonth);
                   
                   const newSnapshot: MonthlySnapshot = {
@@ -261,7 +269,13 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
                   updatedSnapshots.sort((a, b) => b.month.localeCompare(a.month));
                   updatedSnapshots = updatedSnapshots.slice(0, 12);
                   
-                  const next = { ...prev, monthlySnapshots: updatedSnapshots };
+                  const next = { 
+                      ...prev, 
+                      household: {
+                          ...prev.household,
+                          monthlySnapshots: updatedSnapshots
+                      }
+                  };
                   
                   // Save to server after updating snapshots
                   if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
@@ -274,7 +288,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       
       // Update snapshot whenever accounts change
       updateMonthlySnapshot();
-  }, [data.accounts, data.user, isInitialized]);
+  }, [data.accounts, data.user, data.household, isInitialized]);
 
   // ... Server Sync Helpers ...
 
@@ -288,8 +302,9 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       
       // Goals are shared for now (improvements needed for specific ownership)
       
-      const { marketData, ...rest } = currentData;
+      const { marketData, household, monthlySnapshots, ...rest } = currentData;
       
+      // User's finance data should NOT contain household object
       const dataToSave = {
           ...rest,
           accounts: ownedAccounts,
@@ -300,6 +315,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
           const { data: { session } } = await supabase.auth.getSession();
           if (!session?.access_token) throw new Error("No active session");
 
+          // 1. Save user's personal finance data
           await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/finance/save`, {
               method: 'POST',
               headers: {
@@ -311,6 +327,22 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
                   data: dataToSave
               })
           });
+          
+          // 2. If user is the household owner, save household data separately
+          if (currentData.household && currentData.user.role === 'owner') {
+              await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/household/save`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${session.access_token}`
+                  },
+                  body: JSON.stringify({
+                      userId: currentData.user.id,
+                      household: currentData.household
+                  })
+              });
+          }
+          
           // console.log("Data synced to cloud");
       } catch (e) {
           console.error("Failed to sync to server", e);
@@ -907,7 +939,9 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }
 
   const getMonthlyComparison = () => {
-      const snapshots = data.monthlySnapshots || [];
+      // Read from household snapshots (new) with fallback to user-level (legacy)
+      const snapshots = data.household?.monthlySnapshots || data.monthlySnapshots || [];
+      
       if (snapshots.length === 0) return { percentChange: 0, hasData: false };
       
       const now = new Date();
@@ -916,6 +950,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const lastMonthStr = `${lastMonth.getFullYear()}-${String(lastMonth.getMonth() + 1).padStart(2, '0')}`;
       
       const lastMonthSnapshot = snapshots.find(s => s.month === lastMonthStr);
+      
       if (!lastMonthSnapshot) return { percentChange: 0, hasData: false };
       
       const currentNetWorth = getHouseholdNetWorth();
