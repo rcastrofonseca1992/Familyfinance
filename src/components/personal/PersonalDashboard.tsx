@@ -12,10 +12,40 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Plus, Trash2, Wallet, TrendingUp, RefreshCw, Briefcase, Building2, PiggyBank, Landmark, Coins, ShieldAlert, Pencil } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '../ui/utils';
+import { ImageWithFallback } from '../figma/ImageWithFallback';
 
 const SPANISH_BANKS = [
     "Imagin", "CaixaBank", "BBVA", "Santander", "Sabadell", "Bankinter", "ING", "Openbank", "Abanca", "Revolut", "N26", "Trade Republic", "MyInvestor", "Indexa Capital", "Binance", "Coinbase"
 ];
+
+// Bank logo/favicon mapping using Google's favicon service
+const getBankLogoUrl = (institutionName: string): string => {
+    const bankDomains: Record<string, string> = {
+        'Imagin': 'www.imaginbank.com',
+        'CaixaBank': 'www.caixabank.es',
+        'BBVA': 'www.bbva.es',
+        'Santander': 'www.santander.es',
+        'Sabadell': 'www.bancsabadell.com',
+        'Bankinter': 'www.bankinter.com',
+        'ING': 'www.ing.es',
+        'Openbank': 'www.openbank.es',
+        'Abanca': 'www.abanca.com',
+        'Revolut': 'www.revolut.com',
+        'N26': 'n26.com',
+        'Trade Republic': 'traderepublic.com',
+        'MyInvestor': 'myinvestor.es',
+        'Indexa Capital': 'indexacapital.com',
+        'Binance': 'www.binance.com',
+        'Coinbase': 'www.coinbase.com'
+    };
+    
+    const domain = bankDomains[institutionName];
+    if (domain) {
+        return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+    }
+    // Fallback: try to extract domain from institution name
+    return `https://www.google.com/s2/favicons?domain=${institutionName.toLowerCase().replace(/\s+/g, '')}.com&sz=128`;
+};
 
 export const PersonalDashboard: React.FC = () => {
   const { 
@@ -479,6 +509,7 @@ export const PersonalDashboard: React.FC = () => {
 // Sub-component for Account Item to keep clean
 const AccountItem = ({ acc, index, updateAccount, deleteAccount, onEdit }: { acc: Account, index: number, updateAccount: any, deleteAccount: any, onEdit: () => void }) => {
     const isInvestment = acc.type === 'investment';
+    const isDebt = acc.type === 'debt';
     return (
         <motion.div 
              initial={{ opacity: 0, y: 10 }}
@@ -492,12 +523,20 @@ const AccountItem = ({ acc, index, updateAccount, deleteAccount, onEdit }: { acc
                 {/* Top Section (Mobile) / Left Section (Desktop) */}
                 <div className="flex items-start justify-between w-full md:w-auto gap-3">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                        {/* Icon */}
+                        {/* Bank Logo */}
                         <div className={cn(
-                            "h-10 w-10 shrink-0 rounded-xl flex items-center justify-center text-sm font-bold border shadow-sm",
-                            isInvestment ? "bg-purple-100 text-purple-600 border-purple-200 dark:bg-purple-900/20 dark:border-purple-800" : "bg-background text-foreground"
+                            "h-10 w-10 shrink-0 rounded-xl flex items-center justify-center border shadow-sm overflow-hidden",
+                            isInvestment 
+                                ? "bg-purple-100 border-purple-200 dark:bg-purple-900/20 dark:border-purple-800" 
+                                : isDebt 
+                                ? "bg-red-100 border-red-200 dark:bg-red-900/20 dark:border-red-800"
+                                : "bg-white dark:bg-card border-border"
                         )}>
-                            {acc.institution ? acc.institution[0] : 'B'}
+                            <ImageWithFallback 
+                                src={getBankLogoUrl(acc.institution || '')}
+                                alt={acc.institution || 'Bank'}
+                                className="h-full w-full object-contain p-0"
+                            />
                         </div>
                         
                         {/* Name & Institution */}
