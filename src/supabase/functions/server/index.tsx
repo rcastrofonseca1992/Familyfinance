@@ -21,6 +21,19 @@ app.use(
   }),
 );
 
+// Additional explicit CORS headers for maximum compatibility
+app.use("*", async (c, next) => {
+  c.res.headers.set("Access-Control-Allow-Origin", "*");
+  c.res.headers.set("Access-Control-Allow-Headers", "*");
+  c.res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  return next();
+});
+
+// Handle OPTIONS preflight requests
+app.options("*", (c) => {
+  return c.text("ok", 200);
+});
+
 // --- Helper: Get Admin Supabase Client ---
 function getAdminClient() {
   return createClient(
@@ -970,6 +983,38 @@ app.post("/make-server-d9780f4d/user-settings", async (c) => {
   } catch (e) {
     console.error("Update user settings error:", e);
     return c.json({ error: "Failed to update language setting" }, 500);
+  }
+});
+
+// ===========================================
+// NUMBERS API PROXY
+// ===========================================
+
+app.get("/make-server-d9780f4d/numberfact", async (c) => {
+  try {
+    const type = c.req.query("type") ?? "trivia";
+    const number = c.req.query("number") ?? "random";
+
+    const apiUrl = `http://numbersapi.com/${number}/${type}?json`;
+
+    const upstreamRes = await fetch(apiUrl);
+
+    if (!upstreamRes.ok) {
+      console.error(`NumbersAPI returned HTTP ${upstreamRes.status}`);
+      return c.json({
+        error: true,
+        message: `NumbersAPI returned HTTP ${upstreamRes.status}`,
+      }, 500);
+    }
+
+    const data = await upstreamRes.json();
+    return c.json(data);
+  } catch (err) {
+    console.error("NumbersAPI proxy error:", err);
+    return c.json({
+      error: true,
+      message: String(err),
+    }, 500);
   }
 });
 

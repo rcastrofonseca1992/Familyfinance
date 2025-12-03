@@ -13,6 +13,7 @@ import { ProgressCurve } from '../ui/ProgressCurve';
 import { Switch } from '../ui/switch';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { useLanguage } from '../../src/contexts/LanguageContext';
+import { FunFactCard } from './FunFactCard';
 
 interface HomeDashboardProps {
     onNavigate: (page: string) => void;
@@ -154,6 +155,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
     <div className="space-y-6 pb-24 md:pb-0">
       {/* Header & Date */}
       
+      {/* Fun Fact Card */}
+      <FunFactCard />
 
       {/* Main Net Worth Card with Chart */}
       <PremiumCard glow className="overflow-hidden min-h-[300px] flex flex-col">
