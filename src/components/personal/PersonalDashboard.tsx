@@ -44,7 +44,7 @@ export const PersonalDashboard: React.FC<PersonalDashboardProps> = ({ onNavigate
         {/* A. Income Summary Card */}
         <PremiumCard 
           onClick={() => onNavigate('me/income')} 
-          className="flex flex-col gap-4 cursor-pointer hover:border-green-500/50 transition-colors group border-l-4 border-l-green-500"
+          className="flex flex-col gap-4 cursor-pointer hover:border-green-500/50 transition-colors group"
         >
           <div className="flex items-center justify-between pb-3 border-b border-border/50">
             <div className="flex items-center gap-3">
@@ -77,7 +77,7 @@ export const PersonalDashboard: React.FC<PersonalDashboardProps> = ({ onNavigate
         {/* B. Accounts Summary Card */}
         <PremiumCard 
           onClick={() => onNavigate('me/accounts')} 
-          className="flex flex-col gap-4 cursor-pointer hover:border-blue-500/50 transition-colors group border-l-4 border-l-blue-500"
+          className="flex flex-col gap-4 cursor-pointer hover:border-blue-500/50 transition-colors group"
         >
           <div className="flex items-center justify-between pb-3 border-b border-border/50">
             <div className="flex items-center gap-3">
@@ -109,7 +109,7 @@ export const PersonalDashboard: React.FC<PersonalDashboardProps> = ({ onNavigate
         {/* C. Debts Summary Card */}
         <PremiumCard 
           onClick={() => onNavigate('me/debts')} 
-          className="flex flex-col gap-4 cursor-pointer hover:border-red-500/50 transition-colors group border-l-4 border-l-red-500"
+          className="flex flex-col gap-4 cursor-pointer hover:border-red-500/50 transition-colors group"
         >
           <div className="flex items-center justify-between pb-3 border-b border-border/50">
             <div className="flex items-center gap-3">
@@ -142,7 +142,7 @@ export const PersonalDashboard: React.FC<PersonalDashboardProps> = ({ onNavigate
         {/* D. Fixed Costs Summary Card */}
         <PremiumCard 
           onClick={() => onNavigate('me/fixed-costs')} 
-          className="flex flex-col gap-4 cursor-pointer hover:border-orange-500/50 transition-colors group border-l-4 border-l-orange-500"
+          className="flex flex-col gap-4 cursor-pointer hover:border-orange-500/50 transition-colors group"
         >
           <div className="flex items-center justify-between pb-3 border-b border-border/50">
             <div className="flex items-center gap-3">
