@@ -59,6 +59,10 @@ export const dashboardEn = {
   "dashboard.years": "Years",
   "dashboard.viewForecast": "View Wealth Forecast",
   
+  // Emergency Fund - Auto-calculated
+  "dashboard.autoCalculatedSixMonths": "Automatically calculated as 6 months of household fixed expenses.",
+  "dashboard.defineFixedCostsHelper": "Define your fixed household costs to calculate a 6-month emergency fund.",
+  
   // FIRE Card
   "dashboard.financialFreedom": "Financial Freedom",
   "dashboard.householdGoal": "Household Goal",

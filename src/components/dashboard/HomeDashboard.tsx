@@ -22,19 +22,24 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
   const { data, updateData, getHouseholdIncome, getPersonalTotalIncome, getHouseholdFixedCosts, getHouseholdNetWorth, getHouseholdTotalCash, getMonthlyComparison, viewMode, setViewMode } = useFinance();
   const { t } = useLanguage();
   const [isEmergencyEditOpen, setIsEmergencyEditOpen] = useState(false);
-  const [newEmergencyTarget, setNewEmergencyTarget] = useState(data.emergencyFundGoal);
-  const [isVariableIncomeLocal, setIsVariableIncomeLocal] = useState(data.isVariableIncome);
   
-  // Sync local state when dialog opens or data changes
-  useEffect(() => {
-      if (isEmergencyEditOpen) {
-          setNewEmergencyTarget(data.emergencyFundGoal);
-          setIsVariableIncomeLocal(data.isVariableIncome || false);
-      }
-  }, [isEmergencyEditOpen, data.emergencyFundGoal, data.isVariableIncome]);
-
   const currentIncome = viewMode === 'personal' ? getPersonalTotalIncome() : getHouseholdIncome();
   const fixedCosts = getHouseholdFixedCosts();
+  
+  // Auto-calculate Emergency Fund Target (6 months of household fixed costs)
+  // If no fixed costs exist, use legacy manual value as fallback
+  const autoCalculatedEmergencyTarget = fixedCosts > 0 ? fixedCosts * 6 : (data.emergencyFundGoal || 0);
+  
+  // Auto-update emergency fund goal when fixed costs change
+  useEffect(() => {
+    if (fixedCosts > 0) {
+      const newTarget = fixedCosts * 6;
+      if (data.emergencyFundGoal !== newTarget) {
+        updateData({ emergencyFundGoal: newTarget });
+      }
+    }
+  }, [fixedCosts, data.emergencyFundGoal, updateData]);
+  
   // If viewMode is personal, we might want to scale variableSpending or assume it's personal. 
   // For now, we use the global variableSpending but practically it should be split.
   const totalExpenses = fixedCosts + data.variableSpending; 
@@ -386,72 +391,48 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                 </div>
                 <Dialog open={isEmergencyEditOpen} onOpenChange={setIsEmergencyEditOpen}>
                     <DialogTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-8 px-2 text-muted-foreground">
-                            {t('dashboard.edit')}
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground hover:text-primary transition-colors">
+                            <ArrowRight size={16} />
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>{t('dashboard.emergencyFundTarget')}</DialogTitle>
                             <DialogDescription>
-                                {t('dashboard.setReserveAmount')}
+                                {fixedCosts > 0 
+                                    ? t('dashboard.autoCalculatedSixMonths')
+                                    : t('dashboard.defineFixedCostsHelper')}
                             </DialogDescription>
                         </DialogHeader>
                         <div className="py-4 space-y-6">
+                            {/* Read-only Target Display */}
                             <div className="space-y-2">
                                 <Label>{t('dashboard.targetAmount')}</Label>
                                 <div className="relative">
-                                    <Input 
-                                        type="number" 
-                                        value={newEmergencyTarget} 
-                                        onChange={(e) => setNewEmergencyTarget(parseFloat(e.target.value))}
-                                        className="font-bold text-lg pr-8" 
-                                    />
-                                    <span className="absolute right-3 top-2.5 text-muted-foreground">€</span>
-                                </div>
-                            </div>
-                            
-                            <div className="flex items-center justify-between bg-muted/50 p-3 rounded-lg">
-                                <div className="space-y-0.5">
-                                    <Label>{t('dashboard.incomeVariesMonthly')}</Label>
-                                    <p className="text-xs text-muted-foreground">{t('dashboard.increasesRecommendedSafetyNet')}</p>
-                                </div>
-                                <Switch 
-                                    checked={isVariableIncomeLocal}
-                                    onCheckedChange={setIsVariableIncomeLocal}
-                                />
-                            </div>
-                            
-                            <div className="space-y-3 pt-2 border-t">
-                                <p className="text-sm font-medium text-muted-foreground uppercase">{t('dashboard.recommendedRange')}</p>
-                                <div className="flex gap-2">
-                                    <div 
-                                        className="flex-1 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800 cursor-pointer hover:bg-blue-100 transition-colors"
-                                        onClick={() => setNewEmergencyTarget(emergencyMin)}
-                                    >
-                                        <p className="text-xs text-blue-600 dark:text-blue-400 font-bold mb-1">{t('dashboard.minimum')}</p>
-                                        <p className="text-lg font-bold text-blue-700 dark:text-blue-300">{formatCurrency(emergencyMin)}</p>
-                                        <p className="text-[10px] text-muted-foreground">3 {t('dashboard.monthsExpenses')}</p>
-                                    </div>
-                                    <div 
-                                        className="flex-1 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-100 dark:border-purple-800 cursor-pointer hover:bg-purple-100 transition-colors"
-                                        onClick={() => setNewEmergencyTarget(emergencyMax)}
-                                    >
-                                        <p className="text-xs text-purple-600 dark:text-purple-400 font-bold mb-1">{t('dashboard.maximum')}</p>
-                                        <p className="text-lg font-bold text-purple-700 dark:text-purple-300">{formatCurrency(emergencyMax)}</p>
-                                        <p className="text-[10px] text-muted-foreground">6 {t('dashboard.monthsExpenses')}</p>
+                                    <div className="w-full p-3 font-bold text-2xl text-center rounded-lg bg-muted/50 border-2 border-dashed border-border">
+                                        {formatCurrency(autoCalculatedEmergencyTarget)}
                                     </div>
                                 </div>
+                                {fixedCosts > 0 && (
+                                    <p className="text-xs text-muted-foreground text-center">
+                                        {formatCurrency(fixedCosts)} × 6 {t('dashboard.monthsExpenses')} = {formatCurrency(autoCalculatedEmergencyTarget)}
+                                    </p>
+                                )}
                             </div>
+
+                            {fixedCosts === 0 && (
+                                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex items-start gap-3">
+                                    <Info size={16} className="text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
+                                    <p className="text-sm text-blue-800 dark:text-blue-200">
+                                        {t('dashboard.defineFixedCostsHelper')}
+                                    </p>
+                                </div>
+                            )}
                         </div>
                         <DialogFooter>
-                            <Button onClick={() => {
-                                updateData({ 
-                                    emergencyFundGoal: newEmergencyTarget,
-                                    isVariableIncome: isVariableIncomeLocal
-                                });
-                                setIsEmergencyEditOpen(false);
-                            }}>{t('dashboard.saveSettings')}</Button>
+                            <Button onClick={() => setIsEmergencyEditOpen(false)}>
+                                {t('common.close')}
+                            </Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

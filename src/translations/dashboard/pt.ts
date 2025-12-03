@@ -50,7 +50,7 @@ export const dashboardPt = {
   "dashboard.maximum": "MÁXIMO",
   "dashboard.saveSettings": "Guardar Definições",
   "dashboard.fullyFunded": "Totalmente financiado! O excedente é alocado aos objetivos.",
-  "dashboard.gapSuggestAdding": "Lacuna de {{gap}}. Sugerir adicionar €500/mês.",
+  "dashboard.gapSuggestAdding": "Falta {{gap}}. Sugerir adicionar €500/mês.",
   
   // Wealth Forecast Card
   "dashboard.wealthForecast": "Previsão de Riqueza",
@@ -58,6 +58,10 @@ export const dashboardPt = {
   "dashboard.now": "Agora",
   "dashboard.years": "Anos",
   "dashboard.viewForecast": "Ver Previsão de Riqueza",
+  
+  // Emergency Fund - Auto-calculated
+  "dashboard.autoCalculatedSixMonths": "Calculado automaticamente como 6 meses de despesas fixas do agregado.",
+  "dashboard.defineFixedCostsHelper": "Defina os seus custos fixos do agregado para calcular um fundo de emergência de 6 meses.",
   
   // FIRE Card
   "dashboard.financialFreedom": "Liberdade Financeira",
