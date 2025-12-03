@@ -1,4 +1,4 @@
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { projectId, publicAnonKey } from '../../utils/supabase/info';
 
 // NOTE: The make-server function name must match the deployed Edge Function name
 // Check: Supabase Dashboard → Edge Functions → Verify the exact name
