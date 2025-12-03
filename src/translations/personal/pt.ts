@@ -32,7 +32,7 @@ export const personalPt = {
   
   // Accounts Section
   "personal.accounts": "Contas & Ativos",
-  "personal.accountsSubtitle": "Acompanhamento de riqueza pessoal",
+  "personal.accountsSubtitle": "Riqueza pessoal",
   "personal.addAccount": "Adicionar",
   "personal.addPersonalAccount": "Adicionar Conta Pessoal",
   "personal.connectBankAccount": "Ligue uma nova conta bancária ou registe manualmente um ativo.",
