@@ -6,6 +6,12 @@ export const personalEn = {
   "personal.myAccounts": "My Accounts",
   "personal.assetsInvestments": "Assets & Investments",
   
+  // Summary Cards CTAs
+  "personal.manageIncome": "Manage Income",
+  "personal.viewAccounts": "View Accounts",
+  "personal.viewDebts": "View Debts",
+  "personal.manageFixedCosts": "Manage Fixed Costs",
+  
   // Income Section
   "personal.income": "Income Sources",
   "personal.incomeSubtitle": "Monthly net income",
@@ -16,6 +22,13 @@ export const personalEn = {
   "personal.sourceNamePlaceholder": "e.g. Salary, Freelance",
   "personal.monthlyNetAmount": "Monthly Net Amount",
   "personal.totalMonthlyIncome": "Total Monthly Income",
+  "personal.noIncomeYet": "No income sources yet",
+  "personal.addFirstIncome": "Click 'Add' to create your first income source.",
+  "personal.editIncome": "Edit Income Source",
+  "personal.updateIncomeDetails": "Update the details of this income source.",
+  "personal.incomeAdded": "Income source added successfully",
+  "personal.incomeUpdated": "Income source updated successfully",
+  "personal.incomeDeleted": "Income source deleted successfully",
   
   // Accounts Section
   "personal.accounts": "Accounts & Assets",
@@ -41,6 +54,12 @@ export const personalEn = {
   "personal.noCashAccounts": "No cash accounts.",
   "personal.investments": "Investments",
   "personal.noInvestmentAccounts": "No investment accounts.",
+  "personal.totalBalance": "Total Balance",
+  "personal.noAccountsYet": "No accounts yet",
+  "personal.addFirstAccount": "Click 'Add' to create your first account.",
+  "personal.accountAdded": "Account added successfully",
+  "personal.accountUpdated": "Account updated successfully",
+  "personal.accountDeleted": "Account deleted successfully",
   
   // Fixed Costs Section
   "personal.fixedCosts": "Fixed Costs",
@@ -57,11 +76,40 @@ export const personalEn = {
   "personal.shareCostWithHousehold": "Share cost with Household?",
   "personal.shared": "Shared",
   "personal.totalMonthlyCosts": "Total Monthly Costs",
+  "personal.frequency": "Frequency",
+  "personal.yearly": "Yearly",
+  "personal.weekly": "Weekly",
+  "personal.noCostsYet": "No fixed costs yet",
+  "personal.addFirstCost": "Click 'Add' to track your first recurring expense.",
+  "personal.costAdded": "Fixed cost added successfully",
+  "personal.costUpdated": "Fixed cost updated successfully",
+  "personal.costDeleted": "Fixed cost deleted successfully",
   
   // Debts Section
   "personal.debts": "Debts",
   "personal.loansCredit": "Loans & credit",
   "personal.totalDebt": "Total Debt",
+  "personal.monthlyPayments": "Monthly Payments",
+  "personal.addDebt": "Add",
+  "personal.addNewDebt": "Add New Debt",
+  "personal.enterDebtDetails": "Enter the details of your debt or loan.",
+  "personal.debtName": "Debt Name",
+  "personal.debtNamePlaceholder": "e.g. Car Loan, Credit Card",
+  "personal.totalAmount": "Total Amount",
+  "personal.remainingAmount": "Remaining Amount",
+  "personal.monthlyPayment": "Monthly Payment",
+  "personal.interestRate": "Interest Rate (%)",
+  "personal.remaining": "Remaining",
+  "personal.paidOff": "paid off",
+  "personal.total": "Total",
+  "personal.rate": "Rate",
+  "personal.noDebtsYet": "No debts yet",
+  "personal.debtFreeGreat": "Great! You're debt-free.",
+  "personal.editDebt": "Edit Debt",
+  "personal.updateDebtDetails": "Update the details of this debt.",
+  "personal.debtAdded": "Debt added successfully",
+  "personal.debtUpdated": "Debt updated successfully",
+  "personal.debtDeleted": "Debt deleted successfully",
   
   // Edit Dialogs
   "personal.editAccountBalance": "Edit Account Balance",
@@ -71,4 +119,7 @@ export const personalEn = {
   
   // Monthly indicator
   "personal.monthly": "Monthly",
+  
+  // Common
+  "personal.fillAllFields": "Please fill in all required fields.",
 };

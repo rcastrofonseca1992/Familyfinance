@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { MarketData, DEFAULT_MARKET_DATA, fetchBDEMarketData } from '../../lib/bde';
 import { supabase } from '../../lib/supabase';
@@ -22,8 +21,19 @@ export interface RecurringCost {
   name: string;
   amount: number;
   category: string;
+  frequency?: 'monthly' | 'yearly' | 'weekly';
   ownerId: string; // 'user' | 'partner' | 'joint'
   includeInHousehold: boolean;
+}
+
+export interface Debt {
+  id: string;
+  name: string;
+  totalAmount: number;
+  remainingAmount: number;
+  monthlyPayment: number;
+  interestRate: number;
+  ownerId: string;
 }
 
 export interface IncomeSource {
@@ -75,6 +85,7 @@ export interface FinanceData {
   accounts: Account[];
   recurringCosts: RecurringCost[];
   goals: Goal[];
+  debts?: Debt[]; // Optional for backward compatibility
   
   // Global Settings
   emergencyFundGoal: number;
@@ -99,6 +110,7 @@ const defaultData: FinanceData = {
   accounts: [],
   recurringCosts: [],
   goals: [],
+  debts: [],
   emergencyFundGoal: 10000,
   isVariableIncome: false,
   currency: 'EUR',

@@ -8,6 +8,10 @@ import { InvestmentForecastView } from './components/dashboard/InvestmentForecas
 import { FeasibilityEngine } from './components/feasibility/FeasibilityEngine';
 import { GoalsView } from './components/goals/GoalsView';
 import { PersonalDashboard } from './components/personal/PersonalDashboard';
+import { IncomePage } from './components/personal/IncomePage';
+import { AccountsPage } from './components/personal/AccountsPage';
+import { DebtsPage } from './components/personal/DebtsPage';
+import { FixedCostsPage } from './components/personal/FixedCostsPage';
 import { SettingsView } from './components/settings/SettingsView';
 import { HouseholdManagement } from './components/settings/HouseholdManagement';
 import { LoginPage } from './components/auth/LoginPage';
@@ -108,7 +112,11 @@ const MainApp: React.FC = () => {
     switch (currentTab) {
       case 'dashboard': return <HomeDashboard onNavigate={setCurrentTab} />;
       case 'forecast': return <InvestmentForecastView onBack={() => setCurrentTab('dashboard')} />;
-      case 'personal': return <PersonalDashboard />;
+      case 'personal': return <PersonalDashboard onNavigate={setCurrentTab} />;
+      case 'me/income': return <IncomePage onNavigate={setCurrentTab} />;
+      case 'me/accounts': return <AccountsPage onNavigate={setCurrentTab} />;
+      case 'me/debts': return <DebtsPage onNavigate={setCurrentTab} />;
+      case 'me/fixed-costs': return <FixedCostsPage onNavigate={setCurrentTab} />;
       case 'feasibility': return <FeasibilityEngine />;
       case 'goals': return <GoalsView isAddOpen={isGoalDialogOpen} onOpenChange={setIsGoalDialogOpen} />;
       case 'settings': return <SettingsView onNavigate={setCurrentTab} />;
