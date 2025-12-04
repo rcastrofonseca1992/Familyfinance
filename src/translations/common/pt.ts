@@ -44,6 +44,7 @@ export const commonPt = {
   "category.home": "Casa (Principal)",
   "category.mortgage": "Hipoteca",
   "category.trip": "Viagem",
+  "category.car": "Carro",
   "category.emergency": "Fundo de Emergência",
   "category.kids": "Família/Filhos",
   "category.other": "Outro",

@@ -79,6 +79,20 @@ export const goalsEn = {
   // Status
   "goals.noDeadline": "No deadline",
   "goals.months": "months",
+  "goals.month": "month",
   "goals.fullyFunded": "Fully funded! Surplus is allocated to goals.",
   "goals.gapMessage": "Gap of {{amount}}. Suggest adding {{monthly}}/mo.",
+  
+  // Goal Page - Progress Status
+  "goals.progressStatus": "Progress Status",
+  "goals.nearlyThere": "You're almost there! Keep up the great work.",
+  "goals.halfwayThere": "Halfway there! You're making excellent progress.",
+  "goals.goodStart": "Good start! Stay consistent with your savings.",
+  "goals.keepGoing": "Just getting started. Stay focused on your goal!",
+  
+  // Goal Page - Property Details
+  "goals.propertyDetails": "Property Details",
+  "goals.propertyValue": "Property Value",
+  "goals.loanToValue": "Loan to Value",
+  "goals.requiredMonthlyDescription": "Monthly contribution needed to reach your goal on time, including compound interest.",
 };

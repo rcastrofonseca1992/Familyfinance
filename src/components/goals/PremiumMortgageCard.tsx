@@ -7,6 +7,7 @@ import { ImageWithFallback } from '../figma/ImageWithFallback';
 interface PremiumMortgageCardProps {
     goal: Goal;
     currentAmount: number;
+    image?: string;
     onClick?: () => void;
     onSimulatorClick?: () => void;
 }
@@ -14,6 +15,7 @@ interface PremiumMortgageCardProps {
 export const PremiumMortgageCard: React.FC<PremiumMortgageCardProps> = ({
     goal,
     currentAmount,
+    image,
     onClick,
     onSimulatorClick
 }) => {
@@ -76,10 +78,14 @@ export const PremiumMortgageCard: React.FC<PremiumMortgageCardProps> = ({
             {/* Hero Image */}
             <div className="relative">
                 <ImageWithFallback
-                    src="https://images.unsplash.com/photo-1760434875920-2b7a79ea163a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc29tZXRyaWMlMjBtaW5pYXR1cmUlMjBob3VzZXxlbnwxfHx8fDE3NjQ4Mzc4NzB8MA&ixlib=rb-4.1.0&q=80&w=1080"
+                    src={image || "https://images.unsplash.com/photo-1760434875920-2b7a79ea163a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc29tZXRyaWMlMjBtaW5pYXR1cmUlMjBob3VzZXxlbnwxfHx8fDE3NjQ4Mzc4NzB8MA&ixlib=rb-4.1.0&q=80&w=1080"}
                     alt={goal.name}
                     className="w-full h-60 object-cover rounded-t-3xl"
                 />
+                {/* Floating Date Badge */}
+                <span className="absolute top-3 right-3 text-xs font-mono bg-black/40 backdrop-blur-md text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-lg">
+                    {new Date(goal.deadline).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
+                </span>
             </div>
 
             {/* Glass Overlay Content */}
@@ -134,11 +140,7 @@ export const PremiumMortgageCard: React.FC<PremiumMortgageCardProps> = ({
                 </div>
 
                 {/* Metrics Grid */}
-                <div className="grid grid-cols-3 gap-3 text-center mb-4">
-                    <div>
-                        <div className="text-xs text-muted-foreground uppercase tracking-wider">{t('goals.timeLeft')}</div>
-                        <div className="text-lg font-semibold">{monthsUntil} {t('common.months')}</div>
-                    </div>
+                <div className="grid grid-cols-2 gap-3 text-center mb-4">
                     <div>
                         <div className="text-xs text-muted-foreground uppercase tracking-wider">{t('goals.requiredPerMonth')}</div>
                         <div className="text-lg font-semibold text-primary">{formatCurrency(monthlyContribution)}</div>

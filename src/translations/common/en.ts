@@ -44,6 +44,7 @@ export const commonEn = {
   "category.home": "Home (Main)",
   "category.mortgage": "Mortgage",
   "category.trip": "Travel",
+  "category.car": "Car",
   "category.emergency": "Emergency Fund",
   "category.kids": "Family/Kids",
   "category.other": "Other",

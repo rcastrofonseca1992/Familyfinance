@@ -79,6 +79,20 @@ export const goalsPt = {
   // Status
   "goals.noDeadline": "Sem prazo",
   "goals.months": "meses",
+  "goals.month": "mês",
   "goals.fullyFunded": "Totalmente financiado! O excedente é alocado aos objetivos.",
   "goals.gapMessage": "Lacuna de {{amount}}. Sugerir adicionar {{monthly}}/mês.",
+  
+  // Goal Page - Progress Status
+  "goals.progressStatus": "Estado do Progresso",
+  "goals.nearlyThere": "Quase lá! Continue com o excelente trabalho.",
+  "goals.halfwayThere": "A meio caminho! Está a fazer um progresso excelente.",
+  "goals.goodStart": "Bom começo! Mantenha-se consistente com as suas poupanças.",
+  "goals.keepGoing": "Apenas começando. Mantenha-se focado no seu objetivo!",
+  
+  // Goal Page - Property Details
+  "goals.propertyDetails": "Detalhes da Propriedade",
+  "goals.propertyValue": "Valor da Propriedade",
+  "goals.loanToValue": "Rácio de Financiamento",
+  "goals.requiredMonthlyDescription": "Contribuição mensal necessária para atingir o seu objetivo a tempo, incluindo juros compostos.",
 };

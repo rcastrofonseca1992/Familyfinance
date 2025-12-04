@@ -5,7 +5,8 @@ import { formatCurrency, computeFeasibility, calculateGoalDelay, getMarketSentim
 import { FeasibilityEngine } from '../feasibility/FeasibilityEngine';
 import { SavingsRecommendations } from './SavingsRecommendations';
 import { PremiumMortgageCard } from './PremiumMortgageCard';
-import { Target, Plane, Home, ShieldAlert, Plus, Trash2, Calendar, Save, X, AlertTriangle, TrendingUp, Info, CheckCircle, RefreshCw, Star, Calculator } from 'lucide-react';
+import { GoalPage } from './GoalPage';
+import { Target, Plane, Home, ShieldAlert, Plus, Trash2, Calendar, Save, X, AlertTriangle, TrendingUp, Info, CheckCircle, RefreshCw, Star, Calculator, Car, Users } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger, DialogFooter } from '../ui/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '../ui/sheet';
 import { Button } from '../ui/button';
@@ -19,6 +20,28 @@ import { toast } from 'sonner@2.0.3';
 import { useLanguage } from '../../src/contexts/LanguageContext';
 
 const DEFAULT_APY_ESTIMATE = 3.0; // 3% Conservative estimate
+
+// Category-specific images (isometric 3D style)
+const getCategoryImage = (category: string): string => {
+    switch (category) {
+        case 'mortgage':
+        case 'home':
+            return 'https://images.unsplash.com/photo-1760434875920-2b7a79ea163a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc29tZXRyaWMlMjBob3VzZSUyMG1pbmlhdHVyZXxlbnwxfHx8fDE3NjQ4ODI0NTR8MA&ixlib=rb-4.1.0&q=80&w=1080';
+        case 'trip':
+        case 'travel':
+            return 'https://images.unsplash.com/photo-1760434685862-5f2b29748cb9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc29tZXRyaWMlMjB0cmF2ZWwlMjB2YWNhdGlvbnxlbnwxfHx8fDE3NjQ4ODI0NTV8MA&ixlib=rb-4.1.0&q=80&w=1080';
+        case 'emergency':
+            return 'https://images.unsplash.com/photo-1696013910376-c56f76dd8178?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHwzZCUyMG1pbmlhdHVyZSUyMHNoaWVsZCUyMHNlY3VyaXR5fGVufDF8fHx8MTc2NDg4MzcxOHww&ixlib=rb-4.1.0&q=80&w=1080';
+        case 'car':
+            return 'https://images.unsplash.com/photo-1642242413035-58b75e06dfeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc29tZXRyaWMlMjBjYXIlMjBtaW5pYXR1cmV8ZW58MXx8fHwxNzY0ODgyNDU1fDA&ixlib=rb-4.1.0&q=80&w=1080';
+        case 'kids':
+        case 'family':
+            return 'https://images.unsplash.com/photo-1653164579768-ea97833b3b03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHwzZCUyMG1pbmlhdHVyZSUyMHNjaG9vbCUyMHN1cHBsaWVzfGVufDF8fHx8MTc2NDg4MzcxOXww&ixlib=rb-4.1.0&q=80&w=1080';
+        case 'other':
+        default:
+            return 'https://images.unsplash.com/photo-1724680943135-08c96af5dc4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc29tZXRyaWMlMjAzZCUyMHRhcmdldCUyMGdvYWx8ZW58MXx8fHwxNzY0ODgzNzYxfDA&ixlib=rb-4.1.0&q=80&w=1080';
+    }
+};
 
 const getMonthsUntil = (dateStr: string) => {
     if (!dateStr) return 0;
@@ -74,6 +97,9 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
+  
+  // Expandable Goal Page State
+  const [expandedGoal, setExpandedGoal] = useState<Goal | null>(null);
   
   // Delete confirmation state
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -144,11 +170,20 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
 
   const getIcon = (cat: string) => {
     switch(cat) {
-        case 'home': return <Home size={20} />;
-        case 'trip': return <Plane size={20} />;
-        case 'emergency': return <ShieldAlert size={20} />;
-        case 'kids': return <Target size={20} className="text-pink-500" />;
-        default: return <Target size={20} />;
+        case 'home':
+        case 'mortgage':
+            return <Home size={20} />;
+        case 'trip':
+            return <Plane size={20} />;
+        case 'car':
+            return <Car size={20} />;
+        case 'emergency':
+            return <ShieldAlert size={20} />;
+        case 'kids':
+        case 'family':
+            return <Users size={20} />;
+        default:
+            return <Target size={20} />;
     }
   };
 
@@ -224,6 +259,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
   const { t } = useLanguage();
 
   return (
+    <>
     <div className="space-y-8 pb-24">
         {/* Header moved to global AppShell */}
         {/* Add Goal Dialog */}
@@ -242,9 +278,9 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                             <Select value={newGoal.category} onValueChange={v => setNewGoal({...newGoal, category: v as any})}>
                                 <SelectTrigger><SelectValue /></SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="home">{t('category.home')}</SelectItem>
                                     <SelectItem value="mortgage">{t('category.mortgage')}</SelectItem>
                                     <SelectItem value="trip">{t('category.trip')}</SelectItem>
+                                    <SelectItem value="car">{t('category.car')}</SelectItem>
                                     <SelectItem value="emergency">{t('category.emergency')}</SelectItem>
                                     <SelectItem value="kids">{t('category.kids')}</SelectItem>
                                     <SelectItem value="other">{t('category.other')}</SelectItem>
@@ -317,12 +353,14 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                         
                         // Use PremiumMortgageCard for mortgage/home goals
                         if (goal.category === 'mortgage' || goal.category === 'home') {
+                            const goalImage = getCategoryImage(goal.category);
                             return (
                                 <PremiumMortgageCard
                                     key={goal.id}
                                     goal={goal}
                                     currentAmount={displayCurrentAmount}
-                                    onClick={() => openGoalDetail(goal, 'details')}
+                                    image={goalImage}
+                                    onClick={() => setExpandedGoal({...goal, image: goalImage, currentAmount: displayCurrentAmount, requiredMonthlyContribution: calculateMonthlyContribution(goal.targetAmount, displayCurrentAmount, getMonthsUntil(goal.deadline))})}
                                     onSimulatorClick={() => openGoalDetail(goal, 'simulator')}
                                 />
                             );
@@ -334,7 +372,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                         return (
                         <div key={goal.id} className="relative">
                             <PremiumCard glow className="border-primary/20 transition-transform hover:scale-[1.005] bg-blue-50/50 dark:bg-blue-950/10 p-6 md:p-8 px-[16px] py-[24px]">
-                                <div className="space-y-8 cursor-pointer" onClick={() => openGoalDetail(goal, 'details')}>
+                                <div className="space-y-8 cursor-pointer" onClick={() => setExpandedGoal({...goal, currentAmount: displayCurrentAmount, requiredMonthlyContribution: calculateMonthlyContribution(goal.targetAmount, displayCurrentAmount, getMonthsUntil(goal.deadline))})}>
                                     
                                     {/* 1. Tags */}
                                     <div className="flex items-center gap-3">
@@ -432,48 +470,62 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                     const daysLeft = Math.ceil((new Date(goal.deadline).getTime() - Date.now()) / (1000 * 3600 * 24));
                     const monthsLeft = Math.ceil(daysLeft / 30);
                     const requiredMonthly = monthsLeft > 0 ? (goal.targetAmount - goal.currentAmount) / monthsLeft : 0;
+                    const goalImage = getCategoryImage(goal.category);
 
                     return (
-                        <div key={goal.id} onClick={() => openGoalDetail(goal)} className="cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                            <PremiumCard hoverEffect className="relative h-full flex flex-col p-[16px]">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="p-2 bg-primary/5 rounded-xl">
-                                        {getIcon(goal.category)}
-                                    </div>
-                                    <span className="text-xs font-mono bg-muted px-2 py-1 rounded-md text-muted-foreground flex items-center gap-1">
+                        <div key={goal.id} onClick={() => setExpandedGoal({...goal, image: goalImage, requiredMonthlyContribution: calculateMonthlyContribution(goal.targetAmount, goal.currentAmount, monthsLeft)})} className="cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                            <div className="relative w-full rounded-3xl overflow-hidden shadow-xl bg-background border border-border h-full flex flex-col">
+                                {/* Full Width Image Header */}
+                                <div className="relative h-48 w-full">
+                                    <img 
+                                        src={goalImage} 
+                                        alt={goal.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+                                    <span className="absolute top-3 right-3 text-xs font-mono bg-black/40 backdrop-blur-md text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-lg">
                                         <Calendar size={12} />
                                         {new Date(goal.deadline).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
                                     </span>
                                 </div>
                                 
-                                <h3 className="text-xl font-bold mb-1">{goal.name}</h3>
-                                <div className="flex flex-col gap-1 mb-6">
-                                     {goal.category === 'home' && goal.propertyValue ? (
-                                         <>
-                                            <p className="text-xs text-muted-foreground">Price: {formatCurrency(goal.propertyValue)}</p>
-                                            <p className="text-sm text-muted-foreground">Cash: {formatCurrency(goal.targetAmount)}</p>
-                                         </>
-                                     ) : (
-                                        <p className="text-sm text-muted-foreground">Target: {formatCurrency(goal.targetAmount)}</p>
-                                     )}
-                                </div>
-                                
-                                <div className="space-y-2 mt-auto">
-                                    <div className="flex justify-between text-sm">
-                                        <span className="font-medium">{formatCurrency(goal.currentAmount)}</span>
-                                        <span className="text-muted-foreground">{progress.toFixed(0)}%</span>
+                                {/* Content Section */}
+                                <div className="p-5 flex flex-col flex-1">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div className="p-2 bg-primary/5 rounded-xl">
+                                            {getIcon(goal.category)}
+                                        </div>
                                     </div>
-                                    <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                        <div className="h-full bg-primary" style={{ width: `${progress}%` }} />
+                                    
+                                    <h3 className="text-xl font-bold mb-1">{goal.name}</h3>
+                                    <div className="flex flex-col gap-1 mb-6">
+                                         {goal.category === 'home' && goal.propertyValue ? (
+                                             <>
+                                                <p className="text-xs text-muted-foreground">Price: {formatCurrency(goal.propertyValue)}</p>
+                                                <p className="text-sm text-muted-foreground">Cash: {formatCurrency(goal.targetAmount)}</p>
+                                             </>
+                                         ) : (
+                                            <p className="text-sm text-muted-foreground">Target: {formatCurrency(goal.targetAmount)}</p>
+                                         )}
                                     </div>
-                                </div>
+                                    
+                                    <div className="space-y-2 mt-auto">
+                                        <div className="flex justify-between text-sm">
+                                            <span className="font-medium">{formatCurrency(goal.currentAmount)}</span>
+                                            <span className="text-muted-foreground">{progress.toFixed(0)}%</span>
+                                        </div>
+                                        <div className="h-2 bg-muted rounded-full overflow-hidden">
+                                            <div className="h-full bg-primary" style={{ width: `${progress}%` }} />
+                                        </div>
+                                    </div>
 
-                                {progress < 100 && requiredMonthly > 0 && (
-                                    <div className="mt-4 pt-4 border-t border-border/50 text-xs text-muted-foreground">
-                                        To reach goal: <span className="font-medium text-foreground">{formatCurrency(requiredMonthly)}/mo</span>
-                                    </div>
-                                )}
-                            </PremiumCard>
+                                    {progress < 100 && requiredMonthly > 0 && (
+                                        <div className="mt-4 pt-4 border-t border-border/50 text-xs text-muted-foreground">
+                                            To reach goal: <span className="font-medium text-foreground">{formatCurrency(requiredMonthly)}/mo</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     );
                 })}
@@ -671,6 +723,19 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                 </DialogFooter>
             </DialogContent>
         </Dialog>
+        
+        {/* Expandable Goal Page */}
+        {expandedGoal && (
+            <GoalPage 
+                goal={expandedGoal}
+                onBack={() => setExpandedGoal(null)}
+                onEdit={() => {
+                    setExpandedGoal(null);
+                    openGoalDetail(expandedGoal, 'details');
+                }}
+            />
+        )}
     </div>
+    </>
   );
 };
