@@ -480,7 +480,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                 
                 <button 
                     onClick={() => setIsAddOpen(true)}
-                    className="group border-2 border-dashed border-muted-foreground/20 rounded-2xl p-6 flex flex-col items-center justify-center text-muted-foreground hover:text-emerald-700 hover:border-emerald-500/50 transition-all min-h-[200px]"
+                    className="group border-2 border-dashed border-muted-foreground/20 rounded-2xl p-6 flex flex-col items-center justify-center text-muted-foreground hover:text-blue-700 hover:border-blue-500/50 transition-all min-h-[200px]"
                 >
                     <Plus size={32} className="mb-3 opacity-50 group-hover:opacity-100 transition-opacity" />
                     <span className="font-medium">Create New Goal</span>
