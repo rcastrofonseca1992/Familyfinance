@@ -49,8 +49,19 @@ export const ForecastChart: React.FC<ForecastChartProps> = ({ className }) => {
 
   const chartData = generateForecast();
 
+  // Safety check: ensure we have valid data before rendering
+  if (!chartData || chartData.length === 0) {
+    return (
+      <div className={className} style={{ width: '100%', height: '100%', minHeight: '200px' }}>
+        <div className="flex items-center justify-center h-full text-muted-foreground">
+          No data available
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={className}>
+    <div className={className} style={{ width: '100%', height: '100%', minHeight: '200px' }}>
         <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                 <defs>

@@ -333,12 +333,12 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
 
                         return (
                         <div key={goal.id} className="relative">
-                            <PremiumCard glow className="border-primary/20 transition-transform hover:scale-[1.005] bg-emerald-50/50 dark:bg-emerald-950/10 p-6 md:p-8 px-[16px] py-[24px]">
+                            <PremiumCard glow className="border-primary/20 transition-transform hover:scale-[1.005] bg-blue-50/50 dark:bg-blue-950/10 p-6 md:p-8 px-[16px] py-[24px]">
                                 <div className="space-y-8 cursor-pointer" onClick={() => openGoalDetail(goal, 'details')}>
                                     
                                     {/* 1. Tags */}
                                     <div className="flex items-center gap-3">
-                                        <span className="px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-100/60 text-emerald-700 border border-emerald-200/60 shadow-sm">
+                                        <span className="px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-blue-100/60 text-blue-700 border border-blue-200/60 shadow-sm">
                                             {t('goals.mainGoal')}
                                         </span>
                                         {getFeasibilityStatus(goal) && (
@@ -362,12 +362,12 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                     </div>
 
                                     {/* 3. Progress Section */}
-                                    <div className="bg-white/60 dark:bg-black/20 rounded-2xl p-6 border border-emerald-100/50 shadow-sm space-y-6">
+                                    <div className="bg-white/60 dark:bg-black/20 rounded-2xl p-6 border border-blue-100/50 shadow-sm space-y-6">
                                         <div className="flex justify-between items-end">
                                             <div>
                                                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{t('goals.currentSavings')}</p>
                                                 <div className="flex items-baseline gap-2">
-                                                    <span className="text-3xl font-medium text-emerald-900 dark:text-emerald-100">{formatCurrency(displayCurrentAmount)}</span>
+                                                    <span className="text-3xl font-medium text-blue-900 dark:text-blue-100">{formatCurrency(displayCurrentAmount)}</span>
                                                     <span className="text-sm text-muted-foreground">
                                                         / {formatCurrency(goal.targetAmount)}
                                                     </span>
@@ -376,17 +376,17 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                         </div>
                                         
                                         <div>
-                                            <div className="h-3 bg-emerald-100/50 rounded-full overflow-hidden mb-2">
-                                                <div className="h-full bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-1000" style={{ width: `${progress}%` }} />
+                                            <div className="h-3 bg-blue-100/50 rounded-full overflow-hidden mb-2">
+                                                <div className="h-full bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-1000" style={{ width: `${progress}%` }} />
                                             </div>
                                             <div className="flex justify-between text-xs text-muted-foreground">
                                                 <span>{t('goals.allocatedFromSurplus')}</span>
-                                                <span className="font-medium text-emerald-700 dark:text-emerald-400">{formatCurrency(Math.max(0, goal.targetAmount - displayCurrentAmount))} {t('goals.remaining')}</span>
+                                                <span className="font-medium text-blue-700 dark:text-blue-400">{formatCurrency(Math.max(0, goal.targetAmount - displayCurrentAmount))} {t('goals.remaining')}</span>
                                             </div>
                                         </div>
 
                                         {/* Analysis Grid */}
-                                        <div className="grid grid-cols-3 gap-4 pt-4 border-t border-emerald-100/50">
+                                        <div className="grid grid-cols-3 gap-4 pt-4 border-t border-blue-100/50">
                                             <div>
                                                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-0.5">{t('goals.timeLeft')}</p>
                                                 <p className="text-sm font-medium text-foreground">
@@ -395,7 +395,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                             </div>
                                             <div>
                                                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-0.5">{t('goals.requiredPerMonth')}</p>
-                                                <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
+                                                <p className="text-sm font-medium text-blue-700 dark:text-blue-400">
                                                     {goal.deadline 
                                                         ? formatCurrency(calculateMonthlyContribution(goal.targetAmount, displayCurrentAmount, getMonthsUntil(goal.deadline)))
                                                         : '-'}

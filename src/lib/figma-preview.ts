@@ -8,9 +8,20 @@
  */
 
 // 1. Detect Figma Make preview mode
+// Can be overridden by setting localStorage.disablePreviewMode = "true"
 export const isFigmaPreview = (() => {
   try {
-    return typeof window !== 'undefined' && window?.self !== window?.top; // in iframe → Figma Make
+    // Check if user manually disabled preview mode (for testing)
+    if (typeof window !== 'undefined') {
+      const manualOverride = localStorage.getItem('disablePreviewMode');
+      if (manualOverride === 'true') {
+        console.warn('⚠️ Preview mode MANUALLY DISABLED via localStorage');
+        return false;
+      }
+    }
+    
+    // Default: detect iframe → Figma Make
+    return typeof window !== 'undefined' && window?.self !== window?.top;
   } catch {
     return true; // iframe cross-origin → treat as preview mode
   }
@@ -66,12 +77,25 @@ export const mockFinanceData = {
       ownerId: "PREVIEW_USER", 
       includeInHousehold: true,
       apy: 2.5
+    },
+    {
+      id: "ACC3",
+      name: "Investimentos ETFs",
+      balance: 22500,
+      type: "investment" as const,
+      institution: "DEGIRO",
+      currency: "EUR",
+      ownerId: "PREVIEW_USER",
+      includeInHousehold: true,
+      apy: 7.0
     }
   ],
   recurringCosts: [
     { id: "C1", name: "Renda", amount: 900, category: "housing", ownerId: "PREVIEW_USER", includeInHousehold: true },
     { id: "C2", name: "Netflix", amount: 15.99, category: "entertainment", ownerId: "PREVIEW_USER", includeInHousehold: true },
-    { id: "C3", name: "Ginásio", amount: 45, category: "health", ownerId: "PREVIEW_USER", includeInHousehold: true }
+    { id: "C3", name: "Ginásio", amount: 45, category: "health", ownerId: "PREVIEW_USER", includeInHousehold: true },
+    { id: "C4", name: "Spotify", amount: 10.99, category: "entertainment", ownerId: "PREVIEW_USER", includeInHousehold: true },
+    { id: "C5", name: "Seguro Saúde", amount: 85, category: "insurance", ownerId: "PREVIEW_USER", includeInHousehold: true }
   ],
   debts: [
     { 
@@ -103,14 +127,29 @@ export const mockFinanceData = {
       deadline: "2026-06-01", 
       category: "trip" as const,
       isMain: false
+    },
+    {
+      id: "G3",
+      name: "Fundo de Emergência",
+      targetAmount: 15000,
+      currentAmount: 9500,
+      deadline: "2025-12-01",
+      category: "emergency" as const,
+      isMain: false
     }
   ],
   emergencyFundGoal: 15000,
   isVariableIncome: false,
   currency: "EUR",
   theme: "light" as const,
-  variableSpending: 0,
-  monthlySnapshots: mockHousehold.monthlySnapshots
+  variableSpending: 450,
+  monthlySnapshots: mockHousehold.monthlySnapshots,
+  marketData: {
+    euribor12m: 3.2,
+    euribor6m: 3.1,
+    euribor3m: 3.0,
+    lastUpdated: new Date().toISOString()
+  }
 };
 
 // 5. Safe user getter (returns mock in preview, real in production)

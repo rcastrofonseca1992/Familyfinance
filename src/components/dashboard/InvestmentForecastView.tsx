@@ -136,37 +136,43 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                         </div>
                     </div>
 
-                    <div className="flex-1 w-full min-h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={projectionData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                <defs>
-                                    <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
-                                        <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
-                                    </linearGradient>
-                                </defs>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.5} />
-                                <XAxis 
-                                    dataKey="year" 
-                                    axisLine={false} 
-                                    tickLine={false} 
-                                    tick={{ fill: 'var(--color-muted-foreground)', fontSize: 12 }}
-                                    interval="preserveStartEnd"
-                                    ticks={['Now', '5y', '10y', '15y', '20y', '25y']}
-                                />
-                                <YAxis 
-                                    hide={true} // Cleaner look, use tooltip for values
-                                />
-                                <Tooltip content={<CustomTooltip />} />
-                                <Area 
-                                    type="monotone" 
-                                    dataKey="amount" 
-                                    stroke="var(--color-primary)" 
-                                    strokeWidth={3}
-                                    fill="url(#colorTotal)" 
-                                />
-                            </AreaChart>
-                        </ResponsiveContainer>
+                    <div className="flex-1 w-full h-[300px]">
+                        {projectionData && projectionData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height="100%">
+                                <AreaChart data={projectionData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                    <defs>
+                                        <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
+                                            <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                                        </linearGradient>
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.5} />
+                                    <XAxis 
+                                        dataKey="year" 
+                                        axisLine={false} 
+                                        tickLine={false} 
+                                        tick={{ fill: 'var(--color-muted-foreground)', fontSize: 12 }}
+                                        interval="preserveStartEnd"
+                                        ticks={['Now', '5y', '10y', '15y', '20y', '25y']}
+                                    />
+                                    <YAxis 
+                                        hide={true} // Cleaner look, use tooltip for values
+                                    />
+                                    <Tooltip content={<CustomTooltip />} />
+                                    <Area 
+                                        type="monotone" 
+                                        dataKey="amount" 
+                                        stroke="var(--color-primary)" 
+                                        strokeWidth={3}
+                                        fill="url(#colorTotal)" 
+                                    />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <div className="flex items-center justify-center h-full text-muted-foreground">
+                                No data available
+                            </div>
+                        )}
                     </div>
                 </PremiumCard>
 

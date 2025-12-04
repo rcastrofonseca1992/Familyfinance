@@ -87,7 +87,7 @@ export const PremiumMortgageCard: React.FC<PremiumMortgageCardProps> = ({
                 {/* Tags */}
                 <div className="flex gap-2 mb-3">
                     {goal.isMain && (
-                        <span className="px-3 py-1 text-xs font-semibold text-emerald-700 bg-emerald-100 rounded-full">
+                        <span className="px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-100 rounded-full">
                             {t('goals.mainGoal')}
                         </span>
                     )}
