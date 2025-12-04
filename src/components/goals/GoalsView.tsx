@@ -30,15 +30,16 @@ const getCategoryImage = (category: string): string => {
         case 'travel':
             return 'https://images.unsplash.com/photo-1760434685862-5f2b29748cb9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc29tZXRyaWMlMjB0cmF2ZWwlMjB2YWNhdGlvbnxlbnwxfHx8fDE3NjQ4ODI0NTV8MA&ixlib=rb-4.1.0&q=80&w=1080';
         case 'emergency':
-            return 'https://images.unsplash.com/photo-1696013910376-c56f76dd8178?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHwzZCUyMG1pbmlhdHVyZSUyMHNoaWVsZCUyMHNlY3VyaXR5fGVufDF8fHx8MTc2NDg4MzcxOHww&ixlib=rb-4.1.0&q=80&w=1080';
+            return 'https://images.unsplash.com/photo-1674027392842-29f8354e236c?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
         case 'car':
-            return 'https://images.unsplash.com/photo-1642242413035-58b75e06dfeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc29tZXRyaWMlMjBjYXIlMjBtaW5pYXR1cmV8ZW58MXx8fHwxNzY0ODgyNDU1fDA&ixlib=rb-4.1.0&q=80&w=1080';
+            return 'https://images.unsplash.com/photo-1744174208846-1f5c2f8f825d?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
         case 'kids':
+            return 'https://images.unsplash.com/photo-1647331311387-9cca489b53f2?q=80&w=1674&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
         case 'family':
-            return 'https://images.unsplash.com/photo-1653164579768-ea97833b3b03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHwzZCUyMG1pbmlhdHVyZSUyMHNjaG9vbCUyMHN1cHBsaWVzfGVufDF8fHx8MTc2NDg4MzcxOXww&ixlib=rb-4.1.0&q=80&w=1080';
+            return 'https://images.unsplash.com/photo-1647331311387-9cca489b53f2?q=80&w=1674&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
         case 'other':
         default:
-            return 'https://images.unsplash.com/photo-1724680943135-08c96af5dc4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc29tZXRyaWMlMjAzZCUyMHRhcmdldCUyMGdvYWx8ZW58MXx8fHwxNzY0ODgzNzYxfDA&ixlib=rb-4.1.0&q=80&w=1080';
+            return 'https://images.unsplash.com/photo-1727026115176-a36c0bb566f7?q=80&w=2919&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
     }
 };
 
@@ -183,6 +184,25 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
             return <Users size={20} />;
         default:
             return <Target size={20} />;
+    }
+  };
+
+  const getCategoryLabel = (cat: string) => {
+    switch(cat) {
+        case 'home':
+        case 'mortgage':
+            return t('category.mortgage');
+        case 'trip':
+            return t('category.trip');
+        case 'car':
+            return t('category.car');
+        case 'emergency':
+            return t('category.emergency');
+        case 'kids':
+        case 'family':
+            return t('category.kids');
+        default:
+            return t('category.other');
     }
   };
 
@@ -487,8 +507,13 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                 {/* Content Section */}
                                 <div className="p-5 flex flex-col flex-1">
                                     <div className="flex justify-between items-start mb-3">
-                                        <div className="p-2 bg-primary/5 rounded-xl">
-                                            {getIcon(goal.category)}
+                                        <div className="flex items-center gap-2">
+                                            <div className="p-2 bg-primary/5 rounded-xl">
+                                                {getIcon(goal.category)}
+                                            </div>
+                                            <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
+                                                {getCategoryLabel(goal.category)}
+                                            </span>
                                         </div>
                                     </div>
                                     
