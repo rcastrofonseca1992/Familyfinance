@@ -4,6 +4,7 @@ import { PremiumCard } from '../ui/PremiumCard';
 import { formatCurrency, computeFeasibility, calculateGoalDelay, getMarketSentiment, getMortgageAdvice, HOUSE_TARGET, CASH_RATIO_FOR_HOUSE, DTI_LIMIT, DEFAULT_LOAN_YEARS, DEFAULT_INTEREST, EMERGENCY_FUND_TARGET } from '../../lib/finance';
 import { FeasibilityEngine } from '../feasibility/FeasibilityEngine';
 import { SavingsRecommendations } from './SavingsRecommendations';
+import { PremiumMortgageCard } from './PremiumMortgageCard';
 import { Target, Plane, Home, ShieldAlert, Plus, Trash2, Calendar, Save, X, AlertTriangle, TrendingUp, Info, CheckCircle, RefreshCw, Star, Calculator } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger, DialogFooter } from '../ui/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '../ui/sheet';
@@ -242,6 +243,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                 <SelectTrigger><SelectValue /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="home">{t('category.home')}</SelectItem>
+                                    <SelectItem value="mortgage">{t('category.mortgage')}</SelectItem>
                                     <SelectItem value="trip">{t('category.trip')}</SelectItem>
                                     <SelectItem value="emergency">{t('category.emergency')}</SelectItem>
                                     <SelectItem value="kids">{t('category.kids')}</SelectItem>
@@ -252,10 +254,10 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
 
                         <div className="grid gap-2">
                             <Label>{t('goals.goalName')}</Label>
-                            <Input value={newGoal.name} onChange={e => setNewGoal({...newGoal, name: e.target.value})} placeholder={newGoal.category === 'home' ? "e.g. Dream House" : "e.g. Japan Trip"} />
+                            <Input value={newGoal.name} onChange={e => setNewGoal({...newGoal, name: e.target.value})} placeholder={newGoal.category === 'home' || newGoal.category === 'mortgage' ? "e.g. Dream House" : "e.g. Japan Trip"} />
                         </div>
                         
-                        {newGoal.category === 'home' ? (
+                        {(newGoal.category === 'home' || newGoal.category === 'mortgage') ? (
                             <div className="grid gap-2 p-3 bg-muted/30 rounded-lg border">
                                 <Label>{t('goals.propertyPrice')}</Label>
                                 <div className="relative">
@@ -312,6 +314,21 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                     {mainGoals.map(goal => {
                         // Derive current amount for display if it's main
                         const displayCurrentAmount = netAllocatableSavings;
+                        
+                        // Use PremiumMortgageCard for mortgage/home goals
+                        if (goal.category === 'mortgage' || goal.category === 'home') {
+                            return (
+                                <PremiumMortgageCard
+                                    key={goal.id}
+                                    goal={goal}
+                                    currentAmount={displayCurrentAmount}
+                                    onClick={() => openGoalDetail(goal, 'details')}
+                                    onSimulatorClick={() => openGoalDetail(goal, 'simulator')}
+                                />
+                            );
+                        }
+
+                        // Fallback for other goal types with premium design
                         const progress = Math.min(100, (displayCurrentAmount / goal.targetAmount) * 100);
 
                         return (
@@ -340,9 +357,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                             <span className="text-2xl md:text-4xl font-light text-muted-foreground">({progress.toFixed(0)}%)</span>
                                         </div>
                                         <p className="text-2xl md:text-4xl font-light text-foreground/80">
-                                            {goal.category === 'home' && goal.propertyValue 
-                                                ? formatCurrency(goal.propertyValue) 
-                                                : formatCurrency(goal.targetAmount)}
+                                            {formatCurrency(goal.targetAmount)}
                                         </p>
                                     </div>
 
@@ -391,39 +406,6 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                                  <p className="text-sm font-medium text-foreground">{DEFAULT_APY_ESTIMATE}%</p>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    {/* 4. Market Context (Horizontal Strip) */}
-                                    <div className="pt-2 border-t border-emerald-200/40 flex flex-col md:flex-row gap-6 md:items-center justify-between">
-                                        <div className="flex flex-col gap-4 min-w-[120px]">
-                                            <div className="flex items-center gap-3">
-                                                <div className="p-2 bg-emerald-100/50 rounded-lg text-emerald-700 shadow-sm">
-                                                    <TrendingUp size={16} />
-                                                </div>
-                                                <div>
-                                                    <p className="text-[10px] uppercase text-muted-foreground font-bold leading-none mb-1">{t('goals.euribor')}</p>
-                                                    <p className="text-lg font-semibold text-emerald-900 dark:text-emerald-100 leading-none">{marketData.euribor12m}%</p>
-                                                </div>
-                                            </div>
-                                            <div className="pl-1">
-                                                <p className="text-[10px] uppercase text-muted-foreground font-bold mb-1">{t('goals.sentiment')}</p>
-                                                <p className="text-sm font-medium text-emerald-800 dark:text-emerald-200 bg-emerald-100/30 px-2 py-0.5 rounded-md inline-block border border-emerald-200/30">
-                                                    {getMarketSentiment(marketData.euribor12m)}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <p className="text-xs text-muted-foreground flex-1 max-w-xl leading-relaxed hidden md:block">
-                                            {getMortgageAdvice(marketData.euribor12m)}
-                                        </p>
-
-                                        <Button 
-                                            onClick={(e) => { e.stopPropagation(); openGoalDetail(goal, 'simulator'); }} 
-                                            variant="ghost" 
-                                            className="gap-2 text-emerald-700 hover:text-emerald-800 hover:bg-emerald-100/50 whitespace-nowrap"
-                                        >
-                                            <Calculator size={16} /> {t('goals.simulator')}
-                                        </Button>
                                     </div>
                                 </div>
                             </PremiumCard>

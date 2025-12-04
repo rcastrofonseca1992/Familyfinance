@@ -23,6 +23,7 @@ import { Calendar, Plus } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { formatCurrency } from './lib/finance';
 import { getLanguage } from './src/utils/i18n';
+import { isFigmaPreview, logPreviewMode } from './lib/figma-preview';
 
 const MainApp: React.FC = () => {
   const { data, getPersonalNetWorth } = useFinance();
@@ -33,18 +34,20 @@ const MainApp: React.FC = () => {
   // Initialize language on app startup
   useEffect(() => {
     document.documentElement.setAttribute("lang", getLanguage());
+    // Log preview mode status
+    logPreviewMode();
   }, []);
 
-  // 1. Auth Layer
-  if (!data.user) {
+  // 1. Auth Layer - Skip in Figma Preview
+  if (!data.user && !isFigmaPreview) {
       if (authView === 'signup') {
           return <SignUpPage onNavigate={(page) => page === 'login' ? setAuthView('login') : null} />;
       }
       return <LoginPage onNavigate={(page) => page === 'signup' ? setAuthView('signup') : null} />;
   }
 
-  // 2. Household Layer
-  if (!data.household) {
+  // 2. Household Layer - Skip in Figma Preview
+  if (!data.household && !isFigmaPreview) {
       return <HouseholdSetup />;
   }
 

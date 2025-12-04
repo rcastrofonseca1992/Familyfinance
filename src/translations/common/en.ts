@@ -42,6 +42,7 @@ export const commonEn = {
   
   // Investment Categories
   "category.home": "Home (Main)",
+  "category.mortgage": "Mortgage",
   "category.trip": "Travel",
   "category.emergency": "Emergency Fund",
   "category.kids": "Family/Kids",

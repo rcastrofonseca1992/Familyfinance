@@ -42,6 +42,7 @@ export const commonPt = {
   
   // Investment Categories
   "category.home": "Casa (Principal)",
+  "category.mortgage": "Hipoteca",
   "category.trip": "Viagem",
   "category.emergency": "Fundo de Emergência",
   "category.kids": "Família/Filhos",

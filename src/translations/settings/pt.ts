@@ -48,5 +48,5 @@ export const settingsPt = {
   // Account
   "settings.account": "Conta",
   "settings.secured": "Seguro",
-  "settings.logOut": "Terminar Sessão",
+  "settings.logOut": "Logout",
 };
