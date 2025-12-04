@@ -193,9 +193,10 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                                 <div className="flex gap-2 items-center">
                                     <Input 
                                         type="number" 
-                                        value={monthlyContribution} 
-                                        onChange={(e) => setMonthlyContribution(Number(e.target.value))}
+                                        value={monthlyContribution || ''} 
+                                        onChange={(e) => setMonthlyContribution(e.target.value ? Number(e.target.value) : 0)}
                                         className="font-mono"
+                                        placeholder="e.g. 500"
                                     />
                                 </div>
                                 <p className="text-xs text-muted-foreground">{t('forecast.contributionHint')}</p>

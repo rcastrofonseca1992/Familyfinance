@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Edit, Calendar, TrendingUp, Target, DollarSign, Clock, AlertCircle, CheckCircle, Zap, PiggyBank, Calculator, TrendingDown } from 'lucide-react';
 import { formatCurrency } from '../../lib/finance';
 import { Button } from '../ui/button';
@@ -106,15 +106,21 @@ export const GoalPage: React.FC<GoalPageProps> = ({ goal, onBack, onEdit }) => {
   return (
     <div className="fixed inset-0 z-50 bg-background animate-in fade-in duration-300">
       {/* Hero Image - Fixed - Extends to top including status bar */}
-      <div className="fixed inset-x-0 top-0 h-[50vh] overflow-hidden">
+      <div className="fixed inset-x-0 top-0 h-[50vh] overflow-hidden" style={{ paddingTop: 0 }}>
         <img 
           src={heroImage} 
           alt={goal.name}
           className="w-full h-full object-cover"
-          style={{ paddingTop: 'env(safe-area-inset-top)' }}
+          style={{ 
+            marginTop: 'calc(-1 * env(safe-area-inset-top))',
+            height: 'calc(100% + env(safe-area-inset-top))'
+          }}
         />
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/90" style={{ 
+          marginTop: 'calc(-1 * env(safe-area-inset-top))',
+          height: 'calc(100% + env(safe-area-inset-top))'
+        }} />
       </div>
 
       {/* Floating Header */}

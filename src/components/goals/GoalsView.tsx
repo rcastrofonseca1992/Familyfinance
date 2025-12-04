@@ -316,7 +316,12 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                             <div className="grid gap-2 p-3 bg-muted/30 rounded-lg border">
                                 <Label>{t('goals.propertyPrice')}</Label>
                                 <div className="relative">
-                                    <Input type="number" value={newPropertyPrice} onChange={e => onPropertyPriceChange(e.target.value)} placeholder="500000" />
+                                    <Input 
+                                        type="number" 
+                                        value={newPropertyPrice} 
+                                        onChange={e => onPropertyPriceChange(e.target.value)} 
+                                        placeholder="e.g. 500000" 
+                                    />
                                     <span className="absolute right-3 top-2.5 text-muted-foreground">€</span>
                                 </div>
                                 <div className="flex justify-between text-xs text-muted-foreground mt-1 px-1">
@@ -328,7 +333,12 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                         ) : (
                             <div className="grid gap-2">
                                 <Label>{t('goals.targetAmount')}</Label>
-                                <Input type="number" value={newGoal.targetAmount} onChange={e => setNewGoal({...newGoal, targetAmount: parseFloat(e.target.value)})} />
+                                <Input 
+                                    type="number" 
+                                    value={newGoal.targetAmount || ''} 
+                                    onChange={e => setNewGoal({...newGoal, targetAmount: e.target.value ? parseFloat(e.target.value) : 0})} 
+                                    placeholder="e.g. 10000" 
+                                />
                             </div>
                         )}
 
@@ -609,16 +619,18 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                                             type="number" 
                                                             value={selectedGoal.propertyValue || ''} 
                                                             onChange={e => {
-                                                                const p = parseFloat(e.target.value);
-                                                                setSelectedGoal({...selectedGoal, propertyValue: p, targetAmount: p ? p * CASH_RATIO_FOR_HOUSE : 0});
+                                                                const val = e.target.value;
+                                                                const p = val ? parseFloat(val) : 0;
+                                                                setSelectedGoal({...selectedGoal, propertyValue: p || undefined, targetAmount: p ? p * CASH_RATIO_FOR_HOUSE : 0});
                                                             }} 
+                                                            placeholder="e.g. 500000"
                                                         />
                                                     </div>
                                                     <div className="space-y-2">
                                                         <Label>Target (Cash Needed)</Label>
                                                         <Input 
                                                             type="number" 
-                                                            value={selectedGoal.targetAmount} 
+                                                            value={selectedGoal.targetAmount || ''} 
                                                             disabled
                                                             className="bg-muted/50"
                                                         />
@@ -630,8 +642,9 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                                     <Label>Target Amount</Label>
                                                     <Input 
                                                         type="number" 
-                                                        value={selectedGoal.targetAmount} 
-                                                        onChange={e => setSelectedGoal({...selectedGoal, targetAmount: parseFloat(e.target.value)})} 
+                                                        value={selectedGoal.targetAmount || ''} 
+                                                        onChange={e => setSelectedGoal({...selectedGoal, targetAmount: e.target.value ? parseFloat(e.target.value) : 0})} 
+                                                        placeholder="e.g. 10000"
                                                     />
                                                 </div>
                                             )}
@@ -652,8 +665,9 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                                 ) : (
                                                     <Input 
                                                         type="number" 
-                                                        value={selectedGoal.currentAmount} 
-                                                        onChange={e => setSelectedGoal({...selectedGoal, currentAmount: parseFloat(e.target.value)})} 
+                                                        value={selectedGoal.currentAmount || ''} 
+                                                        onChange={e => setSelectedGoal({...selectedGoal, currentAmount: e.target.value ? parseFloat(e.target.value) : 0})} 
+                                                        placeholder="e.g. 5000"
                                                     />
                                                 )}
                                             </div>
