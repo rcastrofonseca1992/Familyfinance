@@ -61,9 +61,9 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
       {/* Language Switcher - Fixed Top Right */}
-      <div className="fixed top-4 right-4 z-50">
+      <div className="fixed top-4 right-4 z-50" style={{ top: 'calc(1rem + env(safe-area-inset-top))' }}>
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}

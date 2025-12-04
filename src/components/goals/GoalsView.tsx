@@ -3,7 +3,6 @@ import { useFinance, Goal } from '../store/FinanceContext';
 import { PremiumCard } from '../ui/PremiumCard';
 import { formatCurrency, computeFeasibility, calculateGoalDelay, getMarketSentiment, getMortgageAdvice, HOUSE_TARGET, CASH_RATIO_FOR_HOUSE, DTI_LIMIT, DEFAULT_LOAN_YEARS, DEFAULT_INTEREST, EMERGENCY_FUND_TARGET } from '../../lib/finance';
 import { FeasibilityEngine } from '../feasibility/FeasibilityEngine';
-import { SavingsRecommendations } from './SavingsRecommendations';
 import { PremiumMortgageCard } from './PremiumMortgageCard';
 import { GoalPage } from './GoalPage';
 import { Target, Plane, Home, ShieldAlert, Plus, Trash2, Calendar, Save, X, AlertTriangle, TrendingUp, Info, CheckCircle, RefreshCw, Star, Calculator, Car, Users } from 'lucide-react';
@@ -454,10 +453,6 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
             </section>
         )}
 
-        <section>
-            <SavingsRecommendations />
-        </section>
-
         {/* Other Goals Grid */}
         <section>
              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -543,7 +538,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
         {/* Goal Detail Sheet with Tabs */}
         <Sheet open={isEditOpen} onOpenChange={setIsEditOpen}>
             <SheetContent className="sm:max-w-2xl w-full overflow-y-auto p-0 gap-0">
-                <SheetHeader className="p-6 pb-2">
+                <SheetHeader className="p-6 pb-4">
                     <SheetTitle className="text-2xl flex items-center gap-2">
                         {selectedGoal && getIcon(selectedGoal.category)}
                         {selectedGoal?.name}
@@ -554,145 +549,153 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                 </SheetHeader>
 
                 {selectedGoal && (
-                    <div className="px-6 pb-6">
-                        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
-                            {selectedGoal.category === 'home' && (
-                                <TabsList className="w-full grid grid-cols-2 mb-6">
-                                    <TabsTrigger value="details">Details & Edit</TabsTrigger>
-                                    <TabsTrigger value="simulator">Simulator</TabsTrigger>
-                                </TabsList>
-                            )}
+                    <>
+                        {/* Tabs at the top of the content */}
+                        {selectedGoal.category === 'home' && (
+                            <div className="px-6 pb-4 border-b">
+                                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                                    <TabsList className="w-full grid grid-cols-2">
+                                        <TabsTrigger value="details">Details & Edit</TabsTrigger>
+                                        <TabsTrigger value="simulator">Simulator</TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
+                            </div>
+                        )}
 
-                            <TabsContent value="details" className="space-y-6">
-                            <div className="space-y-4">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <Label>Name</Label>
-                                        <Input 
-                                            value={selectedGoal.name} 
-                                            onChange={e => setSelectedGoal({...selectedGoal, name: e.target.value})} 
-                                        />
-                                    </div>
-
-                                    {selectedGoal.category === 'home' ? (
-                                        <>
+                        {/* Tab Content */}
+                        <div className="px-6 pb-6 pt-6">
+                            {activeTab === 'details' && (
+                                <div className="space-y-6">
+                                    <div className="space-y-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div className="space-y-2">
-                                                <Label>Property Price</Label>
+                                                <Label>Name</Label>
                                                 <Input 
-                                                    type="number" 
-                                                    value={selectedGoal.propertyValue || ''} 
-                                                    onChange={e => {
-                                                        const p = parseFloat(e.target.value);
-                                                        setSelectedGoal({...selectedGoal, propertyValue: p, targetAmount: p ? p * CASH_RATIO_FOR_HOUSE : 0});
-                                                    }} 
+                                                    value={selectedGoal.name} 
+                                                    onChange={e => setSelectedGoal({...selectedGoal, name: e.target.value})} 
                                                 />
                                             </div>
+
+                                            {selectedGoal.category === 'home' ? (
+                                                <>
+                                                    <div className="space-y-2">
+                                                        <Label>Property Price</Label>
+                                                        <Input 
+                                                            type="number" 
+                                                            value={selectedGoal.propertyValue || ''} 
+                                                            onChange={e => {
+                                                                const p = parseFloat(e.target.value);
+                                                                setSelectedGoal({...selectedGoal, propertyValue: p, targetAmount: p ? p * CASH_RATIO_FOR_HOUSE : 0});
+                                                            }} 
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <Label>Target (Cash Needed)</Label>
+                                                        <Input 
+                                                            type="number" 
+                                                            value={selectedGoal.targetAmount} 
+                                                            disabled
+                                                            className="bg-muted/50"
+                                                        />
+                                                        <p className="text-[10px] text-muted-foreground">Calculated as 30% of Price.</p>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div className="space-y-2">
+                                                    <Label>Target Amount</Label>
+                                                    <Input 
+                                                        type="number" 
+                                                        value={selectedGoal.targetAmount} 
+                                                        onChange={e => setSelectedGoal({...selectedGoal, targetAmount: parseFloat(e.target.value)})} 
+                                                    />
+                                                </div>
+                                            )}
+
                                             <div className="space-y-2">
-                                                <Label>Target (Cash Needed)</Label>
-                                                <Input 
-                                                    type="number" 
-                                                    value={selectedGoal.targetAmount} 
-                                                    disabled
-                                                    className="bg-muted/50"
-                                                />
-                                                <p className="text-[10px] text-muted-foreground">Calculated as 30% of Price.</p>
+                                                <Label>Current Savings Allocation</Label>
+                                                {selectedGoal.isMain ? (
+                                                    <div className="space-y-1">
+                                                        <Input 
+                                                            value={formatCurrency(netAllocatableSavings)} 
+                                                            disabled 
+                                                            className="bg-muted/50 font-bold text-primary"
+                                                        />
+                                                        <p className="text-[10px] text-muted-foreground">
+                                                            Auto-calculated: Total Liquid Savings ({formatCurrency(householdSavings)}) - Emergency Fund ({formatCurrency(emergencyFundTarget)}).
+                                                        </p>
+                                                    </div>
+                                                ) : (
+                                                    <Input 
+                                                        type="number" 
+                                                        value={selectedGoal.currentAmount} 
+                                                        onChange={e => setSelectedGoal({...selectedGoal, currentAmount: parseFloat(e.target.value)})} 
+                                                    />
+                                                )}
                                             </div>
-                                        </>
-                                    ) : (
-                                        <div className="space-y-2">
-                                            <Label>Target Amount</Label>
-                                            <Input 
-                                                type="number" 
-                                                value={selectedGoal.targetAmount} 
-                                                onChange={e => setSelectedGoal({...selectedGoal, targetAmount: parseFloat(e.target.value)})} 
+                                            <div className="space-y-2">
+                                                <Label>Target Date</Label>
+                                                <Input 
+                                                    type="date" 
+                                                    value={selectedGoal.deadline} 
+                                                    onChange={e => setSelectedGoal({...selectedGoal, deadline: e.target.value})} 
+                                                />
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border">
+                                            <div className="space-y-0.5">
+                                                <Label className="text-base">Main Goal</Label>
+                                                <p className="text-xs text-muted-foreground">Is this a primary financial objective?</p>
+                                            </div>
+                                            <Switch 
+                                                checked={selectedGoal.isMain} 
+                                                onCheckedChange={(c) => setSelectedGoal({...selectedGoal, isMain: c})} 
                                             />
                                         </div>
-                                    )}
+                                    </div>
 
-                                    <div className="space-y-2">
-                                        <Label>Current Savings Allocation</Label>
-                                        {selectedGoal.isMain ? (
-                                            <div className="space-y-1">
-                                                <Input 
-                                                    value={formatCurrency(netAllocatableSavings)} 
-                                                    disabled 
-                                                    className="bg-muted/50 font-bold text-primary"
-                                                />
-                                                <p className="text-[10px] text-muted-foreground">
-                                                    Auto-calculated: Total Liquid Savings ({formatCurrency(householdSavings)}) - Emergency Fund ({formatCurrency(emergencyFundTarget)}).
-                                                </p>
+                                    {/* Projections */}
+                                    <PremiumCard className="bg-muted/30">
+                                        <div className="text-center py-6">
+                                            <p className="text-muted-foreground mb-2">Projected Monthly Savings Needed</p>
+                                            <div className="text-3xl font-bold text-primary">
+                                                {(() => {
+                                                    const daysLeft = Math.ceil((new Date(selectedGoal.deadline).getTime() - Date.now()) / (1000 * 3600 * 24));
+                                                    const monthsLeft = Math.max(1, Math.ceil(daysLeft / 30));
+                                                    const current = selectedGoal.isMain ? netAllocatableSavings : selectedGoal.currentAmount;
+                                                    const needed = Math.max(0, selectedGoal.targetAmount - current);
+                                                    return formatCurrency(needed / monthsLeft);
+                                                })()} / mo
                                             </div>
-                                        ) : (
-                                            <Input 
-                                                type="number" 
-                                                value={selectedGoal.currentAmount} 
-                                                onChange={e => setSelectedGoal({...selectedGoal, currentAmount: parseFloat(e.target.value)})} 
-                                            />
-                                        )}
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label>Target Date</Label>
-                                        <Input 
-                                            type="date" 
-                                            value={selectedGoal.deadline} 
-                                            onChange={e => setSelectedGoal({...selectedGoal, deadline: e.target.value})} 
-                                        />
+                                            <p className="text-xs text-muted-foreground mt-2">for the next {
+                                                Math.ceil((new Date(selectedGoal.deadline).getTime() - Date.now()) / (1000 * 3600 * 24 * 30))
+                                            } months</p>
+                                        </div>
+                                    </PremiumCard>
+
+                                    <div className="flex gap-2 pt-4 border-t w-full">
+                                        <Button variant="destructive" className="flex-1" onClick={() => {
+                                            setDeleteConfirmOpen(true);
+                                            setGoalToDelete(selectedGoal);
+                                        }}>
+                                            <Trash2 size={16} className="mr-2" /> Delete Goal
+                                        </Button>
+                                        <Button onClick={handleSaveEdit} className="flex-1">
+                                            <Save size={16} className="mr-2" /> Save Changes
+                                        </Button>
                                     </div>
                                 </div>
-                                
-                                <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border">
-                                    <div className="space-y-0.5">
-                                        <Label className="text-base">Main Goal</Label>
-                                        <p className="text-xs text-muted-foreground">Is this a primary financial objective?</p>
-                                    </div>
-                                    <Switch 
-                                        checked={selectedGoal.isMain} 
-                                        onCheckedChange={(c) => setSelectedGoal({...selectedGoal, isMain: c})} 
-                                    />
-                                </div>
-                            </div>
+                            )}
 
-                            {/* Projections */}
-                             <PremiumCard className="bg-muted/30">
-                                 <div className="text-center py-6">
-                                     <p className="text-muted-foreground mb-2">Projected Monthly Savings Needed</p>
-                                     <div className="text-3xl font-bold text-primary">
-                                         {(() => {
-                                             const daysLeft = Math.ceil((new Date(selectedGoal.deadline).getTime() - Date.now()) / (1000 * 3600 * 24));
-                                             const monthsLeft = Math.max(1, Math.ceil(daysLeft / 30));
-                                             const current = selectedGoal.isMain ? netAllocatableSavings : selectedGoal.currentAmount;
-                                             const needed = Math.max(0, selectedGoal.targetAmount - current);
-                                             return formatCurrency(needed / monthsLeft);
-                                         })()} / mo
-                                     </div>
-                                     <p className="text-xs text-muted-foreground mt-2">for the next {
-                                         Math.ceil((new Date(selectedGoal.deadline).getTime() - Date.now()) / (1000 * 3600 * 24 * 30))
-                                     } months</p>
-                                 </div>
-                             </PremiumCard>
-
-                            <div className="flex gap-2 pt-4 border-t w-full">
-                                 <Button variant="destructive" className="flex-1" onClick={() => {
-                                     setDeleteConfirmOpen(true);
-                                     setGoalToDelete(selectedGoal);
-                                 }}>
-                                    <Trash2 size={16} className="mr-2" /> Delete Goal
-                                </Button>
-                                <Button onClick={handleSaveEdit} className="flex-1">
-                                    <Save size={16} className="mr-2" /> Save Changes
-                                </Button>
-                            </div>
-                        </TabsContent>
-
-                        <TabsContent value="simulator">
-                            <FeasibilityEngine 
-                                targetAmount={selectedGoal.targetAmount} // This is Cash Target
-                                propertyValue={selectedGoal.propertyValue} // This is full Price
-                                currentAmount={selectedGoal.isMain ? undefined : selectedGoal.currentAmount}
-                            />
-                        </TabsContent>
-                    </Tabs>
-                    </div>
+                            {activeTab === 'simulator' && selectedGoal.category === 'home' && (
+                                <FeasibilityEngine 
+                                    targetAmount={selectedGoal.targetAmount} // This is Cash Target
+                                    propertyValue={selectedGoal.propertyValue} // This is full Price
+                                    currentAmount={selectedGoal.isMain ? undefined : selectedGoal.currentAmount}
+                                />
+                            )}
+                        </div>
+                    </>
                 )}
             </SheetContent>
         </Sheet>

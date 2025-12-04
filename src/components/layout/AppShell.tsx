@@ -45,7 +45,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children, currentTab, onTabC
   ];
 
   return (
-    <div className="h-[100dvh] bg-background flex flex-col md:flex-row overflow-hidden">
+    <div className="h-[100dvh] bg-background flex flex-col md:flex-row overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 border-r border-border h-full bg-card">
         <div className="p-6 border-b border-border/50">

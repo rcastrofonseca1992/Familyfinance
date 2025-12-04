@@ -109,7 +109,7 @@ export const HouseholdSetup: React.FC = () => {
 
   if (mode === 'choose') {
       return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-background relative">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-background relative" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
             <UserProfileHeader />
             <motion.div  
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -180,7 +180,7 @@ export const HouseholdSetup: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <UserProfileHeader />
       <motion.div  
         initial={{ opacity: 0, x: 20 }}

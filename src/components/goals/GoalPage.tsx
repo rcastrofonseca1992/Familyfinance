@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, Edit, Calendar, TrendingUp, Target, DollarSign, Clock, AlertCircle, CheckCircle, Zap, PiggyBank, Calculator, TrendingDown } from 'lucide-react';
 import { formatCurrency } from '../../lib/finance';
 import { Button } from '../ui/button';
 import { useLanguage } from '../../src/contexts/LanguageContext';
 import { PremiumCard } from '../ui/PremiumCard';
+import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
+import { FeasibilityEngine } from '../feasibility/FeasibilityEngine';
 
 interface Goal {
   id: string;
@@ -27,6 +29,7 @@ interface GoalPageProps {
 
 export const GoalPage: React.FC<GoalPageProps> = ({ goal, onBack, onEdit }) => {
   const { t } = useLanguage();
+  const [activeTab, setActiveTab] = useState('details');
   
   // Calculate progress
   const progress = Math.min((goal.currentAmount / goal.targetAmount) * 100, 100);
@@ -98,14 +101,17 @@ export const GoalPage: React.FC<GoalPageProps> = ({ goal, onBack, onEdit }) => {
   // Default image for goals
   const heroImage = goal.image || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80';
 
+  const isHomeGoal = goal.category === 'mortgage' || goal.category === 'home';
+
   return (
     <div className="fixed inset-0 z-50 bg-background animate-in fade-in duration-300">
-      {/* Hero Image - Fixed */}
+      {/* Hero Image - Fixed - Extends to top including status bar */}
       <div className="fixed inset-x-0 top-0 h-[50vh] overflow-hidden">
         <img 
           src={heroImage} 
           alt={goal.name}
           className="w-full h-full object-cover"
+          style={{ paddingTop: 'env(safe-area-inset-top)' }}
         />
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/90" />
@@ -159,7 +165,7 @@ export const GoalPage: React.FC<GoalPageProps> = ({ goal, onBack, onEdit }) => {
               </h1>
 
               {/* Property Value for Mortgage Goals */}
-              {(goal.category === 'mortgage' || goal.category === 'home') && goal.propertyValue && (
+              {isHomeGoal && goal.propertyValue && (
                 <p className="text-lg text-muted-foreground">
                   {formatCurrency(goal.propertyValue)}
                 </p>
@@ -184,245 +190,273 @@ export const GoalPage: React.FC<GoalPageProps> = ({ goal, onBack, onEdit }) => {
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="my-8 border-b border-border" />
-
-            {/* Key Metrics Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              {/* Target Amount */}
-              <PremiumCard className="space-y-2 h-full p-4">
-                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">
-                  {t('goals.target')}
-                </p>
-                <p className="text-xl font-bold">
-                  {formatCurrency(goal.targetAmount)}
-                </p>
-              </PremiumCard>
-
-              {/* Remaining */}
-              <PremiumCard className="space-y-2 h-full p-4">
-                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">
-                  {t('goals.remaining')}
-                </p>
-                <p className="text-xl font-bold">
-                  {formatCurrency(remaining)}
-                </p>
-              </PremiumCard>
-
-              {/* Deadline */}
-              <PremiumCard className="space-y-2 h-full p-4">
-                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">
-                  {t('goals.deadline')}
-                </p>
-                <p className="text-xl font-bold">
-                  {new Date(goal.deadline).toLocaleDateString('pt-PT', { 
-                    month: 'short', 
-                    year: 'numeric' 
-                  })}
-                </p>
-              </PremiumCard>
-
-              {/* Time Remaining */}
-              <PremiumCard className="space-y-2 h-full p-4">
-                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">
-                  {t('goals.timeLeft')}
-                </p>
-                <p className="text-xl font-bold">
-                  {monthsRemaining} {monthsRemaining === 1 ? t('goals.month') : t('goals.months')}
-                </p>
-              </PremiumCard>
-            </div>
-
-            {/* Monthly Contribution Section */}
-            {goal.requiredMonthlyContribution && goal.requiredMonthlyContribution > 0 && (
+            {/* Tabs (Only for Home/Mortgage Goals) */}
+            {isHomeGoal && (
               <>
                 <div className="my-8 border-b border-border" />
-                
-                <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10 rounded-2xl border border-blue-200/50 dark:border-blue-800/30">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-3 bg-blue-500 rounded-xl">
-                      <DollarSign size={24} className="text-white" />
-                    </div>
-                    <div>
-                      <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
-                        {t('goals.requiredMonthly')}
-                      </p>
-                      <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">
-                        {formatCurrency(goal.requiredMonthlyContribution)}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {t('goals.requiredMonthlyDescription')}
-                  </p>
-                </div>
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="w-full grid grid-cols-2 mb-6">
+                    <TabsTrigger value="details">Details</TabsTrigger>
+                    <TabsTrigger value="simulator">Simulator</TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </>
             )}
 
-            {/* Achievement Status */}
-            <div className="mt-8 p-6 bg-gradient-to-br from-muted/50 to-muted/30 rounded-2xl">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-background rounded-xl">
-                  <TrendingUp size={24} className="text-blue-600 dark:text-blue-400" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-semibold mb-2">{t('goals.progressStatus')}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {progress >= 80 
-                      ? t('goals.nearlyThere')
-                      : progress >= 50
-                      ? t('goals.halfwayThere')
-                      : progress >= 25
-                      ? t('goals.goodStart')
-                      : t('goals.keepGoing')
-                    }
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Financial Analysis Section */}
-            {monthsRemaining > 0 && remaining > 0 && (
+            {/* Content based on active tab */}
+            {(!isHomeGoal || activeTab === 'details') && (
               <>
-                <div className="my-8 border-b border-border" />
-                
-                <PremiumCard>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-blue-50 dark:bg-blue-950/30 rounded-xl">
-                      <Calculator size={20} className="text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <h3 className="font-semibold text-lg">Financial Analysis</h3>
-                  </div>
+                {!isHomeGoal && <div className="my-8 border-b border-border" />}
 
-                  {/* Contribution Breakdown */}
-                  <div className="space-y-3 mb-6">
-                    <div className="p-4 bg-blue-50/50 dark:bg-blue-950/10 rounded-xl">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Required Per Week</span>
-                        <span className="font-bold text-blue-700 dark:text-blue-400">{formatCurrency(requiredWeekly)}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Required Per Day</span>
-                        <span className="font-bold text-blue-700 dark:text-blue-400">{formatCurrency(requiredDaily)}</span>
-                      </div>
-                    </div>
-                  </div>
+                {/* Key Metrics Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Target Amount */}
+                  <PremiumCard className="space-y-2 h-full p-4">
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wider">
+                      {t('goals.target')}
+                    </p>
+                    <p className="text-xl font-bold">
+                      {formatCurrency(goal.targetAmount)}
+                    </p>
+                  </PremiumCard>
 
-                  {/* Projection with Compound Interest */}
-                  {monthlyRequired > 0 && (
-                    <div className="p-4 rounded-xl border border-border bg-gradient-to-br from-background to-muted/20">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Zap size={16} className="text-amber-500" />
-                        <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
-                          Projected Final Amount (3% APY)
-                        </span>
-                      </div>
-                      <div className="flex items-baseline gap-2 mb-2">
-                        <span className="text-2xl font-bold">{formatCurrency(projectedFinalAmount)}</span>
-                        {onTrack ? (
-                          <CheckCircle size={20} className="text-emerald-600" />
-                        ) : (
-                          <AlertCircle size={20} className="text-rose-600" />
-                        )}
+                  {/* Remaining */}
+                  <PremiumCard className="space-y-2 h-full p-4">
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wider">
+                      {t('goals.remaining')}
+                    </p>
+                    <p className="text-xl font-bold">
+                      {formatCurrency(remaining)}
+                    </p>
+                  </PremiumCard>
+
+                  {/* Deadline */}
+                  <PremiumCard className="space-y-2 h-full p-4">
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wider">
+                      {t('goals.deadline')}
+                    </p>
+                    <p className="text-xl font-bold">
+                      {new Date(goal.deadline).toLocaleDateString('pt-PT', { 
+                        month: 'short', 
+                        year: 'numeric' 
+                      })}
+                    </p>
+                  </PremiumCard>
+
+                  {/* Time Remaining */}
+                  <PremiumCard className="space-y-2 h-full p-4">
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wider">
+                      {t('goals.timeLeft')}
+                    </p>
+                    <p className="text-xl font-bold">
+                      {monthsRemaining} {monthsRemaining === 1 ? t('goals.month') : t('goals.months')}
+                    </p>
+                  </PremiumCard>
+                </div>
+
+                {/* Monthly Contribution Section */}
+                {goal.requiredMonthlyContribution && goal.requiredMonthlyContribution > 0 && (
+                  <>
+                    <div className="my-8 border-b border-border" />
+                    
+                    <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10 rounded-2xl border border-blue-200/50 dark:border-blue-800/30">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-3 bg-blue-500 rounded-xl">
+                          <DollarSign size={24} className="text-white" />
+                        </div>
+                        <div>
+                          <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
+                            {t('goals.requiredMonthly')}
+                          </p>
+                          <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">
+                            {formatCurrency(goal.requiredMonthlyContribution)}
+                          </p>
+                        </div>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        {onTrack ? (
-                          <span className="text-emerald-700 dark:text-emerald-400 font-medium">
-                            On track! Projected surplus: {formatCurrency(surplus)}
-                          </span>
-                        ) : (
-                          <span className="text-rose-700 dark:text-rose-400 font-medium">
-                            Shortfall: {formatCurrency(Math.abs(surplus))} - Consider increasing monthly contributions
-                          </span>
-                        )}
+                        {t('goals.requiredMonthlyDescription')}
                       </p>
                     </div>
-                  )}
-                </PremiumCard>
+                  </>
+                )}
 
-                {/* Feasibility Assessment */}
-                <div className="mt-6">
-                  <PremiumCard>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 bg-purple-50 dark:bg-purple-950/30 rounded-xl">
-                        <Target size={20} className="text-purple-600 dark:text-purple-400" />
-                      </div>
-                      <h3 className="font-semibold text-lg">Feasibility Assessment</h3>
+                {/* Achievement Status */}
+                <div className="mt-8 p-6 bg-gradient-to-br from-muted/50 to-muted/30 rounded-2xl">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-background rounded-xl">
+                      <TrendingUp size={24} className="text-blue-600 dark:text-blue-400" />
                     </div>
-                    
-                    <div className={`p-4 rounded-xl bg-${feasibilityColor}-50/50 dark:bg-${feasibilityColor}-950/20 border border-${feasibilityColor}-200 dark:border-${feasibilityColor}-800/30`}>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Likelihood</span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-${feasibilityColor}-100 dark:bg-${feasibilityColor}-900/30 text-${feasibilityColor}-700 dark:text-${feasibilityColor}-400`}>
-                          {feasibilityLabel}
-                        </span>
-                      </div>
-                      
-                      <div className="space-y-2 text-sm text-muted-foreground">
-                        <p>• You've saved {progress.toFixed(0)}% of your target</p>
-                        <p>• {monthsRemaining} months remaining until deadline</p>
-                        {avgMonthlySavings > 0 && (
-                          <p>• Historical avg: {formatCurrency(avgMonthlySavings)}/month</p>
-                        )}
-                      </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold mb-2">{t('goals.progressStatus')}</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {progress >= 80 
+                          ? t('goals.nearlyThere')
+                          : progress >= 50
+                          ? t('goals.halfwayThere')
+                          : progress >= 25
+                          ? t('goals.goodStart')
+                          : t('goals.keepGoing')
+                        }
+                      </p>
                     </div>
-                  </PremiumCard>
+                  </div>
                 </div>
 
-                {/* Recommendations */}
-                <div className="mt-6">
-                  <PremiumCard>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl">
-                        <PiggyBank size={20} className="text-emerald-600 dark:text-emerald-400" />
-                      </div>
-                      <h3 className="font-semibold text-lg">Expert Recommendations</h3>
-                    </div>
+                {/* Financial Analysis Section */}
+                {monthsRemaining > 0 && remaining > 0 && (
+                  <>
+                    <div className="my-8 border-b border-border" />
                     
-                    <div className="space-y-3">
-                      {progress < 50 && monthsRemaining < 12 && (
-                        <div className="flex gap-3 p-4 bg-rose-50/50 dark:bg-rose-950/20 rounded-xl border border-rose-200 dark:border-rose-800/30">
-                          <AlertCircle size={20} className="text-rose-600 flex-shrink-0 mt-0.5" />
-                          <div className="text-sm">
-                            <p className="font-semibold text-rose-900 dark:text-rose-300 mb-1">Deadline is approaching</p>
-                            <p className="text-muted-foreground">Consider extending your deadline or increasing monthly contributions to stay on track.</p>
+                    <PremiumCard>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-blue-50 dark:bg-blue-950/30 rounded-xl">
+                          <Calculator size={20} className="text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <h3 className="font-semibold text-lg">Financial Analysis</h3>
+                      </div>
+
+                      {/* Contribution Breakdown */}
+                      <div className="space-y-3 mb-6">
+                        <div className="p-4 bg-blue-50/50 dark:bg-blue-950/10 rounded-xl">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Required Per Week</span>
+                            <span className="font-bold text-blue-700 dark:text-blue-400">{formatCurrency(requiredWeekly)}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Required Per Day</span>
+                            <span className="font-bold text-blue-700 dark:text-blue-400">{formatCurrency(requiredDaily)}</span>
                           </div>
                         </div>
-                      )}
-                      
-                      {progress >= 50 && onTrack && (
-                        <div className="flex gap-3 p-4 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-xl border border-emerald-200 dark:border-emerald-800/30">
-                          <CheckCircle size={20} className="text-emerald-600 flex-shrink-0 mt-0.5" />
-                          <div className="text-sm">
-                            <p className="font-semibold text-emerald-900 dark:text-emerald-300 mb-1">You're on track!</p>
-                            <p className="text-muted-foreground">Maintaining your current savings rate will help you reach your goal. Consider setting up automatic transfers to stay consistent.</p>
-                          </div>
-                        </div>
-                      )}
-                      
+                      </div>
+
+                      {/* Projection with Compound Interest */}
                       {monthlyRequired > 0 && (
-                        <div className="flex gap-3 p-4 bg-blue-50/50 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-800/30">
-                          <Calculator size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
-                          <div className="text-sm">
-                            <p className="font-semibold text-blue-900 dark:text-blue-300 mb-1">Optimize with compound interest</p>
-                            <p className="text-muted-foreground">Investing your savings with a conservative {DEFAULT_APY}% annual return could help you reach your goal with less monthly contribution.</p>
+                        <div className="p-4 rounded-xl border border-border bg-gradient-to-br from-background to-muted/20">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Zap size={16} className="text-amber-500" />
+                            <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
+                              Projected Final Amount (3% APY)
+                            </span>
                           </div>
+                          <div className="flex items-baseline gap-2 mb-2">
+                            <span className="text-2xl font-bold">{formatCurrency(projectedFinalAmount)}</span>
+                            {onTrack ? (
+                              <CheckCircle size={20} className="text-emerald-600" />
+                            ) : (
+                              <AlertCircle size={20} className="text-rose-600" />
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            {onTrack ? (
+                              <span className="text-emerald-700 dark:text-emerald-400 font-medium">
+                                On track! Projected surplus: {formatCurrency(surplus)}
+                              </span>
+                            ) : (
+                              <span className="text-rose-700 dark:text-rose-400 font-medium">
+                                Shortfall: {formatCurrency(Math.abs(surplus))} - Consider increasing monthly contributions
+                              </span>
+                            )}
+                          </p>
                         </div>
                       )}
-                      
-                      {goal.category === 'emergency' && progress < 100 && (
-                        <div className="flex gap-3 p-4 bg-amber-50/50 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800/30">
-                          <AlertCircle size={20} className="text-amber-600 flex-shrink-0 mt-0.5" />
-                          <div className="text-sm">
-                            <p className="font-semibold text-amber-900 dark:text-amber-300 mb-1">Emergency fund priority</p>
-                            <p className="text-muted-foreground">Financial experts recommend 3-6 months of expenses in an emergency fund. Prioritize this goal to protect against unexpected events.</p>
+                    </PremiumCard>
+
+                    {/* Feasibility Assessment */}
+                    <div className="mt-6">
+                      <PremiumCard>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="p-2 bg-purple-50 dark:bg-purple-950/30 rounded-xl">
+                            <Target size={20} className="text-purple-600 dark:text-purple-400" />
+                          </div>
+                          <h3 className="font-semibold text-lg">Feasibility Assessment</h3>
+                        </div>
+                        
+                        <div className={`p-4 rounded-xl bg-${feasibilityColor}-50/50 dark:bg-${feasibilityColor}-950/20 border border-${feasibilityColor}-200 dark:border-${feasibilityColor}-800/30`}>
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Likelihood</span>
+                            <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-${feasibilityColor}-100 dark:bg-${feasibilityColor}-900/30 text-${feasibilityColor}-700 dark:text-${feasibilityColor}-400`}>
+                              {feasibilityLabel}
+                            </span>
+                          </div>
+                          
+                          <div className="space-y-2 text-sm text-muted-foreground">
+                            <p>• You've saved {progress.toFixed(0)}% of your target</p>
+                            <p>• {monthsRemaining} months remaining until deadline</p>
+                            {avgMonthlySavings > 0 && (
+                              <p>• Historical avg: {formatCurrency(avgMonthlySavings)}/month</p>
+                            )}
                           </div>
                         </div>
-                      )}
+                      </PremiumCard>
                     </div>
-                  </PremiumCard>
-                </div>
+
+                    {/* Recommendations */}
+                    <div className="mt-6">
+                      <PremiumCard>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="p-2 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl">
+                            <PiggyBank size={20} className="text-emerald-600 dark:text-emerald-400" />
+                          </div>
+                          <h3 className="font-semibold text-lg">Expert Recommendations</h3>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          {progress < 50 && monthsRemaining < 12 && (
+                            <div className="flex gap-3 p-4 bg-rose-50/50 dark:bg-rose-950/20 rounded-xl border border-rose-200 dark:border-rose-800/30">
+                              <AlertCircle size={20} className="text-rose-600 flex-shrink-0 mt-0.5" />
+                              <div className="text-sm">
+                                <p className="font-semibold text-rose-900 dark:text-rose-300 mb-1">Deadline is approaching</p>
+                                <p className="text-muted-foreground">Consider extending your deadline or increasing monthly contributions to stay on track.</p>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {progress >= 50 && onTrack && (
+                            <div className="flex gap-3 p-4 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-xl border border-emerald-200 dark:border-emerald-800/30">
+                              <CheckCircle size={20} className="text-emerald-600 flex-shrink-0 mt-0.5" />
+                              <div className="text-sm">
+                                <p className="font-semibold text-emerald-900 dark:text-emerald-300 mb-1">You're on track!</p>
+                                <p className="text-muted-foreground">Maintaining your current savings rate will help you reach your goal. Consider setting up automatic transfers to stay consistent.</p>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {monthlyRequired > 0 && (
+                            <div className="flex gap-3 p-4 bg-blue-50/50 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-800/30">
+                              <Calculator size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
+                              <div className="text-sm">
+                                <p className="font-semibold text-blue-900 dark:text-blue-300 mb-1">Optimize with compound interest</p>
+                                <p className="text-muted-foreground">Investing your savings with a conservative {DEFAULT_APY}% annual return could help you reach your goal with less monthly contribution.</p>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {goal.category === 'emergency' && progress < 100 && (
+                            <div className="flex gap-3 p-4 bg-amber-50/50 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800/30">
+                              <AlertCircle size={20} className="text-amber-600 flex-shrink-0 mt-0.5" />
+                              <div className="text-sm">
+                                <p className="font-semibold text-amber-900 dark:text-amber-300 mb-1">Emergency fund priority</p>
+                                <p className="text-muted-foreground">Financial experts recommend 3-6 months of expenses in an emergency fund. Prioritize this goal to protect against unexpected events.</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </PremiumCard>
+                    </div>
+                  </>
+                )}
               </>
+            )}
+
+            {/* Simulator Tab Content */}
+            {isHomeGoal && activeTab === 'simulator' && (
+              <div className="mt-6">
+                <FeasibilityEngine 
+                  targetAmount={goal.targetAmount}
+                  propertyValue={goal.propertyValue}
+                  currentAmount={goal.currentAmount}
+                />
+              </div>
             )}
           </div>
         </div>

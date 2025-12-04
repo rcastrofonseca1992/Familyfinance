@@ -4,8 +4,8 @@
   "description": "Premium PWA for managing household finances with goals, tracking, and forecasting",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fdfefd",
-  "theme_color": "#10b981",
+  "background_color": "#fdfdfe",
+  "theme_color": "#6fa8d4",
   "orientation": "portrait-primary",
   "icons": [
     {
