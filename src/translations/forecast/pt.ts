@@ -9,4 +9,12 @@ export const forecastPt = {
   "forecast.totalValue": "Valor Total",
   "forecast.principal": "Principal",
   "forecast.growth": "Crescimento",
+  "forecast.settings": "Definições de Previsão",
+  "forecast.contributionHint": "Adicione aos seus investimentos todos os meses.",
+  "forecast.expectedReturn": "Retorno Esperado (Anual)",
+  "forecast.conservative": "Conservador (3%)",
+  "forecast.aggressive": "Agressivo (10%)",
+  "forecast.includedAccounts": "Contas Incluídas",
+  "forecast.noAccounts": "Nenhuma conta de investimento encontrada.",
+  "forecast.totalPrincipal": "Principal Total",
 };

@@ -45,16 +45,32 @@ function getAdminClient() {
 // --- Helper: Get Authenticated User ---
 async function getAuthUser(c: any) {
   const authHeader = c.req.header('Authorization');
-  if (!authHeader) return null;
+  if (!authHeader) {
+    console.error("🔒 No Authorization header found");
+    return null;
+  }
   
   const token = authHeader.replace('Bearer ', '');
+  console.log(`🔍 Verifying token (length: ${token.length}, preview: ${token.substring(0, 30)}...)`);
+  
+  // Create client with ANON key (this is the correct way to verify user JWTs)
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL') ?? '',
     Deno.env.get('SUPABASE_ANON_KEY') ?? ''
   );
   
+  // Set the auth token for this request
   const { data: { user }, error } = await supabase.auth.getUser(token);
-  if (error || !user) return null;
+  
+  if (error) {
+    console.error("🔒 Auth error:", error.message, error);
+    return null;
+  }
+  if (!user) {
+    console.error("🔒 No user found for token");
+    return null;
+  }
+  console.log(`✅ User authenticated: ${user.id} (${user.email})`);
   return user;
 }
 
@@ -110,6 +126,77 @@ app.post("/make-server-d9780f4d/signup", async (c) => {
   } catch (e) {
     console.error("Signup exception:", e);
     return c.json({ error: "Internal Server Error" }, 500);
+  }
+});
+// ===========================================
+// FUN FACTS - Multilingual Fun Fact Engine
+// ===========================================
+
+// Fun facts database in both Portuguese and English
+const FUN_FACTS = {
+  pt: [
+    { fact: "O polvo tem três corações.", source: "wikipedia" },
+    { fact: "O mel nunca estraga. Mel de 3000 anos foi encontrado em tumbas egípcias e ainda estava comestível.", source: "arqueologia" },
+    { fact: "As bananas são ligeiramente radioativas devido ao potássio que contêm.", source: "física" },
+    { fact: "Um dia em Vénus é mais longo que um ano em Vénus.", source: "astronomia" },
+    { fact: "Os flamingos nascem cinzentos, tornando-se rosa devido à sua dieta.", source: "biologia" },
+    { fact: "O coração da baleia azul é tão grande que um humano poderia nadar através das suas artérias.", source: "biologia" },
+    { fact: "Existe mais poder de computação num smartphone moderno do que em toda a NASA quando enviou o homem à Lua.", source: "tecnologia" },
+    { fact: "As aranhas não podem voar, mas podem viajar centenas de quilómetros usando correntes de ar.", source: "natureza" },
+    { fact: "Um grupo de corujas chama-se parlamento.", source: "linguística" },
+    { fact: "A Torre Eiffel pode crescer até 15 cm no verão devido à expansão térmica do ferro.", source: "física" },
+    { fact: "Os elefantes são os únicos animais que não conseguem saltar.", source: "zoologia" },
+    { fact: "O continente antártico é o deserto mais seco do planeta.", source: "geografia" },
+    { fact: "As impressões digitais dos coalas são quase idênticas às humanas.", source: "biologia" },
+    { fact: "Um raio é cinco vezes mais quente que a superfície do sol.", source: "meteorologia" },
+    { fact: "O cérebro humano usa 20% da energia total do corpo, apesar de representar apenas 2% do peso.", source: "neurociência" }
+  ],
+  en: [
+    { fact: "Octopuses have three hearts.", source: "wikipedia" },
+    { fact: "Honey never spoils. 3000-year-old honey was found in Egyptian tombs and was still edible.", source: "archaeology" },
+    { fact: "Bananas are slightly radioactive due to the potassium they contain.", source: "physics" },
+    { fact: "A day on Venus is longer than a year on Venus.", source: "astronomy" },
+    { fact: "Flamingos are born grey and turn pink due to their diet.", source: "biology" },
+    { fact: "A blue whale's heart is so large a human could swim through its arteries.", source: "biology" },
+    { fact: "There's more computing power in a modern smartphone than all of NASA had when they sent a man to the Moon.", source: "technology" },
+    { fact: "Spiders can't fly, but they can travel hundreds of miles using air currents.", source: "nature" },
+    { fact: "A group of owls is called a parliament.", source: "linguistics" },
+    { fact: "The Eiffel Tower can grow up to 15cm in summer due to thermal expansion of iron.", source: "physics" },
+    { fact: "Elephants are the only animals that can't jump.", source: "zoology" },
+    { fact: "Antarctica is the driest desert on the planet.", source: "geography" },
+    { fact: "Koala fingerprints are almost identical to human fingerprints.", source: "biology" },
+    { fact: "Lightning is five times hotter than the surface of the sun.", source: "meteorology" },
+    { fact: "The human brain uses 20% of the body's total energy despite being only 2% of its weight.", source: "neuroscience" }
+  ]
+};
+
+app.get("/make-server-d9780f4d/funfact", async (c) => {
+  try {
+    const lang = c.req.query("lang") ?? "en";
+    
+    // Validate language
+    const language = (lang === "pt" || lang === "pt-PT") ? "pt" : "en";
+    
+    // Get facts for the language
+    const facts = FUN_FACTS[language];
+    
+    // Return random fact
+    const randomIndex = Math.floor(Math.random() * facts.length);
+    const selectedFact = facts[randomIndex];
+    
+    console.log(`Returning ${language} fun fact: ${selectedFact.fact.substring(0, 50)}...`);
+    
+    return c.json({
+      lang: language,
+      source: selectedFact.source,
+      fact: selectedFact.fact
+    });
+  } catch (err) {
+    console.error(`Fun fact error: ${err}`);
+    return c.json({ 
+      error: true, 
+      message: String(err) 
+    }, 500);
   }
 });
 
@@ -387,6 +474,50 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
       return c.json({ error: "Access Denied: You can only modify your own data" }, 403);
     }
 
+    // ===========================================
+    // A) DATA VALIDATION GUARDS
+    // ===========================================
+    
+    // Validate accounts
+    if (data.accounts !== undefined) {
+      if (!Array.isArray(data.accounts)) {
+        console.error("DATA GUARD: accounts is not an array", typeof data.accounts);
+        return c.json({ error: "Refusing to overwrite: accounts must be an array" }, 400);
+      }
+    }
+    
+    // Validate incomeSources
+    if (data.user?.incomeSources !== undefined) {
+      if (!Array.isArray(data.user.incomeSources)) {
+        console.error("DATA GUARD: incomeSources is not an array", typeof data.user.incomeSources);
+        return c.json({ error: "Refusing to overwrite: incomeSources must be an array" }, 400);
+      }
+    }
+    
+    // Validate recurringCosts
+    if (data.recurringCosts !== undefined) {
+      if (!Array.isArray(data.recurringCosts)) {
+        console.error("DATA GUARD: recurringCosts is not an array", typeof data.recurringCosts);
+        return c.json({ error: "Refusing to overwrite: recurringCosts must be an array" }, 400);
+      }
+    }
+    
+    // Validate debts
+    if (data.debts !== undefined) {
+      if (!Array.isArray(data.debts)) {
+        console.error("DATA GUARD: debts is not an array", typeof data.debts);
+        return c.json({ error: "Refusing to overwrite: debts must be an array" }, 400);
+      }
+    }
+    
+    // Validate goals
+    if (data.goals !== undefined) {
+      if (!Array.isArray(data.goals)) {
+        console.error("DATA GUARD: goals is not an array", typeof data.goals);
+        return c.json({ error: "Refusing to overwrite: goals must be an array" }, 400);
+      }
+    }
+
     const supabase = getAdminClient();
 
     // Get household ID
@@ -397,6 +528,171 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
       .single();
 
     const householdId = membership?.household_id;
+
+    // ===========================================
+    // B) MINIMUM SAFETY RULES - Prevent data wipe
+    // ===========================================
+    
+    // Check existing data counts
+    const { count: existingAccountsCount } = await supabase
+      .from('accounts')
+      .select('*', { count: 'exact', head: true })
+      .eq('owner_id', userId);
+    
+    const { count: existingIncomeCount } = await supabase
+      .from('income_sources')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId);
+    
+    const { count: existingCostsCount } = await supabase
+      .from('recurring_costs')
+      .select('*', { count: 'exact', head: true })
+      .eq('owner_id', userId);
+    
+    const { count: existingDebtsCount } = await supabase
+      .from('debts')
+      .select('*', { count: 'exact', head: true })
+      .eq('owner_id', userId);
+    
+    let existingGoalsCount = 0;
+    if (householdId) {
+      const { count } = await supabase
+        .from('goals')
+        .select('*', { count: 'exact', head: true })
+        .eq('household_id', householdId);
+      existingGoalsCount = count || 0;
+    }
+    
+    // Safety check: prevent wiping existing data with empty payload
+    if (data.accounts !== undefined && data.accounts.length === 0 && (existingAccountsCount || 0) > 0) {
+      console.error(`SAFETY GUARD: Empty accounts payload detected — refusing to wipe ${existingAccountsCount} existing accounts.`);
+      return c.json({ error: `Empty payload detected — refusing to wipe ${existingAccountsCount} accounts.` }, 400);
+    }
+    
+    if (data.user?.incomeSources !== undefined && data.user.incomeSources.length === 0 && (existingIncomeCount || 0) > 0) {
+      console.error(`SAFETY GUARD: Empty incomeSources payload detected — refusing to wipe ${existingIncomeCount} existing income sources.`);
+      return c.json({ error: `Empty payload detected — refusing to wipe ${existingIncomeCount} income sources.` }, 400);
+    }
+    
+    if (data.recurringCosts !== undefined && data.recurringCosts.length === 0 && (existingCostsCount || 0) > 0) {
+      console.error(`SAFETY GUARD: Empty recurringCosts payload detected — refusing to wipe ${existingCostsCount} existing costs.`);
+      return c.json({ error: `Empty payload detected — refusing to wipe ${existingCostsCount} recurring costs.` }, 400);
+    }
+    
+    if (data.debts !== undefined && data.debts.length === 0 && (existingDebtsCount || 0) > 0) {
+      console.error(`SAFETY GUARD: Empty debts payload detected — refusing to wipe ${existingDebtsCount} existing debts.`);
+      return c.json({ error: `Empty payload detected — refusing to wipe ${existingDebtsCount} debts.` }, 400);
+    }
+    
+    if (data.goals !== undefined && existingGoalsCount > 0) {
+      console.error(`SAFETY GUARD: Empty goals payload detected — refusing to wipe ${existingGoalsCount} existing goals.`);
+      return c.json({ error: `Empty payload detected — refusing to wipe ${existingGoalsCount} goals.` }, 400);
+    }
+
+    // ===========================================
+    // C) CREATE BACKUPS BEFORE OVERWRITING
+    // ===========================================
+    
+    const backupTimestamp = new Date().toISOString();
+    
+    // Backup accounts
+    if (data.accounts !== undefined && (existingAccountsCount || 0) > 0) {
+      const { data: existingAccounts } = await supabase
+        .from('accounts')
+        .select('*')
+        .eq('owner_id', userId);
+      
+      if (existingAccounts && existingAccounts.length > 0) {
+        await supabase.from('accounts_backup').insert(
+          existingAccounts.map(acc => ({
+            ...acc,
+            backup_timestamp: backupTimestamp,
+            original_id: acc.id
+          }))
+        );
+        console.log(`✅ Backed up ${existingAccounts.length} accounts`);
+      }
+    }
+    
+    // Backup income sources
+    if (data.user?.incomeSources !== undefined && (existingIncomeCount || 0) > 0) {
+      const { data: existingIncome } = await supabase
+        .from('income_sources')
+        .select('*')
+        .eq('user_id', userId);
+      
+      if (existingIncome && existingIncome.length > 0) {
+        await supabase.from('income_sources_backup').insert(
+          existingIncome.map(inc => ({
+            ...inc,
+            backup_timestamp: backupTimestamp,
+            original_id: inc.id
+          }))
+        );
+        console.log(`✅ Backed up ${existingIncome.length} income sources`);
+      }
+    }
+    
+    // Backup recurring costs
+    if (data.recurringCosts !== undefined && (existingCostsCount || 0) > 0) {
+      const { data: existingCosts } = await supabase
+        .from('recurring_costs')
+        .select('*')
+        .eq('owner_id', userId);
+      
+      if (existingCosts && existingCosts.length > 0) {
+        await supabase.from('recurring_costs_backup').insert(
+          existingCosts.map(cost => ({
+            ...cost,
+            backup_timestamp: backupTimestamp,
+            original_id: cost.id
+          }))
+        );
+        console.log(`✅ Backed up ${existingCosts.length} recurring costs`);
+      }
+    }
+    
+    // Backup debts
+    if (data.debts !== undefined && (existingDebtsCount || 0) > 0) {
+      const { data: existingDebts } = await supabase
+        .from('debts')
+        .select('*')
+        .eq('owner_id', userId);
+      
+      if (existingDebts && existingDebts.length > 0) {
+        await supabase.from('debts_backup').insert(
+          existingDebts.map(debt => ({
+            ...debt,
+            backup_timestamp: backupTimestamp,
+            original_id: debt.id
+          }))
+        );
+        console.log(`✅ Backed up ${existingDebts.length} debts`);
+      }
+    }
+    
+    // Backup goals
+    if (data.goals !== undefined && householdId && existingGoalsCount > 0) {
+      const { data: existingGoals } = await supabase
+        .from('goals')
+        .select('*')
+        .eq('household_id', householdId);
+      
+      if (existingGoals && existingGoals.length > 0) {
+        await supabase.from('goals_backup').insert(
+          existingGoals.map(goal => ({
+            ...goal,
+            backup_timestamp: backupTimestamp,
+            original_id: goal.id
+          }))
+        );
+        console.log(`✅ Backed up ${existingGoals.length} goals`);
+      }
+    }
+
+    // ===========================================
+    // PROCEED WITH SAVE OPERATIONS
+    // ===========================================
 
     // Save income sources
     if (data.user?.incomeSources) {
@@ -563,10 +859,22 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
 
 app.get("/make-server-d9780f4d/finance/load-household/:userId", async (c) => {
   const userId = c.req.param("userId");
+  
+  console.log(`📥 [load-household] Request for userId: ${userId}`);
+  
   const user = await getAuthUser(c);
   
-  if (!user) return c.json({ error: "Unauthorized" }, 401);
-  if (user.id !== userId) return c.json({ error: "Access Denied" }, 403);
+  if (!user) {
+    console.error(`❌ [load-household] No authenticated user found`);
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+  
+  console.log(`✅ [load-household] Authenticated user: ${user.id}`);
+  
+  if (user.id !== userId) {
+    console.error(`❌ [load-household] User ID mismatch: ${user.id} !== ${userId}`);
+    return c.json({ error: "Access Denied" }, 403);
+  }
 
   try {
     const supabase = getAdminClient();
@@ -578,7 +886,12 @@ app.get("/make-server-d9780f4d/finance/load-household/:userId", async (c) => {
       .eq('user_id', userId)
       .single();
 
-    if (!membership) return c.json({ found: false });
+    if (!membership) {
+      console.log(`⚠️ [load-household] No household membership found for user ${userId}`);
+      return c.json({ found: false });
+    }
+
+    console.log(`📊 [load-household] Loading data for household ${membership.household_id}`);
 
     const householdId = membership.household_id;
 
@@ -924,6 +1237,37 @@ async function loadSnapshots(supabase: any, householdId: string) {
 
 app.get("/make-server-d9780f4d/health", (c) => c.json({ status: "ok" }));
 
+// Debug endpoint - check what token we're receiving
+app.post("/make-server-d9780f4d/debug-auth", async (c) => {
+  const authHeader = c.req.header('Authorization');
+  
+  if (!authHeader) {
+    return c.json({ 
+      error: "No auth header",
+      headers: Object.fromEntries(c.req.raw.headers.entries())
+    });
+  }
+  
+  const token = authHeader.replace('Bearer ', '');
+  
+  const supabase = createClient(
+    Deno.env.get('SUPABASE_URL') ?? '',
+    Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+  );
+  
+  const { data: { user }, error } = await supabase.auth.getUser(token);
+  
+  return c.json({
+    receivedHeader: authHeader.substring(0, 50) + "...",
+    tokenLength: token.length,
+    tokenPreview: token.substring(0, 30) + "...",
+    authError: error ? { message: error.message, status: error.status, name: error.name } : null,
+    user: user ? { id: user.id, email: user.email } : null,
+    supabaseUrl: Deno.env.get('SUPABASE_URL'),
+    hasAnonKey: !!Deno.env.get('SUPABASE_ANON_KEY')
+  });
+});
+
 // ===========================================
 // DATA MIGRATION (ONE-TIME USE)
 // ===========================================
@@ -983,38 +1327,6 @@ app.post("/make-server-d9780f4d/user-settings", async (c) => {
   } catch (e) {
     console.error("Update user settings error:", e);
     return c.json({ error: "Failed to update language setting" }, 500);
-  }
-});
-
-// ===========================================
-// NUMBERS API PROXY
-// ===========================================
-
-app.get("/make-server-d9780f4d/numberfact", async (c) => {
-  try {
-    const type = c.req.query("type") ?? "trivia";
-    const number = c.req.query("number") ?? "random";
-
-    const apiUrl = `http://numbersapi.com/${number}/${type}?json`;
-
-    const upstreamRes = await fetch(apiUrl);
-
-    if (!upstreamRes.ok) {
-      console.error(`NumbersAPI returned HTTP ${upstreamRes.status}`);
-      return c.json({
-        error: true,
-        message: `NumbersAPI returned HTTP ${upstreamRes.status}`,
-      }, 500);
-    }
-
-    const data = await upstreamRes.json();
-    return c.json(data);
-  } catch (err) {
-    console.error("NumbersAPI proxy error:", err);
-    return c.json({
-      error: true,
-      message: String(err),
-    }, 500);
   }
 });
 

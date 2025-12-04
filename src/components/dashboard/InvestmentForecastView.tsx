@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import { Slider } from '../ui/slider';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 interface InvestmentForecastViewProps {
     onBack: () => void;
@@ -15,6 +16,7 @@ interface InvestmentForecastViewProps {
 
 export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ onBack }) => {
     const { data, viewMode, getHouseholdIncome, getHouseholdFixedCosts } = useFinance();
+    const { t } = useLanguage();
 
     // Default Assumptions
     const DEFAULT_RETURN_RATE = 7; // 7%
@@ -84,17 +86,17 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                     <div className="space-y-1">
                         <div className="flex items-center gap-2 text-sm">
                             <div className="w-2 h-2 rounded-full bg-primary" />
-                            <span className="text-muted-foreground">Total Value:</span>
+                            <span className="text-muted-foreground">{t('forecast.totalValue')}:</span>
                             <span className="font-mono font-bold">{formatCurrency(payload[0].value)}</span>
                         </div>
                         <div className="flex items-center gap-2 text-xs">
                             <div className="w-2 h-2 rounded-full bg-primary/30" />
-                            <span className="text-muted-foreground">Principal:</span>
+                            <span className="text-muted-foreground">{t('forecast.principal')}:</span>
                             <span className="font-mono">{formatCurrency(payload[0].payload.invested)}</span>
                         </div>
                          <div className="flex items-center gap-2 text-xs">
                             <div className="w-2 h-2 rounded-full bg-green-500/50" />
-                            <span className="text-muted-foreground">Growth:</span>
+                            <span className="text-muted-foreground">{t('forecast.growth')}:</span>
                             <span className="font-mono text-green-600">{formatCurrency(payload[0].payload.interest)}</span>
                         </div>
                     </div>
@@ -113,8 +115,8 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                         <ArrowLeft size={20} />
                     </Button>
                     <div>
-                        <h1 className="text-2xl font-bold">Wealth Forecast</h1>
-                        <p className="text-sm text-muted-foreground">Long-term compound interest projection</p>
+                        <h1 className="text-2xl font-bold">{t('forecast.title')}</h1>
+                        <p className="text-sm text-muted-foreground">{t('forecast.subtitle')}</p>
                     </div>
                 </div>
             </div>
@@ -124,7 +126,7 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                 <PremiumCard className="lg:col-span-2 min-h-[400px] flex flex-col">
                     <div className="flex justify-between items-center mb-6">
                         <div>
-                            <p className="text-xs text-muted-foreground uppercase tracking-wider">Projected Wealth in 25 Years</p>
+                            <p className="text-xs text-muted-foreground uppercase tracking-wider">{t('forecast.projectedWealth')}</p>
                             <h2 className="text-3xl font-bold text-primary mt-1">
                                 {formatCurrency(projectionData[projectionData.length - 1].amount)}
                             </h2>
@@ -173,13 +175,13 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                     <PremiumCard className="space-y-6">
                         <div className="flex items-center gap-2 mb-2">
                             <Settings2 size={18} className="text-muted-foreground" />
-                            <h3 className="font-semibold">Forecast Settings</h3>
+                            <h3 className="font-semibold">{t('forecast.settings')}</h3>
                         </div>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
                                 <div className="flex justify-between">
-                                    <Label>Monthly Contribution</Label>
+                                    <Label>{t('forecast.monthlyContribution')}</Label>
                                     <span className="font-mono font-bold">{formatCurrency(monthlyContribution)}</span>
                                 </div>
                                 <div className="flex gap-2 items-center">
@@ -190,12 +192,12 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                                         className="font-mono"
                                     />
                                 </div>
-                                <p className="text-xs text-muted-foreground">Add to your investments each month.</p>
+                                <p className="text-xs text-muted-foreground">{t('forecast.contributionHint')}</p>
                             </div>
 
                             <div className="space-y-2 pt-4 border-t border-border/50">
                                 <div className="flex justify-between">
-                                    <Label>Expected Return (Annual)</Label>
+                                    <Label>{t('forecast.expectedReturn')}</Label>
                                     <span className="font-bold">{growthRate}%</span>
                                 </div>
                                 <Slider 
@@ -206,8 +208,8 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                                     className="py-4"
                                 />
                                 <div className="flex justify-between text-xs text-muted-foreground">
-                                    <span>Conservative (3%)</span>
-                                    <span>Aggressive (10%)</span>
+                                    <span>{t('forecast.conservative')}</span>
+                                    <span>{t('forecast.aggressive')}</span>
                                 </div>
                             </div>
                         </div>
@@ -216,7 +218,7 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                     <PremiumCard className="space-y-4">
                         <h3 className="font-semibold flex items-center gap-2">
                             <Wallet size={18} className="text-muted-foreground" />
-                            Included Accounts
+                            {t('forecast.includedAccounts')}
                         </h3>
                         <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2">
                             {investmentAccounts.length > 0 ? (
@@ -228,11 +230,11 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                                 ))
                             ) : (
                                 <div className="text-sm text-muted-foreground p-2 text-center italic">
-                                    No investment accounts found.
+                                    {t('forecast.noAccounts')}
                                 </div>
                             )}
                             <div className="flex justify-between text-sm font-bold pt-2 border-t border-border">
-                                <span>Total Principal</span>
+                                <span>{t('forecast.totalPrincipal')}</span>
                                 <span>{formatCurrency(totalPrincipal)}</span>
                             </div>
                         </div>

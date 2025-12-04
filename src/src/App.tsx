@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FinanceProvider, useFinance } from './components/store/FinanceContext';
@@ -18,9 +17,11 @@ import { Toaster } from 'sonner';
 import { Calendar, Plus } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { formatCurrency } from './lib/finance';
+import { useLanguage } from './contexts/LanguageContext';
 
 const MainApp: React.FC = () => {
   const { data, getPersonalNetWorth } = useFinance();
+  const { t } = useLanguage();
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [authView, setAuthView] = useState<'login' | 'signup'>('login');
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
@@ -42,8 +43,8 @@ const MainApp: React.FC = () => {
   const getHeaderInfo = () => {
       if (currentTab === 'forecast') {
         return {
-            title: 'Wealth Forecast',
-            subtitle: 'Projected Growth',
+            title: t('forecast.title'),
+            subtitle: t('forecast.subtitle'),
             action: (
                 <Button variant="ghost" size="sm" onClick={() => setCurrentTab('dashboard')} className="gap-2">
                     Back

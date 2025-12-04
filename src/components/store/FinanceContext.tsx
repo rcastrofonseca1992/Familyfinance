@@ -4,6 +4,13 @@ import { supabase } from '../../lib/supabase';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { toast } from 'sonner@2.0.3';
 
+// Helper function to create auth headers with apikey
+const authHeaders = (token: string) => ({
+  "Authorization": `Bearer ${token}`,
+  "apikey": publicAnonKey,
+  "Content-Type": "application/json"
+});
+
 export interface Account {
   id: string;
   name: string;
@@ -176,6 +183,9 @@ interface FinanceContextType {
   // Household Management
   updateHouseholdMember: (memberId: string, updates: { role?: 'owner' | 'partner', action?: 'remove' }) => Promise<void>;
   updateHouseholdSettings: (settings: { name: string }) => Promise<void>;
+  
+  // Manual data refresh
+  refreshData: () => Promise<void>;
 }
 
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
@@ -330,10 +340,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
           // 1. Save user's personal finance data
           await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/finance/save`, {
               method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${session.access_token}`
-              },
+              headers: authHeaders(session.access_token),
               body: JSON.stringify({
                   userId: currentData.user.id,
                   data: dataToSave
@@ -344,10 +351,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
           if (currentData.household && currentData.user.role === 'owner') {
               await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/household/save`, {
                   method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': `Bearer ${session.access_token}`
-                  },
+                  headers: authHeaders(session.access_token),
                   body: JSON.stringify({
                       userId: currentData.user.id,
                       household: currentData.household
@@ -363,17 +367,56 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const loadFromServer = async (userId: string, options = { skipHousehold: false }) => {
       try {
-          // Use load-household to get data from ALL members
-          const { data: { session } } = await supabase.auth.getSession();
-          const token = session?.access_token || publicAnonKey;
+          console.log("🔍 Step 1: Getting session...");
+          
+          // Get a fresh session (this will auto-refresh if needed)
+          const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+          
+          if (sessionError) {
+              console.error("❌ Session error:", sessionError);
+              toast.error("Session error - please log in again");
+              return;
+          }
+          
+          if (!session) {
+              console.error("❌ No session found");
+              toast.error("No active session - please log in");
+              return;
+          }
+          
+          if (!session.access_token) {
+              console.error("❌ Session exists but no access token");
+              toast.error("Invalid session - please log in again");
+              return;
+          }
+
+          console.log(`✅ Step 2: Session valid, token length: ${session.access_token.length}`);
+          console.log(`🔑 Token preview: ${session.access_token.substring(0, 30)}...`);
+          console.log(`👤 Session user: ${session.user?.id}`);
+          console.log(`⏰ Token expires at: ${new Date(session.expires_at! * 1000).toISOString()}`);
+
+          console.log(`📥 Step 3: Loading data from server for user: ${userId}`);
 
           const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/finance/load-household/${userId}`, {
                method: 'GET',
-               headers: { 'Authorization': `Bearer ${token}` }
+               headers: authHeaders(session.access_token)
           });
+          
+          console.log(`📡 Step 4: Response status: ${response.status}`);
           
           if (response.ok) {
               const { found, data: serverData } = await response.json();
+              console.log(`📊 Server data loaded:`, {
+                  found,
+                  hasUser: !!serverData?.user,
+                  hasHousehold: !!serverData?.household,
+                  accountsCount: serverData?.accounts?.length || 0,
+                  incomeSourcesCount: serverData?.user?.incomeSources?.length || 0,
+                  recurringCostsCount: serverData?.recurringCosts?.length || 0,
+                  debtsCount: serverData?.debts?.length || 0,
+                  goalsCount: serverData?.goals?.length || 0
+              });
+              
               if (found && serverData) {
                    setData(prev => {
                        // Security: Ensure we don't overwrite the authenticated user identity 
@@ -386,6 +429,8 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
                            name: prev.user.name
                        } : serverData.user;
 
+                       console.log(`✅ Updating context with server data`);
+
                        return { 
                            ...prev,
                            ...serverData,
@@ -396,11 +441,19 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
                            marketData: prev.marketData 
                        };
                    });
-                   // toast.success("Data synced from cloud");
+                   toast.success("Data refreshed from server");
+              } else {
+                  console.warn(`⚠️ No data found on server for user ${userId}`);
+                  toast.info("No data found on server - starting fresh");
               }
+          } else {
+              const errorText = await response.text();
+              console.error(`❌ Failed to load from server: ${response.status}`, errorText);
+              toast.error(`Failed to load data: ${response.status}`);
           }
       } catch (e) {
-          console.error("Failed to load from server", e);
+          console.error("❌ Exception in loadFromServer:", e);
+          toast.error("Failed to load data from server");
       }
   };
 
@@ -519,10 +572,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/household/create`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session.access_token}`
-            },
+            headers: authHeaders(session.access_token),
             body: JSON.stringify({
                 name,
                 userId: data.user.id,
@@ -555,10 +605,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/household/join`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session.access_token}`
-            },
+            headers: authHeaders(session.access_token),
             body: JSON.stringify({
                 joinCode: cleanCode,
                 userId: data.user.id,
@@ -612,13 +659,15 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       if (!data.user) return { found: false };
       try {
           const { data: { session } } = await supabase.auth.getSession();
-          const token = session?.access_token || publicAnonKey;
+          
+          if (!session?.access_token) {
+              console.error("Cannot check household: No active session");
+              return { found: false };
+          }
 
           const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/household/user/${data.user.id}`, {
               method: 'GET',
-              headers: {
-                  'Authorization': `Bearer ${token}`
-              }
+              headers: authHeaders(session.access_token)
           });
           
           if (!response.ok) return { found: false };
@@ -640,10 +689,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
           const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/household/member`, {
               method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${session.access_token}`
-              },
+              headers: authHeaders(session.access_token),
               body: JSON.stringify({
                   requesterId: data.user.id,
                   householdId: data.household.id,
@@ -684,10 +730,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
           const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/household/update`, {
               method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${session.access_token}`
-              },
+              headers: authHeaders(session.access_token),
               body: JSON.stringify({
                   requesterId: data.user.id,
                   householdId: data.household.id,
@@ -980,6 +1023,11 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       };
   }
 
+  const refreshData = async () => {
+      if (!data.user) return;
+      await loadFromServer(data.user.id);
+  };
+
   return (
     <FinanceContext.Provider value={{ 
         data, 
@@ -1016,7 +1064,8 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         updateHouseholdMember,
         updateHouseholdSettings,
         viewMode,
-        setViewMode
+        setViewMode,
+        refreshData
     }}>
       {children}
     </FinanceContext.Provider>

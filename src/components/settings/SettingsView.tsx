@@ -17,7 +17,7 @@ interface SettingsViewProps {
 }
 
 export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
-  const { data, updateData, logout, updateHouseholdSettings, leaveHousehold } = useFinance();
+  const { data, updateData, logout, updateHouseholdSettings, leaveHousehold, refreshData } = useFinance();
   const { language, setLanguage, t } = useLanguage();
   const [householdName, setHouseholdName] = useState(data.household?.name || '');
   const isOwner = data.user?.role === 'owner';
@@ -229,6 +229,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Button variant="outline" className="h-auto py-4 justify-start" onClick={refreshData}>
+                        <Database className="mr-3 h-5 w-5 text-blue-500" />
+                        <div className="text-left">
+                            <div className="font-medium">Refresh Data</div>
+                            <div className="text-xs text-muted-foreground">Reload from Supabase</div>
+                        </div>
+                    </Button>
+
                     <Button variant="outline" className="h-auto py-4 justify-start" onClick={handleExport}>
                         <Download className="mr-3 h-5 w-5 text-primary" />
                         <div className="text-left">

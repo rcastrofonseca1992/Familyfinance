@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { X, Sparkles, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/button';
 import { motion, AnimatePresence } from 'motion/react';
-import { getRandomFact } from '../../src/lib/getNumberTrivia';
+import { getFunFact } from '../../src/lib/getFunFact';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 export const FunFactCard: React.FC = () => {
   const [fact, setFact] = useState<string>('');
+  const [source, setSource] = useState<string>('');
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const { language } = useLanguage();
 
   // Check if user has dismissed the card
   useEffect(() => {
@@ -15,18 +19,27 @@ export const FunFactCard: React.FC = () => {
     if (dismissed === 'true') {
       setIsVisible(false);
     } else {
-      fetchRandomFact();
+      fetchFunFact();
     }
   }, []);
 
-  const fetchRandomFact = async () => {
+  const fetchFunFact = async () => {
     setIsLoading(true);
+    setError(false);
     try {
-      const text = await getRandomFact();
-      setFact(text);
-    } catch (error) {
-      console.error('Failed to fetch fun fact:', error);
-      setFact('Did you know? Numbers are everywhere! 🎲');
+      const data = await getFunFact(language);
+      setFact(data.fact);
+      setSource(data.source);
+    } catch (err) {
+      console.error('Failed to fetch fun fact:', err);
+      setError(true);
+      // Set fallback text based on language
+      if (language === 'pt' || language === 'pt-PT') {
+        setFact('Não foi possível carregar uma curiosidade. Tenta novamente.');
+      } else {
+        setFact('Could not load a fun fact. Try again.');
+      }
+      setSource('');
     } finally {
       setIsLoading(false);
     }
@@ -38,7 +51,7 @@ export const FunFactCard: React.FC = () => {
   };
 
   const handleRefresh = () => {
-    fetchRandomFact();
+    fetchFunFact();
   };
 
   if (!isVisible) return null;
@@ -72,7 +85,7 @@ export const FunFactCard: React.FC = () => {
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2 mb-1">
                 <h3 className="font-semibold text-purple-900 dark:text-purple-100">
-                  Fun Fact!
+                  {language === 'pt' || language === 'pt-PT' ? 'Curiosidade do dia' : 'Fun fact of the day'}
                 </h3>
                 <div className="flex items-center gap-1 flex-shrink-0">
                   <Button
@@ -97,11 +110,18 @@ export const FunFactCard: React.FC = () => {
 
               <p className="text-sm text-purple-800 dark:text-purple-200 leading-relaxed">
                 {isLoading ? (
-                  <span className="animate-pulse">Loading a fun fact...</span>
+                  <span className="animate-pulse">
+                    {language === 'pt' || language === 'pt-PT' ? 'A carregar curiosidade...' : 'Loading fun fact...'}
+                  </span>
                 ) : (
                   fact
                 )}
               </p>
+              {source && !error && (
+                <p className="text-xs text-purple-600/50 dark:text-purple-400/50 mt-1 opacity-50">
+                  {language === 'pt' || language === 'pt-PT' ? 'fonte' : 'source'}: {source}
+                </p>
+              )}
             </div>
           </div>
         </div>

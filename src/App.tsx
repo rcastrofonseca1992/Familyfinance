@@ -85,24 +85,7 @@ const MainApp: React.FC = () => {
               subtitle: 'Preferences for your companion.'
           };
       }
-      if (currentTab === 'household-management') {
-          return {
-              title: 'Manage Household',
-              subtitle: 'Members & Permissions'
-          };
-      }
-      if (currentTab === 'personal') {
-          return {
-            title: `Hi, ${data.user?.name}`,
-            subtitle: 'Manage your personal finances.',
-            action: (
-                <div className="text-right">
-                   <div className="text-xs text-muted-foreground">Personal Net Worth</div>
-                   <div className="text-lg font-bold text-primary">{formatCurrency(getPersonalNetWorth())}</div>
-               </div>
-            )
-          }
-      }
+      // Default
       return { title: '', subtitle: null };
   };
 

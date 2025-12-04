@@ -2414,6 +2414,16 @@
     color: var(--color-purple-600);
   }
 
+  .text-purple-600\/50 {
+    color: color-mix(in srgb, oklch(.558 .288 302.321) 50%, transparent);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .text-purple-600\/50 {
+      color: color-mix(in oklab, var(--color-purple-600) 50%, transparent);
+    }
+  }
+
   .text-purple-800 {
     color: var(--color-purple-800);
   }
@@ -4194,6 +4204,16 @@
 
   .dark\:text-purple-400:is(.dark *) {
     color: var(--color-purple-400);
+  }
+
+  .dark\:text-purple-400\/50:is(.dark *) {
+    color: color-mix(in srgb, oklch(.714 .203 305.504) 50%, transparent);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:text-purple-400\/50:is(.dark *) {
+      color: color-mix(in oklab, var(--color-purple-400) 50%, transparent);
+    }
   }
 
   .dark\:text-red-400:is(.dark *) {
