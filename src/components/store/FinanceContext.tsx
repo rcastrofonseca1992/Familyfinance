@@ -207,9 +207,12 @@ interface FinanceContextType {
   updateIncomeSource: (id: string, updates: Partial<IncomeSource>) => void;
   deleteIncomeSource: (id: string) => void;
 
-  // View State
+  // View Mode
   viewMode: 'household' | 'personal';
   setViewMode: (mode: 'household' | 'personal') => void;
+
+  // Initialization State
+  isInitialized: boolean;
 
   // Computations
   getHouseholdIncome: () => number;
@@ -1132,6 +1135,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         updateHouseholdSettings,
         viewMode,
         setViewMode,
+        isInitialized,
         refreshData
     }}>
       {children}

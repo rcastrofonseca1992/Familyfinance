@@ -6,6 +6,7 @@ import { useLanguage } from '../../src/contexts/LanguageContext';
 import { PremiumCard } from '../ui/PremiumCard';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { FeasibilityEngine } from '../feasibility/FeasibilityEngine';
+import { motion } from 'framer-motion';
 
 interface Goal {
   id: string;
@@ -105,22 +106,27 @@ export const GoalPage: React.FC<GoalPageProps> = ({ goal, onBack, onEdit }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-background animate-in fade-in duration-300">
-      {/* Hero Image - Fixed - Extends to top including status bar */}
-      <div className="fixed inset-x-0 top-0 h-[50vh] overflow-hidden" style={{ paddingTop: 0 }}>
-        <img 
+      {/* Hero Image - Fixed - Extends to top including status bar - BULLETPROOF PATTERN */}
+      <div className="fixed inset-x-0 top-0 h-[50vh] overflow-hidden">
+        <motion.img 
+          layoutId={`goal-hero-${goal.id}`}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           src={heroImage} 
           alt={goal.name}
-          className="w-full h-full object-cover"
+          className="absolute inset-0 w-full object-cover"
           style={{ 
-            marginTop: 'calc(-1 * env(safe-area-inset-top))',
-            height: 'calc(100% + env(safe-area-inset-top))'
+            top: `calc(-1 * env(safe-area-inset-top))`,
+            height: `calc(100% + env(safe-area-inset-top))`
           }}
         />
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/90" style={{ 
-          marginTop: 'calc(-1 * env(safe-area-inset-top))',
-          height: 'calc(100% + env(safe-area-inset-top))'
-        }} />
+        {/* Dark Gradient Overlay for Legibility */}
+        <div 
+          className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-transparent pointer-events-none"
+          style={{ 
+            top: `calc(-1 * env(safe-area-inset-top))`,
+            height: `calc(100% + env(safe-area-inset-top))`
+          }}
+        />
       </div>
 
       {/* Floating Header */}

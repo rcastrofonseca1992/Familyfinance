@@ -37,13 +37,11 @@ export const IncomePage: React.FC<IncomePageProps> = ({ onNavigate }) => {
 
   const handleAdd = () => {
     if (!newIncome.name || !newIncome.amount || newIncome.amount <= 0) {
-      toast.error(t('personal.fillAllFields'));
       return;
     }
     addIncomeSource(newIncome as IncomeSource);
     setNewIncome({ name: '', amount: 0 });
     setIsAddOpen(false);
-    toast.success(t('personal.incomeAdded'));
   };
 
   const handleEdit = () => {
@@ -51,7 +49,6 @@ export const IncomePage: React.FC<IncomePageProps> = ({ onNavigate }) => {
     updateIncomeSource(editingIncome.id, editingData);
     setEditingIncome(null);
     setEditingData({});
-    toast.success(t('personal.incomeUpdated'));
   };
 
   const handleDelete = () => {
@@ -59,7 +56,6 @@ export const IncomePage: React.FC<IncomePageProps> = ({ onNavigate }) => {
     deleteIncomeSource(itemToDelete.id);
     setDeleteConfirmOpen(false);
     setItemToDelete(null);
-    toast.success(t('personal.incomeDeleted'));
   };
 
   const openEditDialog = (income: IncomeSource) => {

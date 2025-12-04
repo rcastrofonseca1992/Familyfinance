@@ -15,8 +15,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Switch } from '../ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { cn } from '../ui/utils';
-import { toast } from 'sonner@2.0.3';
+import { ConfirmationDialog } from '../ui/ConfirmationDialog';
 import { useLanguage } from '../../src/contexts/LanguageContext';
+import { motion } from 'motion/react';
 
 const DEFAULT_APY_ESTIMATE = 3.0; // 3% Conservative estimate
 
@@ -224,25 +225,23 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
 
       if (!finalTargetAmount) return;
 
-      // Warn if multiple main goals
+      // Multiple main goals warning removed
       if (newGoal.isMain && mainGoals.length > 0) {
-          toast("You now have multiple main goals. We'll track all of them, but recommend focusing on one.", {
-              icon: <Info size={16} className="text-blue-500" />
-          });
+          // Multiple main goals warning removed
       }
 
-      addGoal({
+      const newGoalData: Goal = {
           name: newGoal.name,
           targetAmount: finalTargetAmount,
           deadline: newGoal.deadline,
           category: (newGoal.category as any) || 'other',
           isMain: newGoal.isMain,
           propertyValue: finalPropertyValue
-      });
+      };
+      addGoal(newGoalData);
       setIsAddOpen(false);
       setNewGoal({ name: '', targetAmount: 0, deadline: '', category: 'other', isMain: false });
       setNewPropertyPrice('');
-      toast.success("Goal created successfully");
   };
 
   const handleSaveEdit = () => {
@@ -256,7 +255,6 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
           isMain: selectedGoal.isMain,
           propertyValue: selectedGoal.propertyValue // Persist changes if edited (though UI for editing prop price is not added yet for simplicity, could add)
       });
-      toast.success("Goal updated");
       setIsEditOpen(false);
   };
 
@@ -500,12 +498,14 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                     return (
                         <div key={goal.id} onClick={() => setExpandedGoal({...goal, image: goalImage, requiredMonthlyContribution: calculateMonthlyContribution(goal.targetAmount, goal.currentAmount, monthsLeft)})} className="cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]">
                             <div className="relative w-full rounded-3xl overflow-hidden shadow-xl bg-background border border-border h-full flex flex-col">
-                                {/* Full Width Image Header */}
-                                <div className="relative h-48 w-full">
-                                    <img 
+                                {/* Full Width Image Header with Motion for shared-element transition */}
+                                <div className="relative h-48 w-full overflow-hidden">
+                                    <motion.img 
+                                        layoutId={`goal-hero-${goal.id}`}
+                                        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                                         src={goalImage} 
                                         alt={goal.name}
-                                        className="w-full h-full object-cover"
+                                        className="absolute inset-0 w-full h-full object-cover"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
                                     <span className="absolute top-3 right-3 text-xs font-mono bg-black/40 backdrop-blur-md text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-lg">
@@ -740,32 +740,22 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
         </Sheet>
 
         {/* Delete Confirmation Dialog */}
-        <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>Are you sure?</DialogTitle>
-                    <DialogDescription>
-                        This action cannot be undone. This will permanently delete the goal.
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                    <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)}>
-                        Cancel
-                    </Button>
-                    <Button variant="destructive" onClick={() => {
-                        if (goalToDelete) {
-                            deleteGoal(goalToDelete.id);
-                            setIsEditOpen(false);
-                            toast.success("Goal deleted");
-                        }
-                        setDeleteConfirmOpen(false);
-                    }}>
-                        Delete
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-        
+        <ConfirmationDialog
+            open={deleteConfirmOpen}
+            onOpenChange={setDeleteConfirmOpen}
+            title="Are you sure?"
+            description="This action cannot be undone. This will permanently delete the goal."
+            confirmLabel="Delete"
+            variant="destructive"
+            onConfirm={() => {
+                if (goalToDelete) {
+                    deleteGoal(goalToDelete.id);
+                    setIsEditOpen(false);
+                }
+                setDeleteConfirmOpen(false);
+            }}
+        />
+
         {/* Expandable Goal Page */}
         {expandedGoal && (
             <GoalPage 

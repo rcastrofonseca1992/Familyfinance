@@ -79,18 +79,17 @@ export const AccountsPage: React.FC<AccountsPageProps> = ({ onNavigate }) => {
 
   const handleAdd = () => {
     if (!newAccount.name || !newAccount.institution) {
-      toast.error(t('personal.fillAllFields'));
       return;
     }
 
     const accountToAdd: Account = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       name: newAccount.name,
       balance: newAccount.balance || 0,
-      institution: newAccount.institution === 'Custom' ? customBank : newAccount.institution,
+      institution: newAccount.institution,
       type: newAccount.type || 'savings',
       currency: newAccount.currency || 'EUR',
-      ownerId: user.id, // Set owner_id automatically
+      ownerId: data.user!.id,
       includeInHousehold: newAccount.includeInHousehold ?? true,
       apy: newAccount.apy || 0
     };
@@ -99,7 +98,6 @@ export const AccountsPage: React.FC<AccountsPageProps> = ({ onNavigate }) => {
     setNewAccount({ name: '', balance: 0, institution: '', type: 'savings', currency: 'EUR', includeInHousehold: true, apy: 0 });
     setCustomBank('');
     setIsAddOpen(false);
-    toast.success(t('personal.accountAdded'));
   };
 
   const handleEdit = () => {
@@ -107,7 +105,6 @@ export const AccountsPage: React.FC<AccountsPageProps> = ({ onNavigate }) => {
     updateAccount(editingAccount.id, editingData);
     setEditingAccount(null);
     setEditingData({});
-    toast.success(t('personal.accountUpdated'));
   };
 
   const handleDelete = () => {
@@ -115,7 +112,6 @@ export const AccountsPage: React.FC<AccountsPageProps> = ({ onNavigate }) => {
     deleteAccount(itemToDelete.id);
     setDeleteConfirmOpen(false);
     setItemToDelete(null);
-    toast.success(t('personal.accountDeleted'));
   };
 
   const openEditDialog = (account: Account) => {

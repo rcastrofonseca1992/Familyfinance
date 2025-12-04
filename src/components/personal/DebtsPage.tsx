@@ -54,47 +54,41 @@ export const DebtsPage: React.FC<DebtsPageProps> = ({ onNavigate }) => {
 
   const handleAdd = () => {
     if (!newDebt.name || !newDebt.totalAmount || newDebt.totalAmount <= 0) {
-      toast.error(t('personal.fillAllFields'));
       return;
     }
 
     const debtToAdd: Debt = {
-      id: Date.now().toString(),
-      name: newDebt.name!,
-      totalAmount: newDebt.totalAmount!,
-      remainingAmount: newDebt.remainingAmount || newDebt.totalAmount!,
+      id: crypto.randomUUID(),
+      name: newDebt.name,
+      totalAmount: newDebt.totalAmount || 0,
+      remainingAmount: newDebt.remainingAmount || newDebt.totalAmount || 0,
       monthlyPayment: newDebt.monthlyPayment || 0,
       interestRate: newDebt.interestRate || 0,
-      ownerId: user.id // Set owner_id automatically
+      ownerId: data.user!.id
     };
 
     const updatedDebts = [...(data.debts || []), debtToAdd];
     updateData({ debts: updatedDebts });
     setNewDebt({ name: '', totalAmount: 0, remainingAmount: 0, monthlyPayment: 0, interestRate: 0 });
     setIsAddOpen(false);
-    toast.success(t('personal.debtAdded'));
   };
 
   const handleEdit = () => {
     if (!editingDebt) return;
-    
-    const updatedDebts = (data.debts || []).map(d => 
+    const updatedDebts = (data.debts || []).map(d =>
       d.id === editingDebt.id ? { ...d, ...editingData } : d
     );
     updateData({ debts: updatedDebts });
     setEditingDebt(null);
     setEditingData({});
-    toast.success(t('personal.debtUpdated'));
   };
 
   const handleDelete = () => {
     if (!itemToDelete) return;
-    
     const updatedDebts = (data.debts || []).filter(d => d.id !== itemToDelete.id);
     updateData({ debts: updatedDebts });
     setDeleteConfirmOpen(false);
     setItemToDelete(null);
-    toast.success(t('personal.debtDeleted'));
   };
 
   const openEditDialog = (debt: Debt) => {

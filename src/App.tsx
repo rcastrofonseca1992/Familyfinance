@@ -18,6 +18,7 @@ import { LoginPage } from './components/auth/LoginPage';
 import { SignUpPage } from './components/auth/SignUpPage';
 import { HouseholdSetup } from './components/onboarding/HouseholdSetup';
 import { PWAHandler } from './components/utils/PWAHandler';
+import { LoadingScreen } from './components/ui/LoadingScreen';
 import { Toaster } from 'sonner';
 import { Calendar, Plus } from 'lucide-react';
 import { Button } from './components/ui/button';
@@ -26,7 +27,7 @@ import { getLanguage } from './src/utils/i18n';
 import { isFigmaPreview, logPreviewMode } from './lib/figma-preview';
 
 const MainApp: React.FC = () => {
-  const { data, getPersonalNetWorth } = useFinance();
+  const { data, getPersonalNetWorth, isInitialized } = useFinance();
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [authView, setAuthView] = useState<'login' | 'signup'>('login');
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
@@ -37,6 +38,11 @@ const MainApp: React.FC = () => {
     // Log preview mode status
     logPreviewMode();
   }, []);
+
+  // Show loading screen while initializing (except during auth/onboarding flows)
+  if (!isInitialized && !isFigmaPreview) {
+    return <LoadingScreen />;
+  }
 
   // 1. Auth Layer - Skip in Figma Preview
   if (!data.user && !isFigmaPreview) {
@@ -113,7 +119,9 @@ const MainApp: React.FC = () => {
 
   return (
     <AppShell currentTab={currentTab} onTabChange={setCurrentTab} title={title} subtitle={subtitle} headerAction={action}>
-        {renderView()}
+        <div className="animate-in fade-in duration-500">
+          {renderView()}
+        </div>
         <PWAHandler />
     </AppShell>
   );

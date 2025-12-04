@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Mail, Lock, ArrowRight, User, Globe } from 'lucide-react';
-import { motion } from 'motion/react';
-import { PremiumCard } from '../ui/PremiumCard';
 import { useFinance } from '../store/FinanceContext';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
+import { ArrowRight, Mail, Lock, User, Sparkles, Globe, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../src/contexts/LanguageContext';
 
 interface SignUpPageProps {
@@ -147,8 +142,17 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
           </div>
 
           <Button type="submit" className="w-full" size="lg" disabled={loading}>
-            {loading ? t('common.loading') || "Creating Account..." : t('signup.button')}
-            {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {t('common.loading') || "Creating Account"}...
+              </>
+            ) : (
+              <>
+                {t('signup.button')}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </>
+            )}
           </Button>
         </form>
 

@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
-import { useFinance } from '../store/FinanceContext';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Mail, Lock, ArrowRight, Globe } from 'lucide-react';
-import { motion } from 'motion/react';
-import { PremiumCard } from '../ui/PremiumCard';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
+import { useFinance } from '../store/FinanceContext';
+import { ArrowRight, Sparkles, Globe, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../src/contexts/LanguageContext';
 
 interface LoginPageProps {
@@ -121,8 +117,17 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
             </div>
 
             <Button type="submit" className="w-full" size="lg" disabled={loading}>
-              {loading ? t('login.button') + '...' : t('login.button')}
-              {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t('login.button')}...
+                </>
+              ) : (
+                <>
+                  {t('login.button')}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
             </Button>
           </form>
 

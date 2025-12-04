@@ -44,24 +44,22 @@ export const FixedCostsPage: React.FC<FixedCostsPageProps> = ({ onNavigate }) =>
 
   const handleAdd = () => {
     if (!newCost.name || !newCost.amount || newCost.amount <= 0) {
-      toast.error(t('personal.fillAllFields'));
       return;
     }
 
     const costToAdd: RecurringCost = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       name: newCost.name,
-      amount: newCost.amount,
+      amount: newCost.amount || 0,
       category: newCost.category || 'Subscription',
       frequency: newCost.frequency || 'monthly',
-      ownerId: user.id, // Set owner_id automatically
+      ownerId: data.user!.id,
       includeInHousehold: newCost.includeInHousehold ?? false
     };
 
     addRecurringCost(costToAdd);
     setNewCost({ name: '', amount: 0, category: 'Subscription', frequency: 'monthly', includeInHousehold: false });
     setIsAddOpen(false);
-    toast.success(t('personal.costAdded'));
   };
 
   const handleEdit = () => {
@@ -69,7 +67,6 @@ export const FixedCostsPage: React.FC<FixedCostsPageProps> = ({ onNavigate }) =>
     updateRecurringCost(editingCost.id, editingData);
     setEditingCost(null);
     setEditingData({});
-    toast.success(t('personal.costUpdated'));
   };
 
   const handleDelete = () => {
@@ -77,7 +74,6 @@ export const FixedCostsPage: React.FC<FixedCostsPageProps> = ({ onNavigate }) =>
     deleteRecurringCost(itemToDelete.id);
     setDeleteConfirmOpen(false);
     setItemToDelete(null);
-    toast.success(t('personal.costDeleted'));
   };
 
   const openEditDialog = (cost: RecurringCost) => {
