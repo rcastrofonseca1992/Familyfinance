@@ -2,7 +2,7 @@ import React from 'react';
 import { Goal, useFinance } from '../store/FinanceContext';
 import { formatCurrency, getMarketSentiment } from '../../lib/finance';
 import { useLanguage } from '../../src/contexts/LanguageContext';
-import { ImageWithFallback } from '../figma/ImageWithFallback';
+import { motion } from 'motion/react';
 
 interface PremiumMortgageCardProps {
     goal: Goal;
@@ -75,15 +75,18 @@ export const PremiumMortgageCard: React.FC<PremiumMortgageCardProps> = ({
                 </span>
             </div>
 
-            {/* Hero Image */}
-            <div className="relative">
-                <ImageWithFallback
+            {/* Hero Image with Motion for shared-element transition */}
+            <div className="relative h-60 overflow-hidden rounded-t-3xl">
+                <motion.img
+                    layoutId={`goal-hero-${goal.id}`}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                     src={image || "https://images.unsplash.com/photo-1760434875920-2b7a79ea163a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc29tZXRyaWMlMjBtaW5pYXR1cmUlMjBob3VzZXxlbnwxfHx8fDE3NjQ4Mzc4NzB8MA&ixlib=rb-4.1.0&q=80&w=1080"}
                     alt={goal.name}
-                    className="w-full h-60 object-cover rounded-t-3xl"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{ borderRadius: '1.5rem 1.5rem 0 0' }}
                 />
                 {/* Floating Date Badge */}
-                <span className="absolute top-3 right-3 text-xs font-mono bg-black/40 backdrop-blur-md text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-lg">
+                <span className="absolute top-3 right-3 text-xs font-mono bg-black/40 backdrop-blur-md text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-lg z-10">
                     {new Date(goal.deadline).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
                 </span>
             </div>
