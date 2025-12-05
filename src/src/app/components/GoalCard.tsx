@@ -10,6 +10,7 @@ import {
   Calendar,
   TrendingUp,
   Target,
+  Clock,
 } from 'lucide-react';
 
 /**

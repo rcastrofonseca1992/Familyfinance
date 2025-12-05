@@ -1,147 +1,230 @@
-# Figma Make - Family Finance Dashboard
+# Figma Make Preview Module
 
-## 🎨 Quick Start
+Isolated UI preview system with mock data for Family Finance Dashboard.
 
-This folder contains the **complete isolated preview environment** for the Family Finance Dashboard.
+---
 
-### Preview Mode
+## 🎯 What This Is
 
-✅ Automatically activated inside Figma Make  
-✅ Mock data for all features  
-✅ No Supabase calls  
-✅ Full UI functionality  
+A **fully isolated preview environment** that provides:
+- ✅ Pure UI components safe for Figma Make regeneration
+- ✅ Complete mock data system (no Supabase calls)
+- ✅ Production-ready components you can import
+- ✅ Proper separation between UI and business logic
 
-### Structure
+---
 
+## 🚀 Quick Start
+
+### Import Components
+```typescript
+import { DashboardPage, GoalCard, type Goal } from '@/app/exports';
+
+<DashboardPage 
+  goals={myGoals} 
+  accounts={myAccounts} 
+  debts={myDebts} 
+/>
 ```
-/src/app/
-├── components/     → Pure UI components (cards, widgets)
-├── pages/          → Full page components
-├── preview/        → Mock system & preview logic
-├── styles/         → Preview-specific styles
-├── index.tsx       → Entry point (auto-detects iframe)
-└── USAGE_GUIDE.md  → Complete documentation
+
+### Import Logic (Production Only)
+```typescript
+import { finance, auth, helpers } from '@/app/exports';
+
+// Calculate compound interest
+const result = finance.calculateCompoundInterest(
+  10000,  // principal
+  500,    // monthly contribution
+  7,      // annual rate %
+  60      // months
+);
+
+// Validate email
+const valid = helpers.isValidEmail('user@example.com');
+```
+
+### Use Mock Data
+```typescript
+import { mockGoals, mockAccounts } from '@/app/exports';
+
+<GoalCard goal={mockGoals[0]} />
 ```
 
 ---
 
-## 📚 Documentation
+## 📂 Structure
 
-**Read the full guide**: [USAGE_GUIDE.md](./USAGE_GUIDE.md)
+```
+/src/app/
+├── app.config.ts          # Mode detection & configuration
+├── logic/                 # Production logic (NOT in preview)
+│   ├── finance.ts        # Financial calculations
+│   ├── supabase.ts       # Database operations
+│   ├── auth.ts           # Authentication
+│   ├── networth.ts       # Net worth calculations
+│   └── helpers.ts        # Utilities
+├── components/            # Pure UI components
+├── pages/                 # Full page layouts
+├── preview/               # Mock system for preview mode
+├── exports.ts             # Public API
+└── USAGE_GUIDE.md        # Complete documentation
+```
 
-Topics covered:
-- Architecture overview
-- Preview mode detection
-- Integration with production
-- Extending mock data
-- Regeneration workflow
+---
+
+## 🔒 Key Principle
+
+**Separation of Concerns:**
+- **UI Components** (`/components/`, `/pages/`) → Figma Make safe
+- **Business Logic** (`/logic/`) → Production only, never executed in preview
+- **Mock System** (`/preview/`) → Preview mode only
+
+---
+
+## 📚 Full Documentation
+
+See [USAGE_GUIDE.md](./USAGE_GUIDE.md) for:
+- Complete API reference
+- Integration examples
+- Testing strategies
+- Architecture details
 - Best practices
 
 ---
 
-## 🚀 Quick Integration
+## ⚙️ Mode Detection
 
-### Use a Component
-
-```typescript
-import { GoalCard } from './app/components/GoalCard';
-
-<GoalCard goal={myGoal} onClick={handleClick} />
-```
-
-### Use a Page
+The system automatically detects if running in preview or production:
 
 ```typescript
-import { DashboardPage } from './app/pages/DashboardPage';
+import { IS_PREVIEW, FEATURES } from '@/app/exports';
 
-<DashboardPage
-  goals={goals}
-  accounts={accounts}
-  debts={debts}
-  onGoalClick={handleGoalClick}
-  onNavigate={navigate}
-/>
+if (IS_PREVIEW) {
+  // Preview: Use mock data
+} else {
+  // Production: Use real Supabase
+}
 ```
 
-### Use Types
+**Preview Mode** (inside Figma Make iframe):
+- ✅ Mock data
+- ✅ No network calls
+- ✅ Dev utilities in console
 
-```typescript
-import type { Goal, Account, Debt } from './app/preview/types';
-```
+**Production Mode** (standalone):
+- ✅ Real authentication
+- ✅ Real database
+- ✅ RLS policies enforced
 
 ---
 
-## ⚠️ Important Rules
+## 🧪 Available Exports
 
-1. **Everything in `/src/app/` will be overwritten** when you regenerate in Figma Make
-2. **Never import from outside `/src/app/`** in Make components
-3. **Commit before regenerating** to preserve your changes
-4. **Copy custom modifications** outside this folder
-
----
-
-## 🧪 Mock Data Included
-
-- ✅ 6 Goals (all categories)
-- ✅ 4 Accounts (checking, savings, investment)
-- ✅ 4 Debts (credit card, loans, mortgage)
-- ✅ 3 Income sources
-- ✅ 7 Fixed costs (rent, utilities, subscriptions)
-- ✅ User & household data
-- ✅ Settings & preferences
-
----
-
-## 📊 Features Implemented
+### Components
+- `GoalCard`, `AccountCard`, `DebtCard`, `IncomeCard`, `FixedCostCard`
 
 ### Pages
-- ✅ DashboardPage - Overview with summary cards
-- ✅ GoalsPage - Full goals list with filtering
-- ✅ PersonalFinancePage - Income, accounts, costs, debts
+- `DashboardPage`, `GoalsPage`, `PersonalFinancePage`
 
-### Components
-- ✅ GoalCard - Premium goal display
-- ✅ AccountCard - Account overview
-- ✅ DebtCard - Debt tracking
-- ✅ IncomeCard - Income sources
-- ✅ FixedCostCard - Monthly costs
+### Logic (Production Only)
+- `finance` - Financial calculations
+- `supabase` - Database operations
+- `auth` - Authentication
+- `networth` - Net worth calculations
+- `helpers` - Utilities
 
-### Mock System
-- ✅ Complete database simulation
-- ✅ Authentication mock
-- ✅ Settings management
-- ✅ Navigation system
-- ✅ API simulation
+### Types
+- `Goal`, `Account`, `Debt`, `Income`, `FixedCost`, `Transaction`, `User`, `Household`
 
----
+### Mock Data
+- `mockGoals`, `mockAccounts`, `mockDebts`, `mockIncomes`, `mockFixedCosts`
 
-## 🎯 Design System
-
-### Colors (Pastel Blue Theme)
-- Primary: Blue (#6fa8d4)
-- Success: Green (goals, income)
-- Warning: Orange (costs)
-- Danger: Red (debts)
-
-### Typography
-- Headings: font-semibold
-- Labels: text-xs uppercase tracking-wider
-- Currency: font-bold
-
-### Components
-- Rounded corners: rounded-2xl, rounded-3xl
-- Shadows: shadow-lg, shadow-xl
-- Hover effects: scale-[1.02]
-- Active effects: scale-[0.98]
+### Configuration
+- `IS_PREVIEW`, `APP_MODE`, `FEATURES`, `API_CONFIG`
 
 ---
 
-## 🔗 Links
+## 🎨 Usage Example
 
-- **Full Documentation**: [USAGE_GUIDE.md](./USAGE_GUIDE.md)
-- **Production Code**: `/src/` (outside this folder)
-- **Global Styles**: `/styles/globals.css`
+```typescript
+import { 
+  DashboardPage, 
+  type Goal, 
+  type Account,
+  mockGoals,
+  mockAccounts,
+  IS_PREVIEW 
+} from '@/app/exports';
+
+function MyApp() {
+  const [goals, setGoals] = useState<Goal[]>(
+    IS_PREVIEW ? mockGoals : []
+  );
+  
+  useEffect(() => {
+    if (!IS_PREVIEW) {
+      // Fetch real data in production
+      fetchGoals().then(setGoals);
+    }
+  }, []);
+  
+  return (
+    <DashboardPage
+      goals={goals}
+      accounts={mockAccounts}
+      onGoalClick={(goal) => navigate(`/goals/${goal.id}`)}
+    />
+  );
+}
+```
 
 ---
 
-**Generated by Figma Make** | December 5, 2024
+## 🔧 Development
+
+### Console Utilities (Preview Mode Only)
+```javascript
+// Available in browser console during preview
+devUtils.logDatabaseState()      // View all mock data
+devUtils.addTestGoal()            // Add test goal
+devUtils.getFinancialSummary()   // Get summary
+devUtils.resetDatabase()          // Reset to defaults
+```
+
+---
+
+## ⚠️ Important Notes
+
+1. **Never import logic in UI components** - Pass calculated values as props
+2. **Logic files are production-only** - They never run in preview mode
+3. **Safe to regenerate** - Figma Make only touches UI components
+4. **Type-safe** - All components and functions are fully typed
+
+---
+
+## 🚀 Integration
+
+### Step 1: Import what you need
+```typescript
+import { DashboardPage, finance, type Goal } from '@/app/exports';
+```
+
+### Step 2: Use in production
+```typescript
+// Calculate values outside component
+const projectedValue = finance.calculateCompoundInterest(
+  goal.currentAmount,
+  goal.monthlyContribution,
+  goal.expectedAPY,
+  monthsRemaining
+);
+
+// Pass to component
+<DashboardPage goals={goals} />
+```
+
+### Step 3: Done! ✅
+
+---
+
+**For complete documentation, see [USAGE_GUIDE.md](./USAGE_GUIDE.md)**

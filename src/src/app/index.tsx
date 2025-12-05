@@ -1,36 +1,22 @@
 /**
- * Figma Make Entry Point
+ * App Preview Entry Point
  * 
- * This file automatically detects if the app is running inside an iframe
- * (preview mode) and renders the preview environment with mock data.
- * 
- * For production, the real app uses /src/main.tsx instead.
+ * Automatically detects if running in Figma Make preview mode (iframe)
+ * and shows preview with mock data. Otherwise, returns null and lets
+ * the production app handle rendering.
  */
 
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 import AppPreview from './preview/AppPreview';
-import '../styles/globals.css';
+import { IS_PREVIEW } from './app.config';
 
-// Detect if running inside iframe (Figma Make preview)
-const IS_PREVIEW = window.self !== window.top;
-
-if (IS_PREVIEW) {
-  console.log('🎨 Figma Make: Preview mode detected, loading mock environment...');
-  
-  const rootElement = document.getElementById('root');
-  if (rootElement) {
-    const root = createRoot(rootElement);
-    root.render(
-      <React.StrictMode>
-        <AppPreview />
-      </React.StrictMode>
-    );
+export default function App() {
+  // In preview mode (iframe), show AppPreview
+  if (IS_PREVIEW) {
+    return <AppPreview />;
   }
-} else {
-  console.log('🚀 Figma Make: Production mode - using /src/main.tsx');
-  // Production app is loaded via /src/main.tsx
-  // This file does nothing in production mode
+  
+  // In production mode (standalone), return null
+  // The production app will handle rendering
+  return null;
 }
-
-export default AppPreview;

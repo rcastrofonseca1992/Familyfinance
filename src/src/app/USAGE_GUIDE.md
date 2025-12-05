@@ -84,8 +84,8 @@ Use Make components in your real app:
 
 ```typescript
 // In your real app code
-import { GoalCard } from '../app/components/GoalCard';
-import { DashboardPage } from '../app/pages/DashboardPage';
+import { GoalCard } from '@/app/components/GoalCard';
+import { DashboardPage } from '@/app/pages/DashboardPage';
 
 // Pass real data from your Supabase context
 <DashboardPage
@@ -103,8 +103,8 @@ Replace your current pages with Make pages:
 
 ```typescript
 // Replace existing dashboard
-import { DashboardPage } from './app/pages/DashboardPage';
-import { useFinance } from './contexts/FinanceContext';
+import { DashboardPage } from '@/app/pages/DashboardPage';
+import { useFinance } from '@/contexts/FinanceContext';
 
 function Dashboard() {
   const { goals, accounts, debts } = useFinance();
@@ -126,7 +126,7 @@ function Dashboard() {
 Share types between Make and production:
 
 ```typescript
-import type { Goal, Account, Debt } from './app/preview/types';
+import type { Goal, Account, Debt } from '@/app/preview/types';
 
 // Use these types in your production code
 const myGoal: Goal = {
@@ -435,7 +435,7 @@ Don't mix custom code with Make output:
 
 Share types between Make and production:
 ```typescript
-import type { Goal } from './app/preview/types';
+import type { Goal } from '@/app/preview/types';
 ```
 
 ### 3. **Commit Make Output**
