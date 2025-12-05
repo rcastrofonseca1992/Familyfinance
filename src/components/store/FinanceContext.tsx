@@ -632,11 +632,19 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Auth Actions
   const login = async (email: string, password?: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data: authData, error } = await supabase.auth.signInWithPassword({
         email,
         password: password || ''
     });
+    
     if (error) throw error;
+    
+    // Block unconfirmed users at login
+    if (authData.user && !authData.user.email_confirmed_at) {
+      // Sign them out immediately
+      await supabase.auth.signOut();
+      throw new Error('Please confirm your email before logging in. Check your inbox for the verification link.');
+    }
   };
 
   const logout = async () => {

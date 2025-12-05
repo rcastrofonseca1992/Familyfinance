@@ -4,7 +4,6 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { PremiumCard } from '../ui/PremiumCard';
-import { useFinance } from '../store/FinanceContext';
 import { ArrowRight, Mail, Lock, User, Sparkles, Globe, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../src/contexts/LanguageContext';
 import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
@@ -12,11 +11,10 @@ import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { motion } from 'motion/react';
 
 interface SignUpPageProps {
-  onNavigate: (page: 'login' | 'dashboard') => void;
+  onNavigate: (page: 'login' | 'verify-email', email?: string) => void;
 }
 
 export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
-  const { login } = useFinance();
   const { language, setLanguage, t } = useLanguage();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -61,8 +59,9 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
           throw new Error(errorMessage);
       }
 
-      // Auto login after signup
-      await login(email, password);
+      // ✅ Correct Supabase flow: Always show verification screen after signup
+      // Don't check email_confirmed_at - user just signed up
+      onNavigate('verify-email', email);
       
     } catch (err: any) {
        setError(err.message || t('signup.error') || "Failed to create account");

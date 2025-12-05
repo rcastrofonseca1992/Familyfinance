@@ -33,8 +33,9 @@ import { isFigmaPreview, logPreviewMode } from './lib/figma-preview';
 const MainApp: React.FC = () => {
   const { data, getPersonalNetWorth, isInitialized, logout } = useFinance();
   const [currentTab, setCurrentTab] = useState('dashboard');
-  const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot-password' | 'reset-password'>('login');
+  const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot-password' | 'reset-password' | 'verify-email'>('login');
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
+  const [verificationEmail, setVerificationEmail] = useState('');
 
   // Initialize language on app startup
   useEffect(() => {
@@ -55,8 +56,21 @@ const MainApp: React.FC = () => {
 
   // 1. Auth Layer - Skip in Figma Preview
   if (!data.user && !isFigmaPreview) {
+      // Show verification screen if user just signed up
+      if (authView === 'verify-email') {
+          return <EmailVerificationScreen email={verificationEmail} onLogout={() => {
+            setAuthView('login');
+            setVerificationEmail('');
+          }} />;
+      }
       if (authView === 'signup') {
-          return <SignUpPage onNavigate={(page) => page === 'login' ? setAuthView('login') : null} />;
+          return <SignUpPage onNavigate={(page, email) => {
+            if (page === 'login') setAuthView('login');
+            else if (page === 'verify-email' && email) {
+              setVerificationEmail(email);
+              setAuthView('verify-email');
+            }
+          }} />;
       }
       if (authView === 'forgot-password') {
           return <ForgotPasswordPage onBack={() => setAuthView('login')} />;
@@ -72,6 +86,7 @@ const MainApp: React.FC = () => {
 
   // 1.5. Email Verification Layer - Skip in Figma Preview
   if (data.user && data.isEmailVerified === false && !isFigmaPreview) {
+      setVerificationEmail(data.user.email);
       return <EmailVerificationScreen email={data.user.email} onLogout={logout} />;
   }
 
