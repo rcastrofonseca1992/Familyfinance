@@ -5,6 +5,7 @@ import { Label } from '../ui/label';
 import { useFinance } from '../store/FinanceContext';
 import { ArrowRight, Mail, Lock, User, Sparkles, Globe, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../src/contexts/LanguageContext';
+import { motion } from 'motion/react';
 
 interface SignUpPageProps {
   onNavigate: (page: 'login' | 'dashboard') => void;
