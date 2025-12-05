@@ -157,7 +157,7 @@ export default function App() {
       <FinanceProvider>
         <LanguageProvider>
           <MainApp />
-          <Toaster />
+          <Toaster position="top-center" />
         </LanguageProvider>
       </FinanceProvider>
     </ErrorBoundary>
