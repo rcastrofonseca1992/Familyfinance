@@ -70,7 +70,7 @@ export const personalPt = {
   "personal.trackRecurringExpense": "Registe uma nova despesa recorrente ou subscrição.",
   "personal.name": "Nome",
   "personal.subscriptionNamePlaceholder": "ex. Spotify",
-  "personal.monthlyCost": "Custo Mensal",
+  "personal.monthlyCost": "Custo",
   "personal.category": "Categoria",
   "personal.categoryPlaceholder": "ex. Entretenimento",
   "personal.shareCostWithHousehold": "Partilhar custo com o Agregado?",

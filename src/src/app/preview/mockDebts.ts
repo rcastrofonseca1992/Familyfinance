@@ -2,10 +2,11 @@ import { Debt } from './types';
 
 /**
  * Mock debts data for preview environment
- * Includes credit card, personal loan, and mortgage
+ * Includes comprehensive examples: credit cards, loans, mortgage
  */
 
 export const mockDebts: Debt[] = [
+  // 1. CREDIT CARD - Primary Card
   {
     id: 'debt-1',
     name: 'Cartão de Crédito Principal',
@@ -18,6 +19,8 @@ export const mockDebts: Debt[] = [
     createdAt: '2024-01-15T10:00:00Z',
     updatedAt: '2024-12-05T10:00:00Z',
   },
+  
+  // 2. PERSONAL LOAN - Home Renovation
   {
     id: 'debt-2',
     name: 'Empréstimo Pessoal',
@@ -30,6 +33,8 @@ export const mockDebts: Debt[] = [
     createdAt: '2023-06-01T10:00:00Z',
     updatedAt: '2024-12-05T10:00:00Z',
   },
+  
+  // 3. MORTGAGE - Home Loan
   {
     id: 'debt-3',
     name: 'Crédito Habitação',
@@ -42,6 +47,8 @@ export const mockDebts: Debt[] = [
     createdAt: '2020-03-15T10:00:00Z',
     updatedAt: '2024-12-05T10:00:00Z',
   },
+  
+  // 4. AUTO LOAN - Car Financing
   {
     id: 'debt-4',
     name: 'Crédito Automóvel',
@@ -52,6 +59,34 @@ export const mockDebts: Debt[] = [
     institution: 'BPI',
     dueDate: '20',
     createdAt: '2022-09-01T10:00:00Z',
+    updatedAt: '2024-12-05T10:00:00Z',
+  },
+  
+  // 5. STUDENT LOAN - Master's Degree
+  {
+    id: 'debt-5',
+    name: 'Empréstimo Estudantil',
+    type: 'student_loan',
+    balance: 15000.00,
+    interestRate: 4.5,
+    minimumPayment: 280.00,
+    institution: 'Caixa Geral',
+    dueDate: '5',
+    createdAt: '2021-09-01T10:00:00Z',
+    updatedAt: '2024-12-05T10:00:00Z',
+  },
+  
+  // 6. OTHER - Medical Expenses
+  {
+    id: 'debt-6',
+    name: 'Despesas Médicas',
+    type: 'other',
+    balance: 2800.00,
+    interestRate: 0.0,
+    minimumPayment: 200.00,
+    institution: 'Hospital Privado',
+    dueDate: '25',
+    createdAt: '2024-08-15T10:00:00Z',
     updatedAt: '2024-12-05T10:00:00Z',
   },
 ];

@@ -2,10 +2,11 @@ import { Goal } from './types';
 
 /**
  * Mock goals data for preview environment
- * Includes at least one goal for each category
+ * Includes comprehensive examples with at least one goal for each category
  */
 
 export const mockGoals: Goal[] = [
+  // 1. MORTGAGE - Dream Home
   {
     id: 'goal-1',
     name: 'Casa dos Sonhos',
@@ -22,6 +23,8 @@ export const mockGoals: Goal[] = [
     createdAt: '2024-01-15T10:00:00Z',
     updatedAt: '2024-12-05T10:00:00Z',
   },
+  
+  // 2. EMERGENCY FUND - 6 months coverage
   {
     id: 'goal-2',
     name: 'Fundo de Emergência',
@@ -36,6 +39,8 @@ export const mockGoals: Goal[] = [
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-12-05T10:00:00Z',
   },
+  
+  // 3. TRAVEL - Japan Trip
   {
     id: 'goal-3',
     name: 'Viagem ao Japão',
@@ -50,6 +55,8 @@ export const mockGoals: Goal[] = [
     createdAt: '2024-02-01T10:00:00Z',
     updatedAt: '2024-12-05T10:00:00Z',
   },
+  
+  // 4. CAR - New Vehicle
   {
     id: 'goal-4',
     name: 'Carro Novo',
@@ -64,6 +71,8 @@ export const mockGoals: Goal[] = [
     createdAt: '2024-03-01T10:00:00Z',
     updatedAt: '2024-12-05T10:00:00Z',
   },
+  
+  // 5. KIDS - Children's Education
   {
     id: 'goal-5',
     name: 'Educação dos Filhos',
@@ -78,6 +87,8 @@ export const mockGoals: Goal[] = [
     createdAt: '2024-01-20T10:00:00Z',
     updatedAt: '2024-12-05T10:00:00Z',
   },
+  
+  // 6. GENERAL - Flexible Savings
   {
     id: 'goal-6',
     name: 'Poupança Geral',

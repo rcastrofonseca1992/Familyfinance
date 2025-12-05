@@ -70,7 +70,7 @@ export const personalEn = {
   "personal.trackRecurringExpense": "Track a new recurring expense or subscription.",
   "personal.name": "Name",
   "personal.subscriptionNamePlaceholder": "e.g. Spotify",
-  "personal.monthlyCost": "Monthly Cost",
+  "personal.monthlyCost": "Cost",
   "personal.category": "Category",
   "personal.categoryPlaceholder": "e.g. Entertainment",
   "personal.shareCostWithHousehold": "Share cost with Household?",

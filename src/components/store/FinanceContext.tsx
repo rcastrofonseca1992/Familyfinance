@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { toast } from 'sonner@2.0.3';
 import { isFigmaPreview, mockFinanceData, safeSaveData, logPreviewMode } from '../../lib/figma-preview';
+import { transformPreviewDataToFinanceData } from '../../src/app/preview/transformToFinanceData';
 
 // Helper function to create auth headers with apikey
 const authHeaders = (token: string) => ({
@@ -74,7 +75,7 @@ export interface Goal {
   targetAmount: number;
   currentAmount: number;
   deadline: string; // ISO date
-  category: 'home' | 'trip' | 'kids' | 'emergency' | 'other' | 'mortgage';
+  category: 'home' | 'trip' | 'kids' | 'emergency' | 'other' | 'mortgage' | 'car' | 'general';
   isMain?: boolean;
   propertyValue?: number; // Full price of the property (for Home goals)
 }
@@ -128,7 +129,7 @@ const defaultData: FinanceData = {
   monthlySnapshots: []
 };
 
-// 🧪 Figma Make Mock Data
+// 🧪 Load mock data for Figma Make preview
 const figmaMockData: FinanceData = {
   ...defaultData,
   user: {
@@ -247,8 +248,9 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // 🧪 Load mock data for Figma Make preview
   useEffect(() => {
       if (isFigmaPreview) {
-          console.log("🎨 Loading mock data for Figma Make preview");
-          setData(figmaMockData);
+          console.log("🎨 Loading comprehensive mock data for Figma Make preview");
+          const previewData = transformPreviewDataToFinanceData();
+          setData(previewData);
           setIsInitialized(true);
           return;
       }
