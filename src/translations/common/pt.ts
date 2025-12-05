@@ -1,6 +1,6 @@
 export const commonPt = {
   // App
-  "app.title": "Family Finance",
+  "app.title": "Notinow",
   
   // Navigation
   "nav.household": "Agregado",

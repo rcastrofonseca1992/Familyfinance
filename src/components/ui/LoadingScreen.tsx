@@ -18,8 +18,9 @@ export const LoadingScreen: React.FC = () => {
           </div>
           
           <div className="text-center space-y-2">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Family Finance
+            <h2 className="text-2xl font-bold">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Noti</span>
+              <span style={{ color: '#FBBF24' }}>now</span>
             </h2>
             <p className="text-sm text-muted-foreground animate-pulse">
               Loading your dashboard...

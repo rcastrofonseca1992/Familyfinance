@@ -1,7 +1,7 @@
 
-  # Family Finance Dashboard PWA
+  # Notinow 2.0
 
-  This is a code bundle for Family Finance Dashboard PWA. The original project is available at https://www.figma.com/design/q5OgYVBDCuGi1AnyCWCxMM/Family-Finance-Dashboard-PWA.
+  This is a code bundle for Notinow 2.0. The original project is available at https://www.figma.com/design/q5OgYVBDCuGi1AnyCWCxMM/Notinow-2.0.
 
   ## Running the code
 

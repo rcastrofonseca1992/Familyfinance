@@ -1,6 +1,6 @@
 {
-  "name": "Family Finance Dashboard",
-  "short_name": "Family Finance",
+  "name": "Notinow",
+  "short_name": "Notinow",
   "description": "Premium PWA for managing household finances with goals, tracking, and forecasting",
   "start_url": "/",
   "display": "standalone",

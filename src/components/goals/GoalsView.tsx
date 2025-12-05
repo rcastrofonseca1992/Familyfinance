@@ -720,7 +720,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                     </PremiumCard>
 
                                     <div className="flex gap-2 pt-4 border-t w-full">
-                                        <Button variant="destructive" className="flex-1" onClick={() => {
+                                        <Button variant="ghost" className="flex-1 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50" onClick={() => {
                                             setDeleteConfirmOpen(true);
                                             setGoalToDelete(selectedGoal);
                                         }}>

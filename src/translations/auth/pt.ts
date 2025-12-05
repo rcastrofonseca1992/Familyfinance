@@ -13,7 +13,7 @@ export const authPt = {
   
   // Signup
   "signup.title": "Crie a sua conta",
-  "signup.subtitle": "Junte-se ao Family Finance hoje",
+  "signup.subtitle": "Junte-se ao Notinow hoje",
   "signup.createAccount": "Criar Conta",
   "signup.startJourney": "Comece a sua jornada para a liberdade financeira.",
   "signup.name": "Nome Completo",
@@ -71,7 +71,7 @@ export const authPt = {
   "resetPassword.error": "Falha ao redefinir palavra-passe",
   
   // Household Setup
-  "household.welcomeTitle": "Bem-vindo ao Family Finance",
+  "household.welcomeTitle": "Bem-vindo ao Notinow",
   "household.chooseOption": "Escolha como gostaria de começar",
   "household.createHousehold": "Criar Agregado",
   "household.createNew": "Comece do zero com um novo agregado",

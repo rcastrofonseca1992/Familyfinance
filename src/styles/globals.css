@@ -9,7 +9,7 @@
   --card-foreground: #1a2433;
   --popover: #ffffff;
   --popover-foreground: #1a2433;
-  --primary: #6fa8d4;
+  --primary: #5E90B6;
   --primary-foreground: #ffffff;
   --secondary: #eaf3f9;
   --secondary-foreground: #2f4056;
@@ -25,25 +25,25 @@
   --switch-background: #cbd8e3;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: #6fa8d4;
+  --ring: #5E90B6;
   
   /* Charts - Pastel Blue variants */
-  --chart-1: #6fa8d4;
-  --chart-2: #8bbce6;
-  --chart-3: #a8d3f0;
-  --chart-4: #c5e6fa;
+  --chart-1: #5E90B6;
+  --chart-2: #7ba5c5;
+  --chart-3: #98bad4;
+  --chart-4: #b5cfe3;
   --chart-5: #4d7aa0;
   
   --radius: 0.625rem;
   
   --sidebar: #fdfdfe;
   --sidebar-foreground: #1a2433;
-  --sidebar-primary: #6fa8d4;
+  --sidebar-primary: #5E90B6;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #eaf3f9;
   --sidebar-accent-foreground: #2f4056;
   --sidebar-border: #d8e3ed;
-  --sidebar-ring: #6fa8d4;
+  --sidebar-ring: #5E90B6;
 }
 
 .dark {

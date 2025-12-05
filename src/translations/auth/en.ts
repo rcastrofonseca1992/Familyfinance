@@ -13,7 +13,7 @@ export const authEn = {
   
   // Signup
   "signup.title": "Create your account",
-  "signup.subtitle": "Join Family Finance today",
+  "signup.subtitle": "Join Notinow today",
   "signup.createAccount": "Create Account",
   "signup.startJourney": "Start your journey to financial freedom.",
   "signup.name": "Full Name",
@@ -71,7 +71,7 @@ export const authEn = {
   "resetPassword.error": "Failed to reset password",
   
   // Household Setup
-  "household.welcomeTitle": "Welcome to Family Finance",
+  "household.welcomeTitle": "Welcome to Notinow",
   "household.chooseOption": "Choose how you'd like to get started",
   "household.createHousehold": "Create Household",
   "household.createNew": "Start fresh with a new household",
