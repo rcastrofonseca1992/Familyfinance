@@ -11,7 +11,7 @@ import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
 import { motion } from 'motion/react';
 
 interface LoginPageProps {
-  onNavigate: (page: 'signup' | 'dashboard') => void;
+  onNavigate: (page: 'signup' | 'dashboard' | 'forgot-password') => void;
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
@@ -105,7 +105,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">{t('login.password')}</Label>
+              <div className="flex justify-between items-center">
+                <Label htmlFor="password">{t('login.password')}</Label>
+                <button 
+                  type="button"
+                  onClick={() => onNavigate('forgot-password')}
+                  className="text-xs text-primary hover:underline"
+                >
+                  {t('login.forgotPassword') || 'Forgot password?'}
+                </button>
+              </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input 

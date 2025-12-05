@@ -111,6 +111,9 @@ export interface FinanceData {
   // Historical Snapshots (DEPRECATED - now stored in household.monthlySnapshots)
   // Kept for backward compatibility during migration
   monthlySnapshots?: MonthlySnapshot[];
+  
+  // Email verification status
+  isEmailVerified?: boolean;
 }
 
 const defaultData: FinanceData = {
@@ -576,12 +579,16 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
           if (session?.user) {
+              // Check email verification status
+              const isEmailVerified = !!session.user.email_confirmed_at;
+              
               // User authenticated - Load strictly from server (No Local Storage)
               setData(prev => {
                   // If user ID hasn't changed, don't trigger reload (session refresh)
                   if (prev.user?.id === session.user.id) {
                       console.log("Auth state change detected but user ID unchanged - keeping existing data");
-                      return prev;
+                      // Update email verification status even on session refresh
+                      return { ...prev, isEmailVerified };
                   }
                   
                   // New user login - Initialize with authenticated user but EMPTY data until server responds
@@ -590,6 +597,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
                       ...defaultData, 
                       theme: prev.theme,
                       marketData: prev.marketData,
+                      isEmailVerified,
                       user: {
                           id: session.user.id,
                           name: session.user.user_metadata.name || 'User',

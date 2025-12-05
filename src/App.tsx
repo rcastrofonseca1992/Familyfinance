@@ -17,6 +17,9 @@ import { SettingsView } from './components/settings/SettingsView';
 import { HouseholdManagement } from './components/settings/HouseholdManagement';
 import { LoginPage } from './components/auth/LoginPage';
 import { SignUpPage } from './components/auth/SignUpPage';
+import { EmailVerificationScreen } from './components/auth/EmailVerificationScreen';
+import { ForgotPasswordPage } from './components/auth/ForgotPasswordPage';
+import { ResetPasswordPage } from './components/auth/ResetPasswordPage';
 import { HouseholdSetup } from './components/onboarding/HouseholdSetup';
 import { PWAHandler } from './components/utils/PWAHandler';
 import { LoadingScreen } from './components/ui/LoadingScreen';
@@ -28,9 +31,9 @@ import { getLanguage } from './src/utils/i18n';
 import { isFigmaPreview, logPreviewMode } from './lib/figma-preview';
 
 const MainApp: React.FC = () => {
-  const { data, getPersonalNetWorth, isInitialized } = useFinance();
+  const { data, getPersonalNetWorth, isInitialized, logout } = useFinance();
   const [currentTab, setCurrentTab] = useState('dashboard');
-  const [authView, setAuthView] = useState<'login' | 'signup'>('login');
+  const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot-password' | 'reset-password'>('login');
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
 
   // Initialize language on app startup
@@ -38,6 +41,11 @@ const MainApp: React.FC = () => {
     document.documentElement.setAttribute("lang", getLanguage());
     // Log preview mode status
     logPreviewMode();
+    
+    // Check if we're on reset password route (from email link)
+    if (window.location.pathname === '/auth/reset-password' || window.location.hash.includes('type=recovery')) {
+      setAuthView('reset-password');
+    }
   }, []);
 
   // Show loading screen while initializing (except during auth/onboarding flows)
@@ -50,7 +58,21 @@ const MainApp: React.FC = () => {
       if (authView === 'signup') {
           return <SignUpPage onNavigate={(page) => page === 'login' ? setAuthView('login') : null} />;
       }
-      return <LoginPage onNavigate={(page) => page === 'signup' ? setAuthView('signup') : null} />;
+      if (authView === 'forgot-password') {
+          return <ForgotPasswordPage onBack={() => setAuthView('login')} />;
+      }
+      if (authView === 'reset-password') {
+          return <ResetPasswordPage onSuccess={() => setAuthView('login')} />;
+      }
+      return <LoginPage onNavigate={(page) => {
+          if (page === 'signup') setAuthView('signup');
+          else if (page === 'forgot-password') setAuthView('forgot-password');
+      }} />;
+  }
+
+  // 1.5. Email Verification Layer - Skip in Figma Preview
+  if (data.user && data.isEmailVerified === false && !isFigmaPreview) {
+      return <EmailVerificationScreen email={data.user.email} onLogout={logout} />;
   }
 
   // 2. Household Layer - Skip in Figma Preview

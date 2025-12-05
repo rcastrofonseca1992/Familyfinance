@@ -9,6 +9,7 @@ export const authPt = {
   "login.signUp": "Criar conta",
   "login.language": "Idioma",
   "login.error": "Falha ao entrar. Por favor, verifique as suas credenciais.",
+  "login.forgotPassword": "Esqueceu a palavra-passe?",
   
   // Signup
   "signup.title": "Crie a sua conta",
@@ -23,6 +24,51 @@ export const authPt = {
   "signup.hasAccount": "Já tem uma conta?",
   "signup.alreadyHaveAccount": "Já tem uma conta?",
   "signup.signIn": "Entrar",
+  "signup.error": "Falha ao criar conta",
+  "signup.accountExistsGeneric": "Não foi possível criar a conta. Se já tem uma conta, tente fazer login ou redefinir a sua palavra-passe.",
+  
+  // Email Verification
+  "verification.title": "Verifique o seu email",
+  "verification.subtitle": "Verifique a sua caixa de entrada para confirmar a sua conta",
+  "verification.sentTo": "Enviámos um email de verificação para:",
+  "verification.instructions": "Clique no link no email para verificar a sua conta e aceder ao painel.",
+  "verification.resend": "Reenviar email de verificação",
+  "verification.resending": "A enviar",
+  "verification.resent": "Email de verificação enviado! Verifique a sua caixa de entrada.",
+  "verification.logout": "Sair e tentar outra conta",
+  "verification.spam": "Não encontra o email? Verifique a pasta de spam ou tente reenviar.",
+  
+  // Forgot Password
+  "forgotPassword.title": "Esqueceu a Palavra-passe?",
+  "forgotPassword.subtitle": "Introduza o seu email para receber um link de redefinição",
+  "forgotPassword.email": "Email",
+  "forgotPassword.emailPlaceholder": "Introduza o seu email",
+  "forgotPassword.button": "Enviar Link de Redefinição",
+  "forgotPassword.sending": "A enviar",
+  "forgotPassword.success": "Verifique o Seu Email",
+  "forgotPassword.successMessage": "Enviámos um link de redefinição de palavra-passe para:",
+  "forgotPassword.successMessageGeneric": "Se existir uma conta com",
+  "forgotPassword.successMessageGeneric2": "receberá um link de redefinição de palavra-passe em breve.",
+  "forgotPassword.checkSpam": "Não encontra? Verifique a pasta de spam.",
+  "forgotPassword.rememberPassword": "Lembra-se da sua palavra-passe?",
+  "forgotPassword.error": "Falha ao enviar email de redefinição",
+  
+  // Reset Password
+  "resetPassword.title": "Redefinir a Sua Palavra-passe",
+  "resetPassword.subtitle": "Introduza a sua nova palavra-passe abaixo",
+  "resetPassword.newPassword": "Nova Palavra-passe",
+  "resetPassword.newPasswordPlaceholder": "Introduza nova palavra-passe",
+  "resetPassword.confirmPassword": "Confirmar Palavra-passe",
+  "resetPassword.confirmPasswordPlaceholder": "Confirme a nova palavra-passe",
+  "resetPassword.passwordRequirement": "Mínimo 6 caracteres",
+  "resetPassword.button": "Redefinir Palavra-passe",
+  "resetPassword.updating": "A atualizar",
+  "resetPassword.success": "Palavra-passe Atualizada!",
+  "resetPassword.redirecting": "A redirecionar para o painel...",
+  "resetPassword.passwordTooShort": "A palavra-passe deve ter pelo menos 6 caracteres",
+  "resetPassword.passwordMismatch": "As palavras-passe não correspondem",
+  "resetPassword.noSession": "Sem sessão de redefinição ativa. Por favor, solicite um novo link de redefinição de palavra-passe.",
+  "resetPassword.error": "Falha ao redefinir palavra-passe",
   
   // Household Setup
   "household.welcomeTitle": "Bem-vindo ao Family Finance",

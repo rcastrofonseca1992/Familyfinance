@@ -24,6 +24,9 @@ export const commonEn = {
   "common.month": "month",
   "common.months": "months",
   "common.years": "years",
+  "common.loading": "Loading",
+  "common.or": "or",
+  "common.backToLogin": "Back to Login",
   
   // Delete Confirmation
   "delete.title": "Are you sure?",

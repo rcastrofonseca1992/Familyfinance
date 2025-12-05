@@ -9,6 +9,7 @@ export const authEn = {
   "login.signUp": "Sign up",
   "login.language": "Language",
   "login.error": "Failed to sign in. Please check your credentials.",
+  "login.forgotPassword": "Forgot password?",
   
   // Signup
   "signup.title": "Create your account",
@@ -23,6 +24,51 @@ export const authEn = {
   "signup.hasAccount": "Already have an account?",
   "signup.alreadyHaveAccount": "Already have an account?",
   "signup.signIn": "Sign in",
+  "signup.error": "Failed to create account",
+  "signup.accountExistsGeneric": "Unable to create account. If you already have an account, please try logging in or resetting your password.",
+  
+  // Email Verification
+  "verification.title": "Verify your email",
+  "verification.subtitle": "Check your inbox to confirm your account",
+  "verification.sentTo": "We sent a verification email to:",
+  "verification.instructions": "Click the link in the email to verify your account and access the dashboard.",
+  "verification.resend": "Resend verification email",
+  "verification.resending": "Sending",
+  "verification.resent": "Verification email sent! Check your inbox.",
+  "verification.logout": "Sign out and try another account",
+  "verification.spam": "Can't find the email? Check your spam folder or try resending.",
+  
+  // Forgot Password
+  "forgotPassword.title": "Forgot Password?",
+  "forgotPassword.subtitle": "Enter your email to receive a reset link",
+  "forgotPassword.email": "Email",
+  "forgotPassword.emailPlaceholder": "Enter your email",
+  "forgotPassword.button": "Send Reset Link",
+  "forgotPassword.sending": "Sending",
+  "forgotPassword.success": "Check Your Email",
+  "forgotPassword.successMessage": "We sent a password reset link to:",
+  "forgotPassword.successMessageGeneric": "If an account exists with",
+  "forgotPassword.successMessageGeneric2": "you will receive a password reset link shortly.",
+  "forgotPassword.checkSpam": "Can't find it? Check your spam folder.",
+  "forgotPassword.rememberPassword": "Remember your password?",
+  "forgotPassword.error": "Failed to send reset email",
+  
+  // Reset Password
+  "resetPassword.title": "Reset Your Password",
+  "resetPassword.subtitle": "Enter your new password below",
+  "resetPassword.newPassword": "New Password",
+  "resetPassword.newPasswordPlaceholder": "Enter new password",
+  "resetPassword.confirmPassword": "Confirm Password",
+  "resetPassword.confirmPasswordPlaceholder": "Confirm new password",
+  "resetPassword.passwordRequirement": "Minimum 6 characters",
+  "resetPassword.button": "Reset Password",
+  "resetPassword.updating": "Updating",
+  "resetPassword.success": "Password Updated!",
+  "resetPassword.redirecting": "Redirecting you to the dashboard...",
+  "resetPassword.passwordTooShort": "Password must be at least 6 characters long",
+  "resetPassword.passwordMismatch": "Passwords do not match",
+  "resetPassword.noSession": "No active reset session. Please request a new password reset link.",
+  "resetPassword.error": "Failed to reset password",
   
   // Household Setup
   "household.welcomeTitle": "Welcome to Family Finance",

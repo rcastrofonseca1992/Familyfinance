@@ -47,14 +47,25 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
       const result = await response.json();
 
       if (!response.ok) {
-          throw new Error(result.error || 'Signup failed');
+          const errorMessage = result.error || 'Signup failed';
+          
+          // Security: Prevent email enumeration for duplicate email errors
+          // Check if error indicates email already exists
+          if (errorMessage.toLowerCase().includes('already') || 
+              errorMessage.toLowerCase().includes('exists') ||
+              errorMessage.toLowerCase().includes('duplicate')) {
+            // Show generic message instead of revealing email exists
+            throw new Error(t('signup.accountExistsGeneric') || 'Unable to create account. If you already have an account, please try logging in or resetting your password.');
+          }
+          
+          throw new Error(errorMessage);
       }
 
       // Auto login after signup
       await login(email, password);
       
     } catch (err: any) {
-       setError(err.message || "Failed to create account");
+       setError(err.message || t('signup.error') || "Failed to create account");
     } finally {
        setLoading(false);
     }

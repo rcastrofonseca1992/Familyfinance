@@ -24,6 +24,9 @@ export const commonPt = {
   "common.month": "mês",
   "common.months": "meses",
   "common.years": "anos",
+  "common.loading": "A carregar",
+  "common.or": "ou",
+  "common.backToLogin": "Voltar ao Login",
   
   // Delete Confirmation
   "delete.title": "Tem a certeza?",

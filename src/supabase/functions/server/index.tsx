@@ -93,7 +93,8 @@ app.post("/make-server-d9780f4d/signup", async (c) => {
       email,
       password,
       user_metadata: { name },
-      email_confirm: true
+      // Require email verification - users must confirm email before accessing the app
+      email_confirm: false
     });
 
     if (authError) {
