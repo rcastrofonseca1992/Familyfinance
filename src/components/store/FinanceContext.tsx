@@ -42,6 +42,7 @@ export interface Debt {
   remainingAmount: number;
   monthlyPayment: number;
   interestRate: number;
+  category?: string; // e.g., 'Loan', 'Credit Card', 'Mortgage', etc.
   ownerId: string;
 }
 

@@ -299,7 +299,7 @@ export const FixedCostsPage: React.FC<FixedCostsPageProps> = ({ onNavigate }) =>
         onOpenChange={setDeleteConfirmOpen}
         onConfirm={handleDelete}
         title={t('delete.title')}
-        description={t('delete.description', { type: 'fixed cost' })}
+        description={t('delete.description', { type: t('personal.fixedCost') })}
       />
     </div>
   );

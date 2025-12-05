@@ -219,7 +219,7 @@ export const IncomePage: React.FC<IncomePageProps> = ({ onNavigate }) => {
         onOpenChange={setDeleteConfirmOpen}
         onConfirm={handleDelete}
         title={t('delete.title')}
-        description={t('delete.description', { type: 'income source' })}
+        description={t('delete.description', { type: t('personal.incomeSource') })}
       />
     </div>
   );

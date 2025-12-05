@@ -5,6 +5,7 @@ import { formatCurrency } from '../../lib/finance';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '../ui/dialog';
 import { DeleteConfirmation } from '../ui/delete-confirmation';
 import { Plus, Trash2, CreditCard, ArrowLeft, Pencil, TrendingDown, AlertCircle } from 'lucide-react';
@@ -22,6 +23,7 @@ export interface Debt {
   monthlyPayment: number;
   interestRate: number;
   ownerId: string;
+  category: 'Loan' | 'Credit Card' | 'Other';
 }
 
 export const DebtsPage: React.FC<DebtsPageProps> = ({ onNavigate }) => {
@@ -35,7 +37,8 @@ export const DebtsPage: React.FC<DebtsPageProps> = ({ onNavigate }) => {
     totalAmount: 0,
     remainingAmount: 0,
     monthlyPayment: 0,
-    interestRate: 0
+    interestRate: 0,
+    category: 'Personal Loan'
   });
 
   const [editingDebt, setEditingDebt] = useState<Debt | null>(null);
@@ -63,12 +66,13 @@ export const DebtsPage: React.FC<DebtsPageProps> = ({ onNavigate }) => {
       remainingAmount: newDebt.remainingAmount || newDebt.totalAmount || 0,
       monthlyPayment: newDebt.monthlyPayment || 0,
       interestRate: newDebt.interestRate || 0,
-      ownerId: data.user!.id
+      ownerId: data.user!.id,
+      category: newDebt.category || 'Loan'
     };
 
     const updatedDebts = [...(data.debts || []), debtToAdd];
     updateData({ debts: updatedDebts });
-    setNewDebt({ name: '', totalAmount: 0, remainingAmount: 0, monthlyPayment: 0, interestRate: 0 });
+    setNewDebt({ name: '', totalAmount: 0, remainingAmount: 0, monthlyPayment: 0, interestRate: 0, category: 'Loan' });
     setIsAddOpen(false);
   };
 
@@ -94,6 +98,7 @@ export const DebtsPage: React.FC<DebtsPageProps> = ({ onNavigate }) => {
     setEditingDebt(debt);
     setEditingData({ 
       name: debt.name,
+      category: debt.category,
       totalAmount: debt.totalAmount,
       remainingAmount: debt.remainingAmount,
       monthlyPayment: debt.monthlyPayment,
@@ -132,6 +137,30 @@ export const DebtsPage: React.FC<DebtsPageProps> = ({ onNavigate }) => {
               <DialogDescription>{t('personal.enterDebtDetails')}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>{t('personal.debtCategory')}</Label>
+                <Select
+                  value={newDebt.category}
+                  onValueChange={(value) => setNewDebt({ ...newDebt, category: value })}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={t('personal.categoryPlaceholder')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Mortgage">{t('personal.debtCategoryMortgage')}</SelectItem>
+                    <SelectItem value="Auto Loan">{t('personal.debtCategoryAutoLoan')}</SelectItem>
+                    <SelectItem value="Credit Card">{t('personal.debtCategoryCreditCard')}</SelectItem>
+                    <SelectItem value="Student Loan">{t('personal.debtCategoryStudentLoan')}</SelectItem>
+                    <SelectItem value="Personal Loan">{t('personal.debtCategoryPersonalLoan')}</SelectItem>
+                    <SelectItem value="Line of Credit">{t('personal.debtCategoryLineOfCredit')}</SelectItem>
+                    <SelectItem value="Business Loan">{t('personal.debtCategoryBusinessLoan')}</SelectItem>
+                    <SelectItem value="Medical Debt">{t('personal.debtCategoryMedicalDebt')}</SelectItem>
+                    <SelectItem value="Tax Debt">{t('personal.debtCategoryTaxDebt')}</SelectItem>
+                    <SelectItem value="Payday Loan">{t('personal.debtCategoryPaydayLoan')}</SelectItem>
+                    <SelectItem value="Other">{t('personal.debtCategoryOther')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="space-y-2">
                 <Label>{t('personal.debtName')}</Label>
                 <Input
@@ -240,6 +269,13 @@ export const DebtsPage: React.FC<DebtsPageProps> = ({ onNavigate }) => {
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      {debt.category && (
+                        <span className="text-xs px-2 py-0.5 bg-violet-100 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 rounded-full uppercase tracking-wider">
+                          {debt.category}
+                        </span>
+                      )}
+                    </div>
                     <h3 className="font-semibold text-lg">{debt.name}</h3>
                     <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                       <span>{t('personal.monthly')}: <span className="font-semibold text-foreground">{formatCurrency(debt.monthlyPayment)}</span></span>
@@ -267,6 +303,30 @@ export const DebtsPage: React.FC<DebtsPageProps> = ({ onNavigate }) => {
                           <DialogDescription>{t('personal.updateDebtDetails')}</DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
+                          <div className="space-y-2">
+                            <Label>{t('personal.debtCategory')}</Label>
+                            <Select
+                              value={editingData.category}
+                              onValueChange={(value) => setEditingData({ ...editingData, category: value })}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder={t('personal.categoryPlaceholder')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Mortgage">{t('personal.debtCategoryMortgage')}</SelectItem>
+                                <SelectItem value="Auto Loan">{t('personal.debtCategoryAutoLoan')}</SelectItem>
+                                <SelectItem value="Credit Card">{t('personal.debtCategoryCreditCard')}</SelectItem>
+                                <SelectItem value="Student Loan">{t('personal.debtCategoryStudentLoan')}</SelectItem>
+                                <SelectItem value="Personal Loan">{t('personal.debtCategoryPersonalLoan')}</SelectItem>
+                                <SelectItem value="Line of Credit">{t('personal.debtCategoryLineOfCredit')}</SelectItem>
+                                <SelectItem value="Business Loan">{t('personal.debtCategoryBusinessLoan')}</SelectItem>
+                                <SelectItem value="Medical Debt">{t('personal.debtCategoryMedicalDebt')}</SelectItem>
+                                <SelectItem value="Tax Debt">{t('personal.debtCategoryTaxDebt')}</SelectItem>
+                                <SelectItem value="Payday Loan">{t('personal.debtCategoryPaydayLoan')}</SelectItem>
+                                <SelectItem value="Other">{t('personal.debtCategoryOther')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
                           <div className="space-y-2">
                             <Label>{t('personal.debtName')}</Label>
                             <Input
@@ -355,7 +415,7 @@ export const DebtsPage: React.FC<DebtsPageProps> = ({ onNavigate }) => {
         onOpenChange={setDeleteConfirmOpen}
         onConfirm={handleDelete}
         title={t('delete.title')}
-        description={t('delete.description', { type: 'debt' })}
+        description={t('delete.description', { type: t('personal.debt') })}
       />
     </div>
   );

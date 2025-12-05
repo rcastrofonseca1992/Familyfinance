@@ -356,7 +356,7 @@ export const AccountsPage: React.FC<AccountsPageProps> = ({ onNavigate }) => {
         onOpenChange={setDeleteConfirmOpen}
         onConfirm={handleDelete}
         title={t('delete.title')}
-        description={t('delete.description', { type: 'account' })}
+        description={t('delete.description', { type: t('personal.account') })}
       />
     </div>
   );
