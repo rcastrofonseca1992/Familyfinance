@@ -598,95 +598,145 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
     
     // Backup accounts
     if (data.accounts !== undefined && (existingAccountsCount || 0) > 0) {
-      const { data: existingAccounts } = await supabase
+      const { data: existingAccounts, error: fetchError } = await supabase
         .from('accounts')
         .select('*')
         .eq('owner_id', userId);
       
+      if (fetchError) {
+        console.error("Failed to fetch accounts for backup:", fetchError);
+        return c.json({ error: "Failed to backup accounts" }, 500);
+      }
+      
       if (existingAccounts && existingAccounts.length > 0) {
-        await supabase.from('accounts_backup').insert(
+        const { error: backupError } = await supabase.from('accounts_backup').insert(
           existingAccounts.map(acc => ({
             ...acc,
             backup_timestamp: backupTimestamp,
             original_id: acc.id
           }))
         );
+        
+        if (backupError) {
+          console.error("Failed to backup accounts:", backupError);
+          return c.json({ error: "Failed to backup accounts - aborting save" }, 500);
+        }
         console.log(`✅ Backed up ${existingAccounts.length} accounts`);
       }
     }
     
     // Backup income sources
     if (data.user?.incomeSources !== undefined && (existingIncomeCount || 0) > 0) {
-      const { data: existingIncome } = await supabase
+      const { data: existingIncome, error: fetchError } = await supabase
         .from('income_sources')
         .select('*')
         .eq('user_id', userId);
       
+      if (fetchError) {
+        console.error("Failed to fetch income sources for backup:", fetchError);
+        return c.json({ error: "Failed to backup income sources" }, 500);
+      }
+      
       if (existingIncome && existingIncome.length > 0) {
-        await supabase.from('income_sources_backup').insert(
+        const { error: backupError } = await supabase.from('income_sources_backup').insert(
           existingIncome.map(inc => ({
             ...inc,
             backup_timestamp: backupTimestamp,
             original_id: inc.id
           }))
         );
+        
+        if (backupError) {
+          console.error("Failed to backup income sources:", backupError);
+          return c.json({ error: "Failed to backup income sources - aborting save" }, 500);
+        }
         console.log(`✅ Backed up ${existingIncome.length} income sources`);
       }
     }
     
     // Backup recurring costs
     if (data.recurringCosts !== undefined && (existingCostsCount || 0) > 0) {
-      const { data: existingCosts } = await supabase
+      const { data: existingCosts, error: fetchError } = await supabase
         .from('recurring_costs')
         .select('*')
         .eq('owner_id', userId);
       
+      if (fetchError) {
+        console.error("Failed to fetch recurring costs for backup:", fetchError);
+        return c.json({ error: "Failed to backup recurring costs" }, 500);
+      }
+      
       if (existingCosts && existingCosts.length > 0) {
-        await supabase.from('recurring_costs_backup').insert(
+        const { error: backupError } = await supabase.from('recurring_costs_backup').insert(
           existingCosts.map(cost => ({
             ...cost,
             backup_timestamp: backupTimestamp,
             original_id: cost.id
           }))
         );
+        
+        if (backupError) {
+          console.error("Failed to backup recurring costs:", backupError);
+          return c.json({ error: "Failed to backup recurring costs - aborting save" }, 500);
+        }
         console.log(`✅ Backed up ${existingCosts.length} recurring costs`);
       }
     }
     
     // Backup debts
     if (data.debts !== undefined && (existingDebtsCount || 0) > 0) {
-      const { data: existingDebts } = await supabase
+      const { data: existingDebts, error: fetchError } = await supabase
         .from('debts')
         .select('*')
         .eq('owner_id', userId);
       
+      if (fetchError) {
+        console.error("Failed to fetch debts for backup:", fetchError);
+        return c.json({ error: "Failed to backup debts" }, 500);
+      }
+      
       if (existingDebts && existingDebts.length > 0) {
-        await supabase.from('debts_backup').insert(
+        const { error: backupError } = await supabase.from('debts_backup').insert(
           existingDebts.map(debt => ({
             ...debt,
             backup_timestamp: backupTimestamp,
             original_id: debt.id
           }))
         );
+        
+        if (backupError) {
+          console.error("Failed to backup debts:", backupError);
+          return c.json({ error: "Failed to backup debts - aborting save" }, 500);
+        }
         console.log(`✅ Backed up ${existingDebts.length} debts`);
       }
     }
     
     // Backup goals
     if (data.goals !== undefined && householdId && existingGoalsCount > 0) {
-      const { data: existingGoals } = await supabase
+      const { data: existingGoals, error: fetchError } = await supabase
         .from('goals')
         .select('*')
         .eq('household_id', householdId);
       
+      if (fetchError) {
+        console.error("Failed to fetch goals for backup:", fetchError);
+        return c.json({ error: "Failed to backup goals" }, 500);
+      }
+      
       if (existingGoals && existingGoals.length > 0) {
-        await supabase.from('goals_backup').insert(
+        const { error: backupError } = await supabase.from('goals_backup').insert(
           existingGoals.map(goal => ({
             ...goal,
             backup_timestamp: backupTimestamp,
             original_id: goal.id
           }))
         );
+        
+        if (backupError) {
+          console.error("Failed to backup goals:", backupError);
+          return c.json({ error: "Failed to backup goals - aborting save" }, 500);
+        }
         console.log(`✅ Backed up ${existingGoals.length} goals`);
       }
     }
@@ -698,14 +748,19 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
     // Save income sources
     if (data.user?.incomeSources) {
       // Delete existing income sources
-      await supabase
+      const { error: deleteError } = await supabase
         .from('income_sources')
         .delete()
         .eq('user_id', userId);
 
+      if (deleteError) {
+        console.error("Failed to delete income sources:", deleteError);
+        return c.json({ error: "Failed to save income sources" }, 500);
+      }
+
       // Insert new ones
       if (data.user.incomeSources.length > 0) {
-        await supabase
+        const { error: insertError } = await supabase
           .from('income_sources')
           .insert(
             data.user.incomeSources.map((source: any) => ({
@@ -715,20 +770,30 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
               amount: source.amount
             }))
           );
+
+        if (insertError) {
+          console.error("Failed to insert income sources:", insertError);
+          return c.json({ error: "Failed to save income sources - data may be partially deleted" }, 500);
+        }
       }
     }
 
     // Save accounts
     if (data.accounts) {
       // Delete existing accounts owned by this user
-      await supabase
+      const { error: deleteError } = await supabase
         .from('accounts')
         .delete()
         .eq('owner_id', userId);
 
+      if (deleteError) {
+        console.error("Failed to delete accounts:", deleteError);
+        return c.json({ error: "Failed to save accounts" }, 500);
+      }
+
       // Insert new ones
       if (data.accounts.length > 0) {
-        await supabase
+        const { error: insertError } = await supabase
           .from('accounts')
           .insert(
             data.accounts.map((account: any) => ({
@@ -744,20 +809,30 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
               apy: account.apy ?? 0
             }))
           );
+
+        if (insertError) {
+          console.error("Failed to insert accounts:", insertError);
+          return c.json({ error: "Failed to save accounts - data may be partially deleted" }, 500);
+        }
       }
     }
 
     // Save recurring costs
     if (data.recurringCosts) {
       // Delete existing costs owned by this user
-      await supabase
+      const { error: deleteError } = await supabase
         .from('recurring_costs')
         .delete()
         .eq('owner_id', userId);
 
+      if (deleteError) {
+        console.error("Failed to delete recurring costs:", deleteError);
+        return c.json({ error: "Failed to save recurring costs" }, 500);
+      }
+
       // Insert new ones
       if (data.recurringCosts.length > 0) {
-        await supabase
+        const { error: insertError } = await supabase
           .from('recurring_costs')
           .insert(
             data.recurringCosts.map((cost: any) => ({
@@ -770,20 +845,30 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
               include_in_household: cost.includeInHousehold ?? true
             }))
           );
+
+        if (insertError) {
+          console.error("Failed to insert recurring costs:", insertError);
+          return c.json({ error: "Failed to save recurring costs - data may be partially deleted" }, 500);
+        }
       }
     }
 
     // Save debts if present
     if (data.debts) {
       // Delete existing debts owned by this user
-      await supabase
+      const { error: deleteError } = await supabase
         .from('debts')
         .delete()
         .eq('owner_id', userId);
 
+      if (deleteError) {
+        console.error("Failed to delete debts:", deleteError);
+        return c.json({ error: "Failed to save debts" }, 500);
+      }
+
       // Insert new ones
       if (data.debts.length > 0) {
-        await supabase
+        const { error: insertError } = await supabase
           .from('debts')
           .insert(
             data.debts.map((debt: any) => ({
@@ -798,6 +883,11 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
               include_in_household: debt.includeInHousehold ?? true
             }))
           );
+
+        if (insertError) {
+          console.error("Failed to insert debts:", insertError);
+          return c.json({ error: "Failed to save debts - data may be partially deleted" }, 500);
+        }
       }
     }
 
@@ -813,14 +903,19 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
 
       if (member?.role === 'owner') {
         // Delete existing goals for household
-        await supabase
+        const { error: deleteError } = await supabase
           .from('goals')
           .delete()
           .eq('household_id', householdId);
 
+        if (deleteError) {
+          console.error("Failed to delete goals:", deleteError);
+          return c.json({ error: "Failed to save goals" }, 500);
+        }
+
         // Insert new ones
         if (data.goals.length > 0) {
-          await supabase
+          const { error: insertError } = await supabase
             .from('goals')
             .insert(
               data.goals.map((goal: any) => ({
@@ -835,12 +930,17 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
                 property_value: goal.propertyValue
               }))
             );
+
+          if (insertError) {
+            console.error("Failed to insert goals:", insertError);
+            return c.json({ error: "Failed to save goals - data may be partially deleted" }, 500);
+          }
         }
       }
     }
 
     // Save user settings
-    await supabase
+    const { error: settingsError } = await supabase
       .from('user_settings')
       .upsert({
         user_id: userId,
@@ -850,6 +950,11 @@ app.post("/make-server-d9780f4d/finance/save", async (c) => {
         is_variable_income: data.isVariableIncome ?? false,
         variable_spending: data.variableSpending ?? 0
       });
+
+    if (settingsError) {
+      console.error("Failed to save user settings:", settingsError);
+      return c.json({ error: "Failed to save user settings" }, 500);
+    }
 
     return c.json({ success: true });
   } catch (e) {

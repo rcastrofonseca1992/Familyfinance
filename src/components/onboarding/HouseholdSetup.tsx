@@ -129,6 +129,7 @@ export const HouseholdSetup: React.FC = () => {
                     >
                         <PremiumCard 
                             className="p-8 border-primary/50 bg-primary/5 cursor-pointer hover:border-primary transition-colors group"
+                            onClick={handleEnterFoundHousehold}
                             glow
                         >
                             <div className="h-12 w-12 bg-primary/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/30 transition-colors">
@@ -136,7 +137,15 @@ export const HouseholdSetup: React.FC = () => {
                             </div>
                             <h3 className="text-xl font-bold mb-2">{t('household.householdFound') || 'Household Found'}</h3>
                             <p className="text-muted-foreground mb-6">{t('household.alreadyMember') || 'You are already a member of'} <span className="font-medium text-foreground">{foundHousehold.name}</span></p>
-                            <Button onClick={handleEnterFoundHousehold} className="w-full group-hover:bg-primary group-hover:text-primary-foreground" size="lg" disabled={isLoading}>
+                            <Button 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleEnterFoundHousehold();
+                                }} 
+                                className="w-full group-hover:bg-primary group-hover:text-primary-foreground" 
+                                size="lg" 
+                                disabled={isLoading}
+                            >
                                 {isLoading ? t('common.loading') || "Loading..." : t('household.enterDashboard') || "Enter Dashboard"} <ArrowUpRight className="ml-2 h-4 w-4" />
                             </Button>
                         </PremiumCard>
@@ -154,7 +163,14 @@ export const HouseholdSetup: React.FC = () => {
                         </div>
                         <h3 className="text-xl font-bold mb-2">{t('household.createHousehold')}</h3>
                         <p className="text-muted-foreground mb-6">{t('household.createNew')}</p>
-                        <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground">
+                        <Button 
+                            variant="outline" 
+                            className="w-full group-hover:bg-primary group-hover:text-primary-foreground"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setMode('create');
+                            }}
+                        >
                             {t('household.createButton')}
                         </Button>
                     </PremiumCard>
@@ -169,7 +185,14 @@ export const HouseholdSetup: React.FC = () => {
                         </div>
                         <h3 className="text-xl font-bold mb-2">{t('household.joinHousehold')}</h3>
                         <p className="text-muted-foreground mb-6">{t('household.joinExisting')}</p>
-                        <Button variant="outline" className="w-full group-hover:bg-blue-500 group-hover:text-white">
+                        <Button 
+                            variant="outline" 
+                            className="w-full group-hover:bg-blue-500 group-hover:text-white"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setMode('join');
+                            }}
+                        >
                             {t('household.joinButton')}
                         </Button>
                     </PremiumCard>

@@ -248,6 +248,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [isInitialized, setIsInitialized] = useState(false);
   const [viewMode, setViewMode] = useState<'household' | 'personal'>('household');
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const saveInProgressRef = useRef<boolean>(false);
 
   // 🧪 Load mock data for Figma Make preview
   useEffect(() => {
@@ -383,6 +384,14 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       }
       
       if (!currentData.user) return;
+
+      // Prevent concurrent saves (race condition protection)
+      if (saveInProgressRef.current) {
+          console.warn("⏸️ Save already in progress - skipping duplicate save");
+          return;
+      }
+
+      saveInProgressRef.current = true;
       
       // Filter to only save items owned by this user
       // This prevents overwriting other members' data with stale copies
@@ -405,7 +414,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
           if (!session?.access_token) throw new Error("No active session");
 
           // 1. Save user's personal finance data
-          await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/finance/save`, {
+          const saveResponse = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/finance/save`, {
               method: 'POST',
               headers: authHeaders(session.access_token),
               body: JSON.stringify({
@@ -413,10 +422,15 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
                   data: dataToSave
               })
           });
+
+          if (!saveResponse.ok) {
+              const errorData = await saveResponse.json().catch(() => ({ error: 'Unknown error' }));
+              throw new Error(errorData.error || `Save failed with status ${saveResponse.status}`);
+          }
           
           // 2. If user is the household owner, save household data separately
           if (currentData.household && currentData.user.role === 'owner') {
-              await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/household/save`, {
+              const householdResponse = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-d9780f4d/household/save`, {
                   method: 'POST',
                   headers: authHeaders(session.access_token),
                   body: JSON.stringify({
@@ -424,11 +438,19 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
                       household: currentData.household
                   })
               });
+
+              if (!householdResponse.ok) {
+                  const errorData = await householdResponse.json().catch(() => ({ error: 'Unknown error' }));
+                  throw new Error(errorData.error || `Household save failed with status ${householdResponse.status}`);
+              }
           }
           
           // console.log("Data synced to cloud");
-      } catch (e) {
+      } catch (e: any) {
           console.error("Failed to sync to server", e);
+          toast.error(`Failed to save: ${e.message || 'Unknown error'}`);
+      } finally {
+          saveInProgressRef.current = false;
       }
   };
 
