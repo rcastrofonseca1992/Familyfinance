@@ -32,6 +32,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 interface HouseholdManagementProps {
   onBack: () => void;
@@ -39,6 +40,7 @@ interface HouseholdManagementProps {
 
 export const HouseholdManagement: React.FC<HouseholdManagementProps> = ({ onBack }) => {
   const { data, updateHouseholdMember, checkServerHousehold } = useFinance();
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const [memberToRemove, setMemberToRemove] = useState<string | null>(null);
 
@@ -171,7 +173,7 @@ export const HouseholdManagement: React.FC<HouseholdManagementProps> = ({ onBack
       <AlertDialog open={!!memberToRemove} onOpenChange={(open) => !open && setMemberToRemove(null)}>
         <AlertDialogContent>
             <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>{t('delete.title')}</AlertDialogTitle>
             <AlertDialogDescription>
                 {memberToRemove === currentUser?.id 
                     ? "You are about to leave this household. You will lose access to shared data."
@@ -180,13 +182,13 @@ export const HouseholdManagement: React.FC<HouseholdManagementProps> = ({ onBack
             </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction 
                 onClick={handleRemoveMember} 
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 disabled={isLoading}
             >
-                {isLoading ? "Processing..." : "Confirm"}
+                {isLoading ? "Processing..." : t('common.confirm')}
             </AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>

@@ -8,6 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./alert-dialog";
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 interface DeleteConfirmationProps {
   open: boolean;
@@ -22,30 +23,33 @@ export function DeleteConfirmation({
   open,
   onOpenChange,
   onConfirm,
-  title = "Are you sure?",
+  title,
   description,
   itemName,
 }: DeleteConfirmationProps) {
+  const { t } = useLanguage();
+  
+  const defaultTitle = t('delete.title');
   const defaultDescription = itemName
-    ? `This will permanently delete "${itemName}". This action cannot be undone.`
-    : "This action cannot be undone. This will permanently delete this item.";
+    ? t('delete.description', { type: `"${itemName}"` })
+    : t('delete.description', { type: 'item' });
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogTitle>{title || defaultTitle}</AlertDialogTitle>
           <AlertDialogDescription>
             {description || defaultDescription}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
             className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
           >
-            Delete
+            {t('common.delete')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

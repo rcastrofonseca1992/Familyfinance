@@ -1,7 +1,10 @@
 import React from 'react';
 import { Wallet } from 'lucide-react';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 export const LoadingScreen: React.FC = () => {
+  const { t } = useLanguage();
+  
   return (
     <div className="fixed inset-0 z-50 bg-background flex items-center justify-center animate-in fade-in duration-300">
       <div className="w-full max-w-md mx-auto px-6 space-y-8">
@@ -23,7 +26,7 @@ export const LoadingScreen: React.FC = () => {
               <span style={{ color: '#FBBF24' }}>now</span>
             </h2>
             <p className="text-sm text-muted-foreground animate-pulse">
-              Loading your dashboard...
+              {t('common.loadingDashboard')}
             </p>
           </div>
         </div>

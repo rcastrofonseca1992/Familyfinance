@@ -25,6 +25,7 @@ export const commonPt = {
   "common.months": "meses",
   "common.years": "anos",
   "common.loading": "A carregar",
+  "common.loadingDashboard": "A carregar o seu painel...",
   "common.or": "ou",
   "common.backToLogin": "Voltar ao Login",
   

@@ -7,6 +7,7 @@ import { TrendingUp, AlertTriangle, Calendar, Calculator, DollarSign, Pencil, Tr
 import { cn } from '../ui/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Switch } from '../ui/switch';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 // Section Container
 export const SectionContainer: React.FC<{ title: string; subtitle?: string; icon?: React.ReactNode; action?: React.ReactNode; children: React.ReactNode; className?: string }> = ({ title, subtitle, icon, action, children, className }) => (
@@ -38,6 +39,8 @@ export const MetricCard: React.FC<{ label: string; value: string; trend?: string
 
 // Debt Card
 export const DebtCard: React.FC<{ debt: Debt; onEdit: () => void; onDelete: () => void }> = ({ debt, onEdit, onDelete }) => {
+    const { t } = useLanguage();
+    
     // Calculate Analytics
     const r = (debt.apr || 0) / 100 / 12;
     const n = debt.remainingTerm || 0;
@@ -84,8 +87,8 @@ export const DebtCard: React.FC<{ debt: Debt; onEdit: () => void; onDelete: () =
             </div>
 
              <div className="flex justify-end gap-2">
-                <Button variant="ghost" size="sm" onClick={onEdit} className="h-8"><Pencil size={14} className="mr-1"/> Edit</Button>
-                <Button variant="ghost" size="sm" className="h-8 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50" onClick={onDelete}><Trash2 size={14} className="mr-1"/> Delete</Button>
+                <Button variant="ghost" size="sm" onClick={onEdit} className="h-8"><Pencil size={14} className="mr-1"/> {t('common.edit')}</Button>
+                <Button variant="ghost" size="sm" className="h-8 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50" onClick={onDelete}><Trash2 size={14} className="mr-1"/> {t('common.delete')}</Button>
             </div>
         </div>
     );

@@ -724,10 +724,10 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                             setDeleteConfirmOpen(true);
                                             setGoalToDelete(selectedGoal);
                                         }}>
-                                            <Trash2 size={16} className="mr-2" /> Delete Goal
+                                            <Trash2 size={16} className="mr-2" /> {t('goals.deleteGoal')}
                                         </Button>
                                         <Button onClick={handleSaveEdit} className="flex-1">
-                                            <Save size={16} className="mr-2" /> Save Changes
+                                            <Save size={16} className="mr-2" /> {t('goals.saveChanges')}
                                         </Button>
                                     </div>
                                 </div>
@@ -750,9 +750,9 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
         <ConfirmationDialog
             open={deleteConfirmOpen}
             onOpenChange={setDeleteConfirmOpen}
-            title="Are you sure?"
-            description="This action cannot be undone. This will permanently delete the goal."
-            confirmLabel="Delete"
+            title={t('goals.deleteConfirmTitle')}
+            description={t('goals.deleteConfirmDescription')}
+            confirmLabel={t('common.delete')}
             variant="destructive"
             onConfirm={() => {
                 if (goalToDelete) {

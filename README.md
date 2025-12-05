@@ -1,7 +1,7 @@
 
-  # Notinow 2.0
+  # Notinow
 
-  This is a code bundle for Notinow 2.0. The original project is available at https://www.figma.com/design/q5OgYVBDCuGi1AnyCWCxMM/Notinow-2.0.
+  This is a code bundle for Notinow. The original project is available at https://www.figma.com/design/q5OgYVBDCuGi1AnyCWCxMM/Notinow.
 
   ## Running the code
 

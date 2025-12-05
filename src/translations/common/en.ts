@@ -25,6 +25,7 @@ export const commonEn = {
   "common.months": "months",
   "common.years": "years",
   "common.loading": "Loading",
+  "common.loadingDashboard": "Loading your dashboard...",
   "common.or": "or",
   "common.backToLogin": "Back to Login",
   
