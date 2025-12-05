@@ -5,6 +5,7 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { AppShell } from './components/layout/AppShell';
 import { HomeDashboard } from './components/dashboard/HomeDashboard';
 import { InvestmentForecastView } from './components/dashboard/InvestmentForecastView';
+import { FIREView } from './components/dashboard/FIREView';
 import { FeasibilityEngine } from './components/feasibility/FeasibilityEngine';
 import { GoalsView } from './components/goals/GoalsView';
 import { PersonalDashboard } from './components/personal/PersonalDashboard';
@@ -109,6 +110,7 @@ const MainApp: React.FC = () => {
     switch (currentTab) {
       case 'dashboard': return <HomeDashboard onNavigate={setCurrentTab} />;
       case 'forecast': return <InvestmentForecastView onBack={() => setCurrentTab('dashboard')} />;
+      case 'fire': return <FIREView onBack={() => setCurrentTab('dashboard')} />;
       case 'personal': return <PersonalDashboard onNavigate={setCurrentTab} />;
       case 'feasibility': return <FeasibilityEngine />;
       case 'goals': return <GoalsView isAddOpen={isGoalDialogOpen} onOpenChange={setIsGoalDialogOpen} />;

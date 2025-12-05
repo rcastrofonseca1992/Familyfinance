@@ -485,14 +485,14 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                     <AreaChart data={[0, 5, 10, 15, 20, 25].map(y => ({ y, v: investmentAssets * Math.pow(1.07, y) }))} margin={{top: 5, right: 0, bottom: 0, left: 0}}>
                         <defs>
                             <linearGradient id="forecastGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
-                                <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                                <stop offset="5%" stopColor="rgb(147, 51, 234)" stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor="rgb(147, 51, 234)" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
                         <Area 
                             type="monotone" 
                             dataKey="v" 
-                            stroke="var(--color-primary)" 
+                            stroke="rgb(147, 51, 234)" 
                             strokeWidth={2} 
                             fill="url(#forecastGradient)" 
                             isAnimationActive={false}
@@ -512,16 +512,16 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                 </div>
                  <div className="text-right">
                     <p className="text-[10px] text-muted-foreground uppercase">25 {t('dashboard.years')}</p>
-                    <p className="font-bold text-xs text-primary">{formatCurrency(investmentAssets * Math.pow(1.07, 25), 'EUR', 0)}</p>
+                    <p className="font-bold text-xs text-purple-600">{formatCurrency(investmentAssets * Math.pow(1.07, 25), 'EUR', 0)}</p>
                 </div>
             </div>
         </PremiumCard>
 
         {/* FIRE Card */}
-        <PremiumCard className="flex flex-col gap-4 border-l-4 border-l-orange-500 relative overflow-hidden">
+        <PremiumCard onClick={() => onNavigate('fire')} className="flex flex-col gap-4 border-l-4 border-l-orange-500 relative overflow-hidden cursor-pointer hover:border-orange-500/50 transition-colors group">
              <div className="flex items-center justify-between pb-3 border-b border-border/50 relative z-10">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-orange-100 dark:bg-orange-900/20 text-orange-600 rounded-lg">
+                    <div className="p-2 bg-orange-100 dark:bg-orange-900/20 text-orange-600 rounded-lg group-hover:bg-orange-200 dark:group-hover:bg-orange-900/30 transition-colors">
                         <Flame size={20} />
                     </div>
                     <div>
@@ -529,6 +529,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({ onNavigate }) => {
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">{t('dashboard.householdGoal')}</p>
                     </div>
                 </div>
+                <ArrowRight size={16} className="text-muted-foreground group-hover:text-orange-600 transition-colors" />
             </div>
             
             <div className="space-y-1 relative z-10">

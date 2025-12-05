@@ -5,6 +5,7 @@ import { personalEn } from './personal/en';
 import { goalsEn } from './goals/en';
 import { settingsEn } from './settings/en';
 import { forecastEn } from './forecast/en';
+import { fireEn } from './fire/en';
 
 export const en = {
   ...commonEn,
@@ -14,4 +15,5 @@ export const en = {
   ...goalsEn,
   ...settingsEn,
   ...forecastEn,
+  ...fireEn,
 };

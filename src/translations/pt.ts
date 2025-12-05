@@ -5,6 +5,7 @@ import { personalPt } from './personal/pt';
 import { goalsPt } from './goals/pt';
 import { settingsPt } from './settings/pt';
 import { forecastPt } from './forecast/pt';
+import { firePt } from './fire/pt';
 
 export const pt = {
   ...commonPt,
@@ -14,4 +15,5 @@ export const pt = {
   ...goalsPt,
   ...settingsPt,
   ...forecastPt,
+  ...firePt,
 };

@@ -85,12 +85,12 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                     <p className="font-bold text-sm mb-2">{payload[0].payload.fullYear} ({label})</p>
                     <div className="space-y-1">
                         <div className="flex items-center gap-2 text-sm">
-                            <div className="w-2 h-2 rounded-full bg-primary" />
+                            <div className="w-2 h-2 rounded-full bg-purple-600" />
                             <span className="text-muted-foreground">{t('forecast.totalValue')}:</span>
                             <span className="font-mono font-bold">{formatCurrency(payload[0].value)}</span>
                         </div>
                         <div className="flex items-center gap-2 text-xs">
-                            <div className="w-2 h-2 rounded-full bg-primary/30" />
+                            <div className="w-2 h-2 rounded-full bg-purple-600/30" />
                             <span className="text-muted-foreground">{t('forecast.principal')}:</span>
                             <span className="font-mono">{formatCurrency(payload[0].payload.invested)}</span>
                         </div>
@@ -127,11 +127,11 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                     <div className="flex justify-between items-center mb-6">
                         <div>
                             <p className="text-xs text-muted-foreground uppercase tracking-wider">{t('forecast.projectedWealth')}</p>
-                            <h2 className="text-3xl font-bold text-primary mt-1">
+                            <h2 className="text-3xl font-bold text-purple-600 mt-1">
                                 {formatCurrency(projectionData[projectionData.length - 1].amount)}
                             </h2>
                         </div>
-                        <div className="p-3 bg-primary/10 rounded-full text-primary">
+                        <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-full text-purple-600">
                             <TrendingUp size={24} />
                         </div>
                     </div>
@@ -142,8 +142,8 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                                 <AreaChart data={projectionData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                                     <defs>
                                         <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
-                                            <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                                            <stop offset="5%" stopColor="rgb(147, 51, 234)" stopOpacity={0.3}/>
+                                            <stop offset="95%" stopColor="rgb(147, 51, 234)" stopOpacity={0}/>
                                         </linearGradient>
                                     </defs>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.5} />
@@ -162,7 +162,7 @@ export const InvestmentForecastView: React.FC<InvestmentForecastViewProps> = ({ 
                                     <Area 
                                         type="monotone" 
                                         dataKey="amount" 
-                                        stroke="var(--color-primary)" 
+                                        stroke="rgb(147, 51, 234)" 
                                         strokeWidth={3}
                                         fill="url(#colorTotal)" 
                                     />
