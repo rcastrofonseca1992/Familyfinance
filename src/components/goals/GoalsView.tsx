@@ -389,7 +389,7 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
                                     currentAmount={displayCurrentAmount}
                                     image={goalImage}
                                     onClick={() => setExpandedGoal({...goal, image: goalImage, currentAmount: displayCurrentAmount, requiredMonthlyContribution: calculateMonthlyContribution(goal.targetAmount, displayCurrentAmount, getMonthsUntil(goal.deadline))})}
-                                    onSimulatorClick={() => openGoalDetail(goal, 'simulator')}
+                                    onSimulatorClick={() => setExpandedGoal({...goal, image: goalImage, currentAmount: displayCurrentAmount, requiredMonthlyContribution: calculateMonthlyContribution(goal.targetAmount, displayCurrentAmount, getMonthsUntil(goal.deadline)), initialTab: 'simulator'})}
                                 />
                             );
                         }

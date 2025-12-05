@@ -21,6 +21,7 @@ interface Goal {
   propertyValue?: number;
   loanToValue?: number;
   requiredMonthlyContribution?: number;
+  initialTab?: string; // Add initialTab prop
 }
 
 interface GoalPageProps {
@@ -31,7 +32,7 @@ interface GoalPageProps {
 
 export const GoalPage: React.FC<GoalPageProps> = ({ goal, onBack, onEdit }) => {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState('details');
+  const [activeTab, setActiveTab] = useState(goal.initialTab || 'details');
   
   // Calculate progress
   const progress = Math.min((goal.currentAmount / goal.targetAmount) * 100, 100);
