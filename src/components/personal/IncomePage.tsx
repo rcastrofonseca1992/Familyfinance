@@ -9,7 +9,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { DeleteConfirmation } from '../ui/delete-confirmation';
 import { Plus, Trash2, TrendingUp, ArrowLeft, Pencil } from 'lucide-react';
 import { useLanguage } from '../../src/contexts/LanguageContext';
-import { toast } from 'sonner';
 
 interface IncomePageProps {
   onNavigate: (page: string) => void;

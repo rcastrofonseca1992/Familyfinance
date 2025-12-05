@@ -19,7 +19,7 @@ import { SignUpPage } from './components/auth/SignUpPage';
 import { HouseholdSetup } from './components/onboarding/HouseholdSetup';
 import { PWAHandler } from './components/utils/PWAHandler';
 import { LoadingScreen } from './components/ui/LoadingScreen';
-import { Toaster } from 'sonner';
+import { Toaster } from 'sonner@2.0.3';
 import { Calendar, Plus } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { formatCurrency } from './lib/finance';

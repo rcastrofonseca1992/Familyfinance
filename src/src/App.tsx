@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FinanceProvider, useFinance } from './components/store/FinanceContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { AppShell } from './components/layout/AppShell';
 import { HomeDashboard } from './components/dashboard/HomeDashboard';
 import { InvestmentForecastView } from './components/dashboard/InvestmentForecastView';
@@ -13,7 +14,7 @@ import { LoginPage } from './components/auth/LoginPage';
 import { SignUpPage } from './components/auth/SignUpPage';
 import { HouseholdSetup } from './components/onboarding/HouseholdSetup';
 import { PWAHandler } from './components/utils/PWAHandler';
-import { Toaster } from 'sonner';
+import { Toaster } from 'sonner@2.0.3';
 import { Calendar, Plus } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { formatCurrency } from './lib/finance';
@@ -108,7 +109,7 @@ const MainApp: React.FC = () => {
     switch (currentTab) {
       case 'dashboard': return <HomeDashboard onNavigate={setCurrentTab} />;
       case 'forecast': return <InvestmentForecastView onBack={() => setCurrentTab('dashboard')} />;
-      case 'personal': return <PersonalDashboard />;
+      case 'personal': return <PersonalDashboard onNavigate={setCurrentTab} />;
       case 'feasibility': return <FeasibilityEngine />;
       case 'goals': return <GoalsView isAddOpen={isGoalDialogOpen} onOpenChange={setIsGoalDialogOpen} />;
       case 'settings': return <SettingsView onNavigate={setCurrentTab} />;
@@ -129,8 +130,10 @@ export default function App() {
   return (
     <ErrorBoundary>
       <FinanceProvider>
-        <MainApp />
-        <Toaster />
+        <LanguageProvider>
+          <MainApp />
+          <Toaster />
+        </LanguageProvider>
       </FinanceProvider>
     </ErrorBoundary>
   );

@@ -11,7 +11,6 @@ import { DeleteConfirmation } from '../ui/delete-confirmation';
 import { Plus, Trash2, Wallet, ArrowLeft, Pencil, Building2 } from 'lucide-react';
 import { useLanguage } from '../../src/contexts/LanguageContext';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
-import { toast } from 'sonner';
 
 interface AccountsPageProps {
   onNavigate: (page: string) => void;

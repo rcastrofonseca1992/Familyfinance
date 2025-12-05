@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { PremiumCard } from '../ui/PremiumCard';
 import { useFinance } from '../store/FinanceContext';
 import { ArrowRight, Mail, Lock, User, Sparkles, Globe, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../src/contexts/LanguageContext';
+import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
+import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { motion } from 'motion/react';
 
 interface SignUpPageProps {
@@ -94,78 +98,85 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
           <p className="text-muted-foreground">{t('signup.startJourney')}</p>
         </div>
 
-        <form onSubmit={handleSignup} className="space-y-5">
-          <div className="space-y-2">
-            <Label htmlFor="name">{t('signup.fullName')}</Label>
-            <div className="relative">
-              <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input 
-                  id="name"
-                  placeholder={t('placeholder.name')} 
-                  className="pl-9 bg-background/50"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-              />
+        <PremiumCard glow className="space-y-6 p-8">
+          {error && (
+            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md text-red-600 text-sm">
+              {error}
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="email">{t('signup.email')}</Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input 
-                  id="email"
-                  type="email" 
-                  placeholder={t('placeholder.email')} 
-                  className="pl-9 bg-background/50"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-              />
+          )}
+          <form onSubmit={handleSignup} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">{t('signup.fullName')}</Label>
+              <div className="relative">
+                <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input 
+                    id="name"
+                    placeholder={t('placeholder.name')} 
+                    className="pl-9 bg-background/50"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">{t('signup.password')}</Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input 
-                  id="password"
-                  type="password" 
-                  placeholder={t('placeholder.createPassword')} 
-                  className="pl-9 bg-background/50"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-              />
+            <div className="space-y-2">
+              <Label htmlFor="email">{t('signup.email')}</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input 
+                    id="email"
+                    type="email" 
+                    placeholder={t('placeholder.email')} 
+                    className="pl-9 bg-background/50"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">{t('signup.password')}</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input 
+                    id="password"
+                    type="password" 
+                    placeholder={t('placeholder.createPassword')} 
+                    className="pl-9 bg-background/50"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <Button type="submit" className="w-full" size="lg" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t('common.loading') || "Creating Account"}...
+                </>
+              ) : (
+                <>
+                  {t('signup.button')}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </form>
+
+          <div className="text-center text-sm text-muted-foreground">
+            {t('signup.alreadyHaveAccount')}{" "}
+            <button 
+              onClick={() => onNavigate('login')}
+              className="text-primary font-medium hover:underline"
+            >
+              {t('signup.signIn')}
+            </button>
           </div>
-
-          <Button type="submit" className="w-full" size="lg" disabled={loading}>
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t('common.loading') || "Creating Account"}...
-              </>
-            ) : (
-              <>
-                {t('signup.button')}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </>
-            )}
-          </Button>
-        </form>
-
-        <div className="text-center text-sm text-muted-foreground mt-6">
-          {t('signup.alreadyHaveAccount')}{" "}
-          <button 
-            onClick={() => onNavigate('login')}
-            className="text-primary font-medium hover:underline"
-          >
-            {t('signup.signIn')}
-          </button>
-        </div>
+        </PremiumCard>
       </motion.div>
     </div>
   );

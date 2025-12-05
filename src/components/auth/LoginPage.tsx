@@ -3,9 +3,11 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from ".
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { PremiumCard } from '../ui/PremiumCard';
 import { useFinance } from '../store/FinanceContext';
-import { ArrowRight, Sparkles, Globe, Loader2 } from 'lucide-react';
+import { ArrowRight, Sparkles, Globe, Loader2, Mail, Lock } from 'lucide-react';
 import { useLanguage } from '../../src/contexts/LanguageContext';
+import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
 import { motion } from 'motion/react';
 
 interface LoginPageProps {
