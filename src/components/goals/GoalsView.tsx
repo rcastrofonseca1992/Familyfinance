@@ -19,6 +19,7 @@ import { ConfirmationDialog } from '../ui/ConfirmationDialog';
 import { useLanguage } from '../../src/contexts/LanguageContext';
 import { motion } from 'motion/react';
 
+
 const DEFAULT_APY_ESTIMATE = 3.0; // 3% Conservative estimate
 
 // Category-specific images (isometric 3D style)

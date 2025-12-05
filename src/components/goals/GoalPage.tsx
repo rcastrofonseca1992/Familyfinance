@@ -6,7 +6,8 @@ import { useLanguage } from '../../src/contexts/LanguageContext';
 import { PremiumCard } from '../ui/PremiumCard';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { FeasibilityEngine } from '../feasibility/FeasibilityEngine';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
+
 
 interface Goal {
   id: string;
