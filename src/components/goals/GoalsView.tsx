@@ -572,7 +572,13 @@ export const GoalsView: React.FC<GoalsViewProps> = ({ isAddOpen: propIsAddOpen, 
         </section>
 
         {/* Goal Detail Sheet with Tabs */}
-        <Sheet open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <Sheet open={isEditOpen} onOpenChange={(open) => {
+            setIsEditOpen(open);
+            if (!open) {
+                // Reset to details tab when closing
+                setActiveTab('details');
+            }
+        }}>
             <SheetContent className="sm:max-w-2xl w-full overflow-y-auto p-0 gap-0">
                 <SheetHeader className="p-6 pb-4">
                     <SheetTitle className="text-2xl flex items-center gap-2">
