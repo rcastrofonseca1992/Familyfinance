@@ -7,12 +7,6 @@ interface LanguageContextType {
   t: (key: string, params?: Record<string, string>) => string;
 }
 
-export const AVAILABLE_LANGUAGES = [
-  { code: "en", label: "English" },
-  { code: "pt", label: "Português" }
-];
-
-
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
