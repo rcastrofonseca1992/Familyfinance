@@ -49,9 +49,9 @@ export const AppShell: React.FC<AppShellProps> = ({ children, currentTab, onTabC
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 border-r border-border h-full bg-card">
         <div className="p-6 border-b border-border/50">
-            <h1 className="font-bold text-xl tracking-tight flex items-baseline gap-1">
+            <h1 className="font-bold text-xl tracking-tight flex items-baseline">
               <span className="text-primary">Noti</span>
-              <span className="text-foreground">now</span>
+              <span className="text-yellow-400">now</span>
             </h1>
             <p className="text-xs text-muted-foreground mt-1">{data.household?.name}</p>
         </div>
