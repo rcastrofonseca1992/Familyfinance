@@ -30,6 +30,7 @@ import { formatCurrency } from './lib/finance';
 import { getLanguage } from './src/utils/i18n';
 import { isFigmaPreview, logPreviewMode } from './lib/figma-preview';
 import { PublicHomePage } from './components/public/PublicHomePage';
+import { useIsPWA } from './components/utils/useIsPWA';
 
 const MainApp: React.FC = () => {
   const getInitialTab = () => {
@@ -205,7 +206,9 @@ const MainApp: React.FC = () => {
 };
 
 export default function App() {
-  const isPublicHomeRoute = typeof window !== 'undefined' && window.location.pathname === '/home';
+  const isPWA = useIsPWA();
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const isPublicHomeRoute = !isPWA && (pathname === '/' || pathname === '/home');
 
   if (isPublicHomeRoute) {
     return (

@@ -30,8 +30,19 @@ export const PublicHomePage: React.FC = () => {
   if (isPWA) return null;
 
   return (
-    <div className="public-homepage min-h-screen bg-gradient-to-b from-white to-[#f6fbff] text-gray-900" aria-label="FamilyFinance public home page">
-      <header className="sticky top-0 z-20 border-b border-gray-100 bg-white/90 backdrop-blur" role="banner">
+    <div
+      className="public-homepage relative min-h-screen bg-gradient-to-b from-white via-[#f7fbff] to-[#eef5fb] text-gray-900"
+      aria-label="FamilyFinance public home page"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        aria-hidden
+      >
+        <div className="absolute -left-10 top-10 h-40 w-40 rounded-full bg-[#6FA8D4]/20 blur-3xl" />
+        <div className="absolute bottom-0 right-[-80px] h-56 w-56 rounded-full bg-[#6FA8D4]/15 blur-3xl" />
+      </div>
+
+      <header className="sticky top-0 z-20 border-b border-gray-100 bg-white/95 backdrop-blur" role="banner">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2" aria-label="FamilyFinance logo">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ backgroundColor: `${primaryColor}1a` }}>
@@ -61,9 +72,9 @@ export const PublicHomePage: React.FC = () => {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8" role="main">
-        <section className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center" aria-labelledby="hero-heading">
-          <div className="space-y-6">
+      <main className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8" role="main">
+        <section className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center" aria-labelledby="hero-heading">
+          <div className="space-y-7">
             <p className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-gray-200">
               Built for EU families
               <span className="inline-flex items-center gap-1 text-[#2f855a]">
@@ -71,7 +82,7 @@ export const PublicHomePage: React.FC = () => {
                 GDPR-ready
               </span>
             </p>
-            <div className="space-y-4">
+            <div className="space-y-5">
               <h1 id="hero-heading" className="text-4xl font-black leading-[1.1] text-gray-900 sm:text-5xl">
                 Your Family’s Finances, Simplified.
               </h1>
@@ -105,12 +116,13 @@ export const PublicHomePage: React.FC = () => {
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-lg" aria-label="Feature preview">
-            <div className="rounded-xl bg-gradient-to-br from-[#6FA8D4]/15 via-white to-white p-6">
+          <div className="relative rounded-2xl border border-gray-100 bg-white p-6 shadow-xl" aria-label="Feature preview">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#6FA8D4]/10 via-transparent to-white" aria-hidden />
+            <div className="relative rounded-xl bg-white/70 p-6 ring-1 ring-gray-100 backdrop-blur">
               <div className="space-y-4">
                 <div className="flex items-center justify-between text-sm font-semibold text-gray-800">
                   <span>Household Balance</span>
-                  <span className="rounded-full bg-white px-3 py-1 text-xs text-[#2f855a] shadow-sm ring-1 ring-[#2f855a]/10">Up to date</span>
+                  <span className="rounded-full bg-white px-3 py-1 text-xs text-[#2f855a] shadow-sm ring-1 ring-[#2f855a]/15">Up to date</span>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
