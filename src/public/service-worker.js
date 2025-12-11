@@ -92,7 +92,8 @@ self.addEventListener('fetch', (event) => {
   }
 
   if (url.hostname.endsWith('supabase.co')) {
-    event.respondWith(staleWhileRevalidate(request, SUPABASE_CACHE));
+    // Avoid caching authenticated Supabase responses to prevent cross-session data leaks
+    event.respondWith(fetch(request));
     return;
   }
 
