@@ -4,6 +4,7 @@ import { WifiOff, Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { useLanguage } from '../../src/contexts/LanguageContext';
+import { useIsPWA } from './useIsPWA';
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -14,14 +15,11 @@ export const PWAHandler: React.FC = () => {
   const { t } = useLanguage();
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isStandalone, setIsStandalone] = useState(
-    window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true
-  );
+  const isStandalone = useIsPWA();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(display-mode: standalone)');
     const handleDisplayModeChange = () => {
-      setIsStandalone(mediaQuery.matches || (window.navigator as any).standalone === true);
       setDeferredPrompt(null);
     };
 

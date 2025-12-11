@@ -29,6 +29,7 @@ import { Button } from './components/ui/button';
 import { formatCurrency } from './lib/finance';
 import { getLanguage } from './src/utils/i18n';
 import { isFigmaPreview, logPreviewMode } from './lib/figma-preview';
+import { PublicHomePage } from './components/public/PublicHomePage';
 
 const MainApp: React.FC = () => {
   const getInitialTab = () => {
@@ -77,6 +78,12 @@ const MainApp: React.FC = () => {
     // Check if we're on reset password route (from email link)
     if (window.location.pathname === '/auth/reset-password' || window.location.hash.includes('type=recovery')) {
       setAuthView('reset-password');
+    }
+
+    if (window.location.pathname === '/signup') {
+      setAuthView('signup');
+    } else if (window.location.pathname === '/login') {
+      setAuthView('login');
     }
   }, []);
 
@@ -198,6 +205,19 @@ const MainApp: React.FC = () => {
 };
 
 export default function App() {
+  const isPublicHomeRoute = typeof window !== 'undefined' && window.location.pathname === '/home';
+
+  if (isPublicHomeRoute) {
+    return (
+      <ErrorBoundary>
+        <LanguageProvider>
+          <PublicHomePage />
+          <Toaster position="top-center" />
+        </LanguageProvider>
+      </ErrorBoundary>
+    );
+  }
+
   return (
     <ErrorBoundary>
       <FinanceProvider>
