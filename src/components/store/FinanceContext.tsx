@@ -3,8 +3,6 @@ import { MarketData, DEFAULT_MARKET_DATA, fetchBDEMarketData } from '../../lib/b
 import { supabase } from '../../lib/supabase';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { toast } from 'sonner@2.0.3';
-import { isFigmaPreview, mockFinanceData, safeSaveData, logPreviewMode } from '../../lib/figma-preview';
-import { transformPreviewDataToFinanceData } from '../../src/app/preview/transformToFinanceData';
 
 // Helper function to create auth headers with apikey
 const authHeaders = (token: string) => ({
@@ -133,49 +131,6 @@ const defaultData: FinanceData = {
   monthlySnapshots: []
 };
 
-// 🧪 Load mock data for Figma Make preview
-const figmaMockData: FinanceData = {
-  ...defaultData,
-  user: {
-    id: "demo",
-    name: "Ricardo",
-    email: "demo@example.com",
-    role: "owner",
-    netIncome: 4300,
-    incomeSources: [
-      { id: "inc1", name: "Salário", amount: 3500, ownerId: "demo" },
-      { id: "inc2", name: "Freelance", amount: 800, ownerId: "demo" }
-    ]
-  },
-  household: {
-    id: "demo-house",
-    name: "Fonseca Household",
-    members: [],
-    monthlySnapshots: []
-  },
-  goals: [
-    {
-      id: "g1",
-      name: "House",
-      targetAmount: 150000,
-      currentAmount: 43103,
-      deadline: "2028-01-01",
-      category: "mortgage",
-      isMain: true,
-      propertyValue: 500000
-    }
-  ],
-  accounts: [
-    { id: "acc1", name: "Checking Account", balance: 15000, type: "cash", institution: "Imagin", currency: "EUR", ownerId: "demo", includeInHousehold: true },
-    { id: "acc2", name: "Savings", balance: 28103, type: "savings", institution: "Imagin", currency: "EUR", ownerId: "demo", includeInHousehold: true, apy: 2.5 }
-  ],
-  recurringCosts: [
-    { id: "rc1", name: "Rent", amount: 900, category: "housing", ownerId: "demo", includeInHousehold: true },
-    { id: "rc2", name: "Netflix", amount: 15.99, category: "entertainment", ownerId: "demo", includeInHousehold: true }
-  ],
-  emergencyFundGoal: 15000
-};
-
 // Dev initial state - cleaned for production readiness
 const devInitialData: FinanceData = {
   ...defaultData,
@@ -243,29 +198,14 @@ interface FinanceContextType {
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
 
 export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // 🎇 Auto-detect Figma Make preview mode
   const [data, setData] = useState<FinanceData>(defaultData);
   const [isInitialized, setIsInitialized] = useState(false);
   const [viewMode, setViewMode] = useState<'household' | 'personal'>('household');
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const saveInProgressRef = useRef<boolean>(false);
 
-  // 🧪 Load mock data for Figma Make preview
-  useEffect(() => {
-      if (isFigmaPreview) {
-          console.log("🎨 Loading comprehensive mock data for Figma Make preview");
-          const previewData = transformPreviewDataToFinanceData();
-          setData(previewData);
-          setIsInitialized(true);
-          return;
-      }
-  }, [isFigmaPreview]);
-
   // Fetch BDE Data on mount
   useEffect(() => {
-      // Skip in Figma preview
-      if (isFigmaPreview) return;
-      
       const loadMarketData = async () => {
           const marketData = await fetchBDEMarketData();
           setData(prev => ({ ...prev, marketData }));
@@ -377,12 +317,6 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // ... Server Sync Helpers ...
 
   const saveToServer = async (currentData: FinanceData) => {
-      // 🎇 Skip server sync in Figma Make preview
-      if (isFigmaPreview) {
-          console.warn("⏭️ Skipping server sync (Figma Make preview)");
-          return;
-      }
-      
       if (!currentData.user) return;
 
       // Prevent concurrent saves (race condition protection)
@@ -455,12 +389,6 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const loadFromServer = async (userId: string, options = { skipHousehold: false }) => {
-      // 🎇 Skip server load in Figma Make preview
-      if (isFigmaPreview) {
-          console.warn("⏭️ Figma preview = skipping server load");
-          return;
-      }
-      
       try {
           console.log("🔍 Step 1: Getting session...");
           
@@ -589,9 +517,6 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   
   // Supabase Auth Listener
   useEffect(() => {
-      // Skip auth listener in Figma preview
-      if (isFigmaPreview) return;
-      
       supabase.auth.getSession().then(({ data: { session } }) => {
           if (session?.user) {
              // Handled by onAuthStateChange below

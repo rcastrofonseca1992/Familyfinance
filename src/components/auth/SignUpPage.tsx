@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { PremiumCard } from '../ui/PremiumCard';
-import { ArrowRight, Mail, Lock, User, Sparkles, Globe, Loader2 } from 'lucide-react';
+import { ArrowRight, Mail, Lock, User, Globe, Loader2, Eye, EyeOff, ShieldCheck, Check } from 'lucide-react';
 import { useLanguage } from '../../src/contexts/LanguageContext';
 import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
@@ -21,6 +21,9 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const isFormValid = Boolean(name.trim() && email.trim() && password.trim().length >= 6);
 
   const handleLanguageChange = (lang: string) => {
     setLanguage(lang);
@@ -71,7 +74,7 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-secondary/40 to-background relative" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
       {/* Language Switcher - Fixed Top Right */}
       <div className="fixed top-4 right-4 z-50" style={{ top: 'calc(1rem + env(safe-area-inset-top))' }}>
         <motion.div
@@ -101,20 +104,20 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        className="w-full max-w-[520px]"
       >
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold tracking-tight mb-2">{t('signup.createAccount')}</h1>
           <p className="text-muted-foreground">{t('signup.startJourney')}</p>
         </div>
 
-        <PremiumCard glow className="space-y-6 p-8">
+        <PremiumCard glow hoverEffect className="space-y-6 p-8">
           {error && (
-            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md text-red-600 text-sm">
+            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md text-red-600 text-sm" role="alert" aria-live="polite">
               {error}
             </div>
           )}
-          <form onSubmit={handleSignup} className="space-y-4">
+          <form onSubmit={handleSignup} className="space-y-4" aria-busy={loading}>
             <div className="space-y-2">
               <Label htmlFor="name">{t('signup.fullName')}</Label>
               <div className="relative">
@@ -126,6 +129,7 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    autoComplete="name"
                 />
               </div>
             </div>
@@ -142,6 +146,7 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
                 />
               </div>
             </div>
@@ -152,17 +157,27 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
                 <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input 
                     id="password"
-                    type="password" 
+                    type={showPassword ? "text" : "password"} 
                     placeholder={t('placeholder.createPassword')} 
                     className="pl-9 bg-background/50"
                     required
+                    minLength={6}
+                    autoComplete="new-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 px-3 text-muted-foreground hover:text-foreground"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
             </div>
 
-            <Button type="submit" className="w-full" size="lg" disabled={loading}>
+            <Button type="submit" className="w-full" size="lg" disabled={loading || !isFormValid}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -185,6 +200,17 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ onNavigate }) => {
             >
               {t('signup.signIn')}
             </button>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 border-t pt-4 mt-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-3">
+              <Check className="h-4 w-4 text-primary" />
+              <span>{t('signup.passwordHint') || 'Minimum 6 characters, avoid reused passwords.'}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              <span>{t('signup.verificationHint') || 'We send a verification email to secure your account.'}</span>
+            </div>
           </div>
         </PremiumCard>
       </motion.div>

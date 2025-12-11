@@ -44,6 +44,8 @@
   --sidebar-accent-foreground: #2f4056;
   --sidebar-border: #d8e3ed;
   --sidebar-ring: #5E90B6;
+  --shadow-elevated: 0 18px 40px -24px rgba(15, 23, 42, 0.25);
+  --shadow-elevated-strong: 0 24px 60px -24px rgba(15, 23, 42, 0.32);
 }
 
 .dark {
@@ -82,6 +84,8 @@
   --sidebar-accent-foreground: #e6eff5;
   --sidebar-border: #232d38;
   --sidebar-ring: #8bbce6;
+  --shadow-elevated: 0 18px 40px -24px rgba(0, 0, 0, 0.45);
+  --shadow-elevated-strong: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
 }
 
 @theme inline {
@@ -206,4 +210,14 @@ html {
 
 .animate-shimmer {
   animation: shimmer 2s infinite;
+}
+
+@layer utilities {
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .shadow-elevated-strong {
+    box-shadow: var(--shadow-elevated-strong);
+  }
 }

@@ -8,9 +8,8 @@ import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '../ui/dialog';
 import { DeleteConfirmation } from '../ui/delete-confirmation';
-import { Plus, Trash2, Wallet, ArrowLeft, Pencil, Building2 } from 'lucide-react';
+import { Plus, Trash2, Wallet, ArrowLeft, Pencil } from 'lucide-react';
 import { useLanguage } from '../../src/contexts/LanguageContext';
-import { ImageWithFallback } from '../figma/ImageWithFallback';
 
 interface AccountsPageProps {
   onNavigate: (page: string) => void;
@@ -45,6 +44,29 @@ const getBankLogoUrl = (institutionName: string): string => {
     return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
   }
   return `https://www.google.com/s2/favicons?domain=${institutionName.toLowerCase().replace(/\s+/g, '')}.com&sz=128`;
+};
+
+const BankLogo: React.FC<{ institution: string }> = ({ institution }) => {
+  const [didError, setDidError] = useState(false);
+  const initials = institution.slice(0, 2).toUpperCase() || 'BK';
+
+  if (didError) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-muted text-xs font-semibold text-muted-foreground">
+        {initials}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={getBankLogoUrl(institution)}
+      alt={institution}
+      className="h-full w-full object-cover"
+      loading="lazy"
+      onError={() => setDidError(true)}
+    />
+  );
 };
 
 export const AccountsPage: React.FC<AccountsPageProps> = ({ onNavigate }) => {
@@ -267,12 +289,7 @@ export const AccountsPage: React.FC<AccountsPageProps> = ({ onNavigate }) => {
           <PremiumCard key={account.id} className="flex items-center justify-between hover:border-blue-500/30 transition-colors">
             <div className="flex items-center gap-3 flex-1">
               <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center overflow-hidden">
-                <ImageWithFallback
-                  src={getBankLogoUrl(account.institution)}
-                  alt={account.institution}
-                  className="w-full h-full object-cover"
-                  fallback={<Building2 size={20} className="text-muted-foreground" />}
-                />
+                <BankLogo institution={account.institution} />
               </div>
               <div className="flex-1">
                 <p className="font-semibold">{account.name}</p>

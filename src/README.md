@@ -43,16 +43,6 @@ A premium Progressive Web App (PWA) for managing household finances with goals, 
 ```
 /
 ├── src/
-│   ├── app/                       # Figma Make isolated preview
-│   │   ├── components/           # Pure UI components
-│   │   ├── pages/                # Full page layouts
-│   │   ├── logic/                # Production business logic
-│   │   ├── preview/              # Mock data system
-│   │   ├── app.config.ts         # Mode detection
-│   │   ├── exports.ts            # Public API
-│   │   ├── README.md             # Quick start guide
-│   │   └── USAGE_GUIDE.md        # Complete documentation
-│   │
 │   ├── components/               # Production components
 │   │   ├── auth/                # Login/signup
 │   │   ├── dashboard/           # Home dashboard
@@ -117,33 +107,6 @@ A premium Progressive Web App (PWA) for managing household finances with goals, 
    ```
    http://localhost:5173
    ```
-
----
-
-## 📦 Figma Make Preview System
-
-This project includes a fully isolated preview environment for Figma Make that:
-- ✅ Works with mock data (no Supabase calls)
-- ✅ Provides complete UI components
-- ✅ Separates UI from business logic
-- ✅ Safe to regenerate without breaking production
-
-**Location**: `/src/app/`
-
-**Documentation**:
-- `/src/app/README.md` - Quick start guide
-- `/src/app/USAGE_GUIDE.md` - Complete documentation
-
-**Usage**:
-```typescript
-import { DashboardPage, type Goal } from '@/app/exports';
-
-<DashboardPage 
-  goals={myGoals} 
-  accounts={myAccounts} 
-  debts={myDebts} 
-/>
-```
 
 ---
 
@@ -244,12 +207,7 @@ npm run lint
 
 ## 🚢 Deployment
 
-### Option 1: Figma Make (Easiest)
-1. Open project in Figma Make
-2. Click "Deploy"
-3. Done! ✅
-
-### Option 2: Self-Hosted
+### Self-Hosted
 ```bash
 # Build for production
 npm run build

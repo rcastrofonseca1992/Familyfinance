@@ -22,7 +22,7 @@ const NAV_ITEMS: { id: ViewType; label: string; icon: React.ElementType }[] = [
 export const MobileTopBar: React.FC = () => {
   return (
     <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border h-14 px-4 flex items-center justify-between">
-        <span className="font-bold text-lg tracking-tight">Figma Make</span>
+        <span className="font-bold text-lg tracking-tight">FamilyFinance</span>
         <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             <span className="text-[10px] uppercase font-medium text-muted-foreground tracking-wider">Online</span>
@@ -65,7 +65,7 @@ export const Sidebar: React.FC<NavigationProps> = ({ currentView, onChangeView }
     <div className="hidden md:flex flex-col fixed top-0 left-0 h-full w-[260px] bg-background border-r border-border p-6 z-40">
       <div className="mb-10 px-2">
         <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
-          Figma Make
+          FamilyFinance
         </h1>
         <p className="text-xs text-muted-foreground tracking-widest uppercase mt-1">Finance OS</p>
       </div>
@@ -78,7 +78,7 @@ export const Sidebar: React.FC<NavigationProps> = ({ currentView, onChangeView }
             className={cn(
               "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
               currentView === item.id 
-                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
+                ? "bg-primary text-primary-foreground shadow-elevated"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground"
             )}
           >

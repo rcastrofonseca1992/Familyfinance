@@ -17,16 +17,22 @@ export const HouseholdSetup: React.FC = () => {
   const [name, setName] = useState('My Family');
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingHousehold, setIsCheckingHousehold] = useState(true);
   const [foundHousehold, setFoundHousehold] = useState<Household | null>(null);
 
   React.useEffect(() => {
       const checkForHousehold = async () => {
-          if (data.user) {
-              const result = await checkServerHousehold();
-              if (result.found && result.household) {
-                  setFoundHousehold(result.household);
-              }
+          if (!data.user) {
+              setIsCheckingHousehold(false);
+              return;
           }
+
+          setIsCheckingHousehold(true);
+          const result = await checkServerHousehold();
+          if (result.found && result.household) {
+              setFoundHousehold(result.household);
+          }
+          setIsCheckingHousehold(false);
       };
       checkForHousehold();
   }, [data.user]);
@@ -121,7 +127,32 @@ export const HouseholdSetup: React.FC = () => {
                     <p className="text-xl text-muted-foreground">{t('household.chooseOption')}</p>
                 </div>
 
-                {foundHousehold && (
+                {isCheckingHousehold && (
+                    <PremiumCard
+                        className="mb-8 p-8"
+                        glow
+                        aria-busy="true"
+                    >
+                        <div className="flex items-center gap-4">
+                            <div className="relative h-12 w-12 rounded-xl bg-muted overflow-hidden">
+                                <span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+                            </div>
+                            <div className="flex-1 space-y-3">
+                                <div className="relative h-3 w-1/3 rounded-full bg-muted overflow-hidden">
+                                    <span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+                                </div>
+                                <div className="relative h-3 w-2/3 rounded-full bg-muted overflow-hidden">
+                                    <span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+                                </div>
+                            </div>
+                            <div className="relative h-10 w-28 rounded-full bg-muted overflow-hidden">
+                                <span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+                            </div>
+                        </div>
+                    </PremiumCard>
+                )}
+
+                {foundHousehold && !isCheckingHousehold && (
                     <motion.div 
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}

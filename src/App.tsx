@@ -28,7 +28,6 @@ import { Calendar, Plus } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { formatCurrency } from './lib/finance';
 import { getLanguage } from './src/utils/i18n';
-import { isFigmaPreview, logPreviewMode } from './lib/figma-preview';
 
 const MainApp: React.FC = () => {
   const { data, getPersonalNetWorth, isInitialized, logout } = useFinance();
@@ -40,9 +39,6 @@ const MainApp: React.FC = () => {
   // Initialize language on app startup
   useEffect(() => {
     document.documentElement.setAttribute("lang", getLanguage());
-    // Log preview mode status
-    logPreviewMode();
-    
     // Check if we're on reset password route (from email link)
     if (window.location.pathname === '/auth/reset-password' || window.location.hash.includes('type=recovery')) {
       setAuthView('reset-password');
@@ -50,12 +46,12 @@ const MainApp: React.FC = () => {
   }, []);
 
   // Show loading screen while initializing (except during auth/onboarding flows)
-  if (!isInitialized && !isFigmaPreview) {
+  if (!isInitialized) {
     return <LoadingScreen />;
   }
 
-  // 1. Auth Layer - Skip in Figma Preview
-  if (!data.user && !isFigmaPreview) {
+  // 1. Auth Layer
+  if (!data.user) {
       // Show verification screen if user just signed up
       if (authView === 'verify-email') {
           return <EmailVerificationScreen email={verificationEmail} onLogout={() => {
@@ -84,14 +80,14 @@ const MainApp: React.FC = () => {
       }} />;
   }
 
-  // 1.5. Email Verification Layer - Skip in Figma Preview
-  if (data.user && data.isEmailVerified === false && !isFigmaPreview) {
+  // 1.5. Email Verification Layer
+  if (data.user && data.isEmailVerified === false) {
       setVerificationEmail(data.user.email);
       return <EmailVerificationScreen email={data.user.email} onLogout={logout} />;
   }
 
-  // 2. Household Layer - Skip in Figma Preview
-  if (!data.household && !isFigmaPreview) {
+  // 2. Household Layer
+  if (!data.household) {
       return <HouseholdSetup />;
   }
 
