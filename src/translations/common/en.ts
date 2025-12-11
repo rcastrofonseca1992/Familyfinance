@@ -64,7 +64,16 @@ export const commonEn = {
   "error.somethingWentWrong": "Something went wrong",
   "error.unexpectedError": "We've encountered an unexpected error. Please try refreshing the page.",
   "error.refresh": "Refresh Page",
-  
+
+  // PWA
+  "pwa.backOnline": "Back online",
+  "pwa.offlineTitle": "You are offline",
+  "pwa.offlineDescription": "Changes will sync when you reconnect.",
+  "pwa.installSuccess": "App added. It will now behave like a native window.",
+  "pwa.installTitle": "Install App",
+  "pwa.installDescription": "Add to your dock or home screen for offline access",
+  "pwa.installButton": "Install",
+
   // Placeholders
   "placeholder.email": "you@example.com",
   "placeholder.name": "John Doe",

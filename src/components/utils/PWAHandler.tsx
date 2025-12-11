@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { WifiOff, Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
+import { useLanguage } from '../../src/contexts/LanguageContext';
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -10,6 +11,7 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 export const PWAHandler: React.FC = () => {
+  const { t } = useLanguage();
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isStandalone, setIsStandalone] = useState(
@@ -31,14 +33,14 @@ export const PWAHandler: React.FC = () => {
     const handleOnline = () => {
       if (isOffline) {
         setIsOffline(false);
-        toast.success('Back online');
+        toast.success(t('pwa.backOnline'));
       }
     };
     const handleOffline = () => {
       if (!isOffline) {
         setIsOffline(true);
-        toast.error('You are offline', {
-          description: 'Changes will sync when you reconnect.',
+        toast.error(t('pwa.offlineTitle'), {
+          description: t('pwa.offlineDescription'),
           icon: <WifiOff className="h-4 w-4" />,
           duration: Infinity,
         });
@@ -107,7 +109,7 @@ export const PWAHandler: React.FC = () => {
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
-        toast.success('App added. It will now behave like a native window.');
+        toast.success(t('pwa.installSuccess'));
       }
       setDeferredPrompt(null);
     });
@@ -118,14 +120,14 @@ export const PWAHandler: React.FC = () => {
   return (
     <div className="fixed bottom-20 left-4 right-4 md:bottom-4 md:left-auto md:right-4 md:w-auto z-50">
         <div className="bg-background border border-border p-4 rounded-xl shadow-lg flex items-center gap-4 animate-in slide-in-from-bottom-5">
-            <div className="bg-primary/10 p-2 rounded-lg text-primary">
+          <div className="bg-primary/10 p-2 rounded-lg text-primary">
                 <Download size={20} />
             </div>
             <div className="flex-1">
-                <div className="font-bold text-sm">Install App</div>
-                <div className="text-xs text-muted-foreground">Add to your dock or home screen for offline access</div>
+                <div className="font-bold text-sm">{t('pwa.installTitle')}</div>
+                <div className="text-xs text-muted-foreground">{t('pwa.installDescription')}</div>
             </div>
-            <Button size="sm" onClick={handleInstall}>Install</Button>
+            <Button size="sm" onClick={handleInstall}>{t('pwa.installButton')}</Button>
         </div>
     </div>
   );

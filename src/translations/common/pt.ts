@@ -64,7 +64,16 @@ export const commonPt = {
   "error.somethingWentWrong": "Algo correu mal",
   "error.unexpectedError": "Encontrámos um erro inesperado. Por favor, tente atualizar a página.",
   "error.refresh": "Atualizar Página",
-  
+
+  // PWA
+  "pwa.backOnline": "Ligação restabelecida",
+  "pwa.offlineTitle": "Está offline",
+  "pwa.offlineDescription": "As alterações serão sincronizadas quando voltar a ligar-se.",
+  "pwa.installSuccess": "Aplicação adicionada. Agora irá comportar-se como uma janela nativa.",
+  "pwa.installTitle": "Instalar Aplicação",
+  "pwa.installDescription": "Adicione ao dock ou ecrã inicial para acesso offline",
+  "pwa.installButton": "Instalar",
+
   // Placeholders
   "placeholder.email": "voce@exemplo.com",
   "placeholder.name": "João Silva",
