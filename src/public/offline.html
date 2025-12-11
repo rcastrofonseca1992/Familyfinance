@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notinow Offline</title>
+    <meta name="description" content="You are offline. Notinow will reconnect when a network is available." />
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 2rem;
+        color: #0f172a;
+        background: #fdfdfe;
+      }
+      main {
+        max-width: 480px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.5rem;
+        margin: 0 0 0.5rem;
+      }
+      p {
+        margin: 0 0 0.75rem;
+      }
+      ul {
+        padding-left: 1.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main aria-label="Offline notice">
+      <h1>You're offline</h1>
+      <p>
+        Notinow is cached for offline use. We'll retry any requests once you're back online.
+      </p>
+      <p>If you expected live data, please check:</p>
+      <ul>
+        <li>Airplane mode is disabled</li>
+        <li>Your Wi-Fi or cellular connection is active</li>
+        <li>Try refreshing once you're connected</li>
+      </ul>
+    </main>
+  </body>
+</html>

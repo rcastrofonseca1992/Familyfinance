@@ -1,15 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="Notinow is a premium PWA for managing household finances with secure offline-ready experiences."
+    />
+    <meta name="application-name" content="Notinow" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Notinow" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="color-scheme" content="light dark" />
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Notinow</title>
-    </head>
+    <!-- Security: conservative baseline CSP to reduce injection risk while allowing Supabase and fonts -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'self' https://sbloltrvdnbrgszhounz.supabase.co; img-src 'self' data: https://sbloltrvdnbrgszhounz.supabase.co; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline'; script-src 'self'; manifest-src 'self'; frame-ancestors 'self';"
+    />
 
-    <body>
-      <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
-    </body>
-  </html>
-  
+    <!-- PWA Manifest and Icons -->
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+    <meta name="msapplication-TileColor" content="#5E90B6" />
+    <meta name="msapplication-TileImage" content="/android-chrome-192x192.png" />
+
+    <!-- Theme Colors for installable experiences -->
+    <meta name="theme-color" content="#fdfdfe" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c1218" media="(prefers-color-scheme: dark)" />
+
+    <!-- Performance hints -->
+    <link rel="preconnect" href="https://sbloltrvdnbrgszhounz.supabase.co" crossorigin />
+    <link rel="dns-prefetch" href="https://sbloltrvdnbrgszhounz.supabase.co" />
+    <link rel="prefetch" href="/dashboard" as="document" />
+
+    <!-- Safe area support for PWA shells on modern devices -->
+    <meta name="viewport-fit" content="cover" />
+
+    <title>Notinow</title>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
