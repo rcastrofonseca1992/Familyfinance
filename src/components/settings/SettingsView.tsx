@@ -326,7 +326,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onNavigate }) => {
             </PremiumCard>
 
             <div className="text-center pt-4">
-                <p className="text-xs text-muted-foreground">FamilyFinance v1.1.0</p>
+                <p className="text-xs text-muted-foreground">Notinow v1.1.0</p>
             </div>
         </div>
     </div>

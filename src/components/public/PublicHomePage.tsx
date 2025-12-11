@@ -32,7 +32,7 @@ export const PublicHomePage: React.FC = () => {
   return (
     <div
       className="public-homepage relative min-h-screen bg-gradient-to-b from-white via-[#f7fbff] to-[#eef5fb] text-gray-900"
-      aria-label="FamilyFinance public home page"
+      aria-label="Notinow public home page"
     >
       <div
         className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -44,15 +44,18 @@ export const PublicHomePage: React.FC = () => {
 
       <header className="sticky top-0 z-20 border-b border-gray-100 bg-white/95 backdrop-blur" role="banner">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2" aria-label="FamilyFinance logo">
+          <div className="flex items-center gap-2" aria-label="Notinow logo">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ backgroundColor: `${primaryColor}1a` }}>
-              <span className="text-xl font-black" style={{ color: primaryColor }}>FF</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-base font-semibold leading-tight" style={{ color: primaryColor }}>
-                FamilyFinance
+              <span className="text-xl font-black tracking-tight" style={{ color: primaryColor }}>
+                N
               </span>
-              <span className="text-xs text-gray-600">Plan. Save. Grow.</span>
+            </div>
+            <div className="flex flex-col font-bold tracking-tight leading-tight text-gray-900">
+              <span className="text-lg">
+                <span className="text-[#6FA8D4]">Noti</span>
+                <span className="text-yellow-400">now</span>
+              </span>
+              <span className="text-xs font-medium text-gray-600">Plan. Save. Grow.</span>
             </div>
           </div>
           <nav className="flex items-center gap-3" aria-label="Primary">
@@ -179,7 +182,7 @@ export const PublicHomePage: React.FC = () => {
               <p className="text-sm font-semibold uppercase tracking-wide text-[#6FA8D4]">Privacy &amp; Security</p>
               <h2 id="privacy-heading" className="mt-2 text-3xl font-bold text-gray-900">Built for trust and control</h2>
               <p className="mt-3 max-w-2xl text-base text-gray-700">
-                We respect your household’s privacy. No ads or trackers—just the tools you need to plan confidently.
+                We respect your household’s privacy. No ads or trackers—just the tools you need to plan confidently with Notinow.
               </p>
             </div>
             <div className="w-full max-w-xl">
@@ -203,9 +206,9 @@ export const PublicHomePage: React.FC = () => {
           <div className="flex items-center gap-3" aria-label="Legal links">
             <a className={navigationLinkClasses} href="/privacy">Privacy Policy</a>
             <a className={navigationLinkClasses} href="/terms">Terms</a>
-            <a className={navigationLinkClasses} href="mailto:hello@familyfinance.app">Contact</a>
+            <a className={navigationLinkClasses} href="mailto:hello@notinow.app">Contact</a>
           </div>
-          <p className="text-xs text-gray-600">© {new Date().getFullYear()} FamilyFinance. All rights reserved.</p>
+          <p className="text-xs text-gray-600">© {new Date().getFullYear()} Notinow. All rights reserved.</p>
         </div>
       </footer>
     </div>
