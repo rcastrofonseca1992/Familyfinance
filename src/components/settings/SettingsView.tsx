@@ -5,7 +5,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Moon, Sun, CloudOff, Database, Bell, Users, User, Download, Upload, AlertCircle, ShieldCheck, Home, Globe } from 'lucide-react';
 import { useFinance } from '../store/FinanceContext';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
 import { useLanguage } from '../../src/contexts/LanguageContext';

@@ -15,7 +15,7 @@ import { LoginPage } from './components/auth/LoginPage';
 import { SignUpPage } from './components/auth/SignUpPage';
 import { HouseholdSetup } from './components/onboarding/HouseholdSetup';
 import { PWAHandler } from './components/utils/PWAHandler';
-import { Toaster } from 'sonner@2.0.3';
+import { Toaster } from 'sonner';
 import { Calendar, Plus } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { formatCurrency } from './lib/finance';

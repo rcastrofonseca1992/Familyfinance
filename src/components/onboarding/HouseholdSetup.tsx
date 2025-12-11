@@ -6,7 +6,7 @@ import { Users, ArrowRight, Home, LogOut, ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { PremiumCard } from '../ui/PremiumCard';
 import { useFinance, Household } from '../store/FinanceContext';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useLanguage } from '../../src/contexts/LanguageContext';
 

@@ -1,11 +1,14 @@
 {
+  "id": "/",
   "name": "Notinow",
   "short_name": "Notinow",
   "description": "Premium PWA for managing household finances with goals, tracking, and forecasting",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "background_color": "#fdfdfe",
-  "theme_color": "#6fa8d4",
+  "theme_color": "#5E90B6",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -46,5 +49,50 @@
     }
   ],
   "categories": ["finance", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Open dashboard",
+      "short_name": "Dashboard",
+      "description": "Jump into your household overview",
+      "url": "/?view=dashboard",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Track goals",
+      "short_name": "Goals",
+      "description": "Check progress against your milestones",
+      "url": "/?view=goals",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Settings",
+      "short_name": "Settings",
+      "description": "Open preferences to manage households and app options",
+      "url": "/?view=settings",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "prefer_related_applications": false,
   "screenshots": []
 }

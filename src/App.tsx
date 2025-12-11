@@ -23,7 +23,7 @@ import { ResetPasswordPage } from './components/auth/ResetPasswordPage';
 import { HouseholdSetup } from './components/onboarding/HouseholdSetup';
 import { PWAHandler } from './components/utils/PWAHandler';
 import { LoadingScreen } from './components/ui/LoadingScreen';
-import { Toaster } from 'sonner@2.0.3';
+import { Toaster } from 'sonner';
 import { Calendar, Plus } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { formatCurrency } from './lib/finance';
@@ -31,8 +31,32 @@ import { getLanguage } from './src/utils/i18n';
 import { isFigmaPreview, logPreviewMode } from './lib/figma-preview';
 
 const MainApp: React.FC = () => {
+  const getInitialTab = () => {
+    const params = new URLSearchParams(window.location.search);
+    const view = params.get('view');
+    const allowedViews = new Set([
+      'dashboard',
+      'forecast',
+      'fire',
+      'personal',
+      'me/income',
+      'me/accounts',
+      'me/debts',
+      'me/fixed-costs',
+      'feasibility',
+      'goals',
+      'settings',
+      'household-management',
+    ]);
+
+    if (view && allowedViews.has(view)) {
+      return view;
+    }
+    return 'dashboard';
+  };
+
   const { data, getPersonalNetWorth, isInitialized, logout } = useFinance();
-  const [currentTab, setCurrentTab] = useState('dashboard');
+  const [currentTab, setCurrentTab] = useState<string>(getInitialTab);
   const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot-password' | 'reset-password' | 'verify-email'>('login');
   const [isGoalDialogOpen, setIsGoalDialogOpen] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState('');
@@ -42,6 +66,13 @@ const MainApp: React.FC = () => {
     document.documentElement.setAttribute("lang", getLanguage());
     // Log preview mode status
     logPreviewMode();
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('view')) {
+      params.delete('view');
+      const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}${window.location.hash}`;
+      window.history.replaceState({}, '', newUrl);
+    }
     
     // Check if we're on reset password route (from email link)
     if (window.location.pathname === '/auth/reset-password' || window.location.hash.includes('type=recovery')) {

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { MarketData, DEFAULT_MARKET_DATA, fetchBDEMarketData } from '../../lib/bde';
 import { supabase } from '../../lib/supabase';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { isFigmaPreview, mockFinanceData, safeSaveData, logPreviewMode } from '../../lib/figma-preview';
 import { transformPreviewDataToFinanceData } from '../../src/app/preview/transformToFinanceData';
 
