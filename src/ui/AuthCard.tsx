@@ -1,27 +1,25 @@
+// src/ui/AuthCard.tsx
 import React from "react";
-import { PremiumCard } from "./PremiumCard";
 import { cn } from "./utils";
 
-interface AuthCardProps {
-  children: React.ReactNode;
-  className?: string;
-}
+interface AuthCardProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-/**
- * AuthCard: shared wrapper for auth screens.
- * Uses PremiumCard in fullWidth mode with consistent padding.
- */
-export const AuthCard: React.FC<AuthCardProps> = ({ children, className }) => {
+export const AuthCard: React.FC<AuthCardProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   return (
-    <PremiumCard
-      glow
-      
+    <div
+      {...props}
       className={cn(
-        "p-6 md:p-8 rounded-xl shadow-md bg-card",
+        "w-full sm:max-w-[420px]",
+        "bg-card border border-border rounded-2xl shadow-elevated",
+        "p-4 sm:p-6",
         className
       )}
     >
       {children}
-    </PremiumCard>
+    </div>
   );
 };

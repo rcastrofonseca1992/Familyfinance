@@ -1,4 +1,4 @@
-// ui/AuthHeader.tsx
+// src/components/auth/AuthHeader.tsx
 import React from "react";
 
 interface AuthHeaderProps {
@@ -8,19 +8,20 @@ interface AuthHeaderProps {
 
 export const AuthHeader: React.FC<AuthHeaderProps> = ({ title, subtitle }) => {
   return (
-    <header className="text-center space-y-3">
-      <div className="text-3xl font-extrabold tracking-tight flex items-baseline justify-center gap-1">
-        <span className="text-primary">Noti</span>
-        <span className="text-[rgb(251,191,36)]">now</span>
+    <header className="w-full text-center space-y-4 max-w-none">
+      <div className="text-3xl font-extrabold tracking-tight">
+      <span className="font-bold text-primary">Noti</span>
+<span
+  className="font-bold"
+  style={{ color: "rgb(251, 191, 36)" }}
+>
+  now
+</span>
+
       </div>
 
-      <h1 className="text-xl font-semibold tracking-tight text-foreground">
-        {title}
-      </h1>
-
-      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-        {subtitle}
-      </p>
+      <h1 className="text-xl font-semibold">{title}</h1>
+      <p className="text-sm text-muted-foreground">{subtitle}</p>
     </header>
   );
 };

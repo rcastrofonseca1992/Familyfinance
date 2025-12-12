@@ -1,5 +1,5 @@
-// components/auth/AuthLayout.tsx
-import React from "react";
+// src/components/auth/AuthLayout.tsx
+import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Globe, ArrowLeft } from "lucide-react";
 
@@ -29,17 +29,20 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
   showBackButton = false,
   onBack,
 }) => {
+  const [isPWA, setIsPWA] = useState(false);
+
+  useEffect(() => {
+    const standalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (window.navigator as any).standalone === true;
+
+    setIsPWA(standalone);
+  }, []);
+
   return (
     <main
       aria-label={pageLabel}
-      className="
-        min-h-screen
-        bg-gradient-to-br
-        from-background
-        via-secondary/40
-        to-background
-        relative
-      "
+      className="w-full min-h-screen bg-gradient-to-br from-background via-secondary/40 to-background relative"
       style={{
         paddingTop: "env(safe-area-inset-top)",
         paddingBottom: "env(safe-area-inset-bottom)",
@@ -48,24 +51,49 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
       {showBackButton && onBack && (
         <button
           onClick={onBack}
-          className="
-            fixed left-4 top-4 z-50
-            p-3 rounded-full
-            bg-card/80 backdrop-blur-md
-            border border-border/50 shadow-sm
-          "
+          className="fixed left-4 z-50 p-3 rounded-full bg-card/80 backdrop-blur-md border border-border/50 shadow-sm"
+          style={{ top: "calc(1rem + env(safe-area-inset-top))" }}
         >
           <ArrowLeft size={20} />
         </button>
       )}
 
-      <div className="fixed right-4 top-4 z-50">
+      {/* CONTENT */}
+      <div
+        className="w-full min-h-screen flex justify-center px-4"
+        style={{
+          alignItems: isPWA ? "flex-start" : "center",
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25 }}
+          className="w-full flex flex-col items-center gap-6 pt-12"
+        >
+          {children}
+        </motion.div>
+      </div>
+
+      {/* LANGUAGE SWITCHER — CORRECT CENTERING */}
+      <div
+        className="
+          fixed
+          inset-x-0
+          flex
+          justify-center
+          z-50
+        "
+        style={{
+          bottom: "calc(1rem + env(safe-area-inset-bottom))",
+        }}
+      >
         <Select value={language} onValueChange={onLanguageChange}>
           <SelectTrigger className="w-[180px] bg-card/80 backdrop-blur-md border-border/50 shadow-sm">
             <Globe className="mr-2 h-4 w-4 text-primary" />
             <SelectValue />
           </SelectTrigger>
-          <SelectContent align="end">
+          <SelectContent align="center">
             {AVAILABLE_LANGUAGES.map((lang) => (
               <SelectItem key={lang.code} value={lang.code}>
                 <div className="flex items-center gap-2">
@@ -76,35 +104,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
             ))}
           </SelectContent>
         </Select>
-      </div>
-
-      <div
-        className="
-          min-h-screen
-          w-full
-          flex
-          flex-col
-          items-center
-          justify-start
-          sm:justify-center
-          px-2 sm:px-6
-        "
-      >
-        <motion.section
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25 }}
-          className="
-            w-full
-            max-w-[420px]
-            flex flex-col
-            items-stretch
-            gap-6
-            py-12 sm:py-0
-          "
-        >
-          {children}
-        </motion.section>
       </div>
     </main>
   );
