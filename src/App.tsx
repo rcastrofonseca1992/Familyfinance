@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { FinanceProvider, useFinance } from './components/store/FinanceContext';
-import { LanguageProvider } from './src/contexts/LanguageContext';
+import { FinanceProvider, useFinance } from './store/FinanceContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { AppShell } from './components/layout/AppShell';
 import { HomeDashboard } from './components/dashboard/HomeDashboard';
 import { InvestmentForecastView } from './components/dashboard/InvestmentForecastView';
@@ -22,12 +22,12 @@ import { ForgotPasswordPage } from './components/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './components/auth/ResetPasswordPage';
 import { HouseholdSetup } from './components/onboarding/HouseholdSetup';
 import { PWAHandler } from './components/utils/PWAHandler';
-import { LoadingScreen } from './components/ui/LoadingScreen';
+import { LoadingScreen } from './ui/LoadingScreen';
 import { Toaster } from 'sonner@2.0.3';
 import { Calendar, Plus } from 'lucide-react';
-import { Button } from './components/ui/button';
+import { Button } from './ui/button';
 import { formatCurrency } from './lib/finance';
-import { getLanguage } from './src/utils/i18n';
+import { getLanguage } from './utils/i18n';
 
 const MainApp: React.FC = () => {
   const { data, getPersonalNetWorth, isInitialized, logout } = useFinance();

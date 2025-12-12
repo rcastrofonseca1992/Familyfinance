@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Edit, Calendar, TrendingUp, Target, DollarSign, Clock, AlertCircle, CheckCircle, Zap, PiggyBank, Calculator, TrendingDown } from 'lucide-react';
 import { formatCurrency } from '../../lib/finance';
-import { Button } from '../ui/button';
-import { useLanguage } from '../../src/contexts/LanguageContext';
-import { PremiumCard } from '../ui/PremiumCard';
-import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
+import { Button } from '../../ui/button';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { PremiumCard } from '../../ui/PremiumCard';
+import { Tabs, TabsList, TabsTrigger } from '../../ui/tabs';
 import { FeasibilityEngine } from '../feasibility/FeasibilityEngine';
 import { motion } from 'motion/react';
 

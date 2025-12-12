@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useFinance } from '../store/FinanceContext';
-import { PremiumCard } from '../ui/PremiumCard';
-import { Button } from '../ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Badge } from '../ui/badge';
+import { useFinance } from '../../store/FinanceContext';
+import { PremiumCard } from '../../ui/PremiumCard';
+import { Button } from '../../ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
+import { Badge } from '../../ui/badge';
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../ui/table';
+} from '../../ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,9 +19,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
+} from '../../ui/dropdown-menu';
 import { MoreHorizontal, UserMinus, Shield, ShieldAlert, ArrowLeft } from 'lucide-react';
-import { toast } from 'sonner@2.0.3';
+import { toast } from '../../utils/toastManager';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,8 +31,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../ui/alert-dialog";
-import { useLanguage } from '../../src/contexts/LanguageContext';
+} from "../../ui/alert-dialog";
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface HouseholdManagementProps {
   onBack: () => void;

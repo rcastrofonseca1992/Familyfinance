@@ -1,5 +1,5 @@
 // Barrel exports for UI components
-// This allows importing like: import { Button, Card } from "@/components/ui";
+// This allows importing like: import { Button, Card } from "@/ui";
 
 export * from "./accordion";
 export * from "./alert-dialog";

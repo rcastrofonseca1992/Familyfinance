@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useFinance } from '../store/FinanceContext';
-import { PremiumCard } from '../ui/PremiumCard';
+import { useFinance } from '../../store/FinanceContext';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { formatCurrency } from '../../lib/finance';
 import { Info, ChevronDown, ChevronUp, ShieldCheck, TrendingUp, Zap, Flame, Sunrise } from 'lucide-react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '../ui/dialog';
-import { cn } from '../ui/utils';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../ui/accordion';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '../../ui/dialog';
+import { cn } from '../../ui/utils';
 
 export const SavingsRecommendations: React.FC = () => {
   const { data, getHouseholdIncome, getPersonalTotalIncome, getHouseholdFixedCosts, getHouseholdTotalCash, getHouseholdNetWorth, viewMode } = useFinance();

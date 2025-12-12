@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { useFinance } from '../store/FinanceContext';
-import { PremiumCard } from '../ui/PremiumCard';
+import { useFinance } from '../../store/FinanceContext';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { formatCurrency } from '../../lib/finance';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '../ui/dialog';
-import { DeleteConfirmation } from '../ui/delete-confirmation';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import { Label } from '../../ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '../../ui/dialog';
+import { DeleteConfirmation } from '../../ui/delete-confirmation';
 import { Plus, Trash2, CreditCard, ArrowLeft, Pencil, TrendingDown, AlertCircle } from 'lucide-react';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface DebtsPageProps {
   onNavigate: (page: string) => void;

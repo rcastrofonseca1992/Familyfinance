@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Home, PieChart, Calculator, Target, Settings, PlusCircle } from 'lucide-react';
-import { cn } from '../ui/utils';
+import { cn } from '../../ui/utils';
 
 export type ViewType = 'dashboard' | 'feasibility' | 'accounts' | 'goals' | 'settings';
 

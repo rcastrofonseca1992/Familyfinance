@@ -1,5 +1,5 @@
-import { en } from '../../translations/en';
-import { pt } from '../../translations/pt';
+import { en } from '../translations/en';
+import { pt } from '../translations/pt';
 
 type Translations = typeof en;
 

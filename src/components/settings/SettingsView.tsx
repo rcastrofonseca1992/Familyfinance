@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { PremiumCard } from '../ui/PremiumCard';
-import { Switch } from '../ui/switch';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
+import { PremiumCard } from '../../ui/PremiumCard';
+import { Switch } from '../../ui/switch';
+import { Input } from '../../ui/input';
+import { Button } from '../../ui/button';
 import { Moon, Sun, CloudOff, Database, Bell, Users, User, Download, Upload, AlertCircle, ShieldCheck, Home, Globe } from 'lucide-react';
-import { useFinance } from '../store/FinanceContext';
-import { toast } from 'sonner@2.0.3';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { useFinance } from '../../store/FinanceContext';
+import { toast } from '../../utils/toastManager';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { AVAILABLE_LANGUAGES } from '../../utils/i18n';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { projectId } from '../../utils/supabase/info';
 import { supabase } from '../../lib/supabase';
 

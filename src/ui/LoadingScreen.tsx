@@ -1,6 +1,7 @@
 import React from 'react';
 import { Wallet } from 'lucide-react';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { useLanguage } from '../contexts/LanguageContext';
+
 
 export const LoadingScreen: React.FC = () => {
   const { t } = useLanguage();

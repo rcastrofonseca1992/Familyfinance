@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { MarketData, DEFAULT_MARKET_DATA, fetchBDEMarketData } from '../../lib/bde';
-import { supabase } from '../../lib/supabase';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
-import { toast } from '../../utils/toastManager';
+import { MarketData, DEFAULT_MARKET_DATA, fetchBDEMarketData } from '../lib/bde';
+import { supabase } from '../lib/supabase';
+import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { toast } from '../utils/toastManager';
 
 // Helper function to create auth headers with apikey
 const authHeaders = (token: string) => ({

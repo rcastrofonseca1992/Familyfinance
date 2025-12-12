@@ -1,7 +1,7 @@
 import React from 'react';
 import { AreaChart, Area, XAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { formatCurrency } from '../../lib/finance';
-import { useFinance } from '../store/FinanceContext';
+import { useFinance } from '../../store/FinanceContext';
 
 interface ForecastChartProps {
   className?: string;

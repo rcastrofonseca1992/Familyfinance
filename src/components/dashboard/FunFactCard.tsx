@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { X, Sparkles, RefreshCw } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { motion, AnimatePresence } from 'motion/react';
-import { getFunFact } from '../../src/lib/getFunFact';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { getFunFact } from '../../lib/getFunFact';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export const FunFactCard: React.FC = () => {
   const [fact, setFact] = useState<string>('');

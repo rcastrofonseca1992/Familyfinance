@@ -1,10 +1,10 @@
 import React from 'react';
-import { useFinance } from '../store/FinanceContext';
-import { PremiumCard } from '../ui/PremiumCard';
+import { useFinance } from '../../store/FinanceContext';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { formatCurrency } from '../../lib/finance';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { Wallet, TrendingUp, CreditCard, Receipt, ArrowRight } from 'lucide-react';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface PersonalDashboardProps {
   onNavigate: (page: string) => void;

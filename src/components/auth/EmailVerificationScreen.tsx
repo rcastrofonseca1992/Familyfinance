@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Button } from '../ui/button';
-import { PremiumCard } from '../ui/PremiumCard';
+import { Button } from '../../ui/button';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { Mail, RefreshCw, Loader2, CheckCircle } from 'lucide-react';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { motion } from 'motion/react';
 import { createClient } from '@supabase/supabase-js';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';

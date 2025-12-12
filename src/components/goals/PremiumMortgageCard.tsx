@@ -1,7 +1,7 @@
 import React from 'react';
-import { Goal, useFinance } from '../store/FinanceContext';
+import { Goal, useFinance } from '../../store/FinanceContext';
 import { formatCurrency, getMarketSentiment } from '../../lib/finance';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { motion } from 'motion/react';
 
 interface PremiumMortgageCardProps {

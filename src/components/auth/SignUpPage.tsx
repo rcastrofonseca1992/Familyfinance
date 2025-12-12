@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { PremiumCard } from '../ui/PremiumCard';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../ui/select";
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import { Label } from '../../ui/label';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { ArrowRight, Mail, Lock, User, Globe, Loader2, Eye, EyeOff, ShieldCheck, Check } from 'lucide-react';
-import { useLanguage } from '../../src/contexts/LanguageContext';
-import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { AVAILABLE_LANGUAGES } from '../../utils/i18n';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { motion } from 'motion/react';
 

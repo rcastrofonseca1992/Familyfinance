@@ -1,22 +1,22 @@
 import React, { useState, useMemo } from 'react';
-import { useFinance, Goal } from '../store/FinanceContext';
-import { PremiumCard } from '../ui/PremiumCard';
+import { useFinance, Goal } from '../../store/FinanceContext';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { formatCurrency, computeFeasibility, calculateGoalDelay, getMarketSentiment, getMortgageAdvice, HOUSE_TARGET, CASH_RATIO_FOR_HOUSE, DTI_LIMIT, DEFAULT_LOAN_YEARS, DEFAULT_INTEREST, EMERGENCY_FUND_TARGET } from '../../lib/finance';
 import { FeasibilityEngine } from '../feasibility/FeasibilityEngine';
 import { PremiumMortgageCard } from './PremiumMortgageCard';
 import { GoalPage } from './GoalPage';
 import { Target, Plane, Home, ShieldAlert, Plus, Trash2, Calendar, Save, X, AlertTriangle, TrendingUp, Info, CheckCircle, RefreshCw, Star, Calculator, Car, Users } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger, DialogFooter } from '../ui/dialog';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '../ui/sheet';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { Switch } from '../ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { cn } from '../ui/utils';
-import { ConfirmationDialog } from '../ui/ConfirmationDialog';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger, DialogFooter } from '../../ui/dialog';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '../../ui/sheet';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import { Label } from '../../ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { Switch } from '../../ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../ui/tabs';
+import { cn } from '../../ui/utils';
+import { ConfirmationDialog } from '../../ui/ConfirmationDialog';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { motion } from 'motion/react';
 
 

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { PremiumCard } from '../ui/PremiumCard';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import { Label } from '../../ui/label';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { Lock, CheckCircle, Loader2, KeyRound } from 'lucide-react';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { motion } from 'motion/react';
 import { createClient } from '@supabase/supabase-js';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';

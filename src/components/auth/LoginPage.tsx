@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { PremiumCard } from '../ui/PremiumCard';
-import { useFinance } from '../store/FinanceContext';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../ui/select";
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import { Label } from '../../ui/label';
+import { PremiumCard } from '../../ui/PremiumCard';
+import { useFinance } from '../../store/FinanceContext';
 import { ArrowRight, Globe, Loader2, Mail, Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react';
-import { useLanguage } from '../../src/contexts/LanguageContext';
-import { AVAILABLE_LANGUAGES } from '../../src/utils/i18n';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { AVAILABLE_LANGUAGES } from '../../utils/i18n';
 import { motion } from 'motion/react';
 
 interface LoginPageProps {

@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { useFinance, RecurringCost } from '../store/FinanceContext';
-import { PremiumCard } from '../ui/PremiumCard';
+import { useFinance, RecurringCost } from '../../store/FinanceContext';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { formatCurrency } from '../../lib/finance';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '../ui/dialog';
-import { DeleteConfirmation } from '../ui/delete-confirmation';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import { Label } from '../../ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '../../ui/dialog';
+import { DeleteConfirmation } from '../../ui/delete-confirmation';
 import { Plus, Trash2, Receipt, ArrowLeft, Pencil, RefreshCw } from 'lucide-react';
-import { useLanguage } from '../../src/contexts/LanguageContext';
-import { toast } from 'sonner';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { toast } from '../../utils/toastManager';
 
 interface FixedCostsPageProps {
   onNavigate: (page: string) => void;

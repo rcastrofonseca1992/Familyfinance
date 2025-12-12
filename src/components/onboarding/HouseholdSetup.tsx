@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import { Label } from '../../ui/label';
 import { Users, ArrowRight, Home, LogOut, ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
-import { PremiumCard } from '../ui/PremiumCard';
-import { useFinance, Household } from '../store/FinanceContext';
-import { toast } from 'sonner@2.0.3';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { PremiumCard } from '../../ui/PremiumCard';
+import { useFinance, Household } from '../../store/FinanceContext';
+import { toast } from '../../utils/toastManager';
+import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export const HouseholdSetup: React.FC = () => {
   const { createHousehold, joinHousehold, logout, data, checkServerHousehold, enterHousehold } = useFinance();

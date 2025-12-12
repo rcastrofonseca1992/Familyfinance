@@ -1,14 +1,14 @@
 import React from 'react';
-import { useFinance } from '../store/FinanceContext';
-import { PremiumCard } from '../ui/PremiumCard';
+import { useFinance } from '../../store/FinanceContext';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { formatCurrency } from '../../lib/finance';
 import { ArrowLeft, Flame, TrendingUp, Calculator, Lightbulb, Target, Calendar, DollarSign, TrendingDown, Info, CheckCircle2, Sliders, ChevronDown } from 'lucide-react';
-import { Button } from '../ui/button';
-import { useLanguage } from '../../src/contexts/LanguageContext';
-import { Progress } from '../ui/progress';
-import { Slider } from '../ui/slider';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
+import { Button } from '../../ui/button';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { Progress } from '../../ui/progress';
+import { Slider } from '../../ui/slider';
+import { Input } from '../../ui/input';
+import { Label } from '../../ui/label';
 
 interface FIREViewProps {
     onBack: () => void;

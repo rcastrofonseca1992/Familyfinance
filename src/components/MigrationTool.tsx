@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button } from './ui/button';
-import { PremiumCard } from './ui/premium-card';
+import { Button } from '../ui/button';
+import { PremiumCard } from '../ui/premium-card';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { createClient } from '@supabase/supabase-js';
 

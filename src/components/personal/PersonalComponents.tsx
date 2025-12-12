@@ -1,13 +1,13 @@
 import React from 'react';
-import { Account, RecurringCost, Debt } from '../store/FinanceContext';
+import { Account, RecurringCost, Debt } from '../../store/FinanceContext';
 import { formatCurrency } from '../../lib/finance';
-import { Button } from '../ui/button';
-import { PremiumCard } from '../ui/PremiumCard';
+import { Button } from '../../ui/button';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { TrendingUp, AlertTriangle, Calendar, Calculator, DollarSign, Pencil, Trash2 } from 'lucide-react';
-import { cn } from '../ui/utils';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { Switch } from '../ui/switch';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { cn } from '../../ui/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { Switch } from '../../ui/switch';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 // Section Container
 export const SectionContainer: React.FC<{ title: string; subtitle?: string; icon?: React.ReactNode; action?: React.ReactNode; children: React.ReactNode; className?: string }> = ({ title, subtitle, icon, action, children, className }) => (

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useFinance } from '../store/FinanceContext';
+import { useFinance } from '../../store/FinanceContext';
 import { 
   computeFeasibility, 
   mortgageMonthlyPayment, 
@@ -13,10 +13,10 @@ import {
   DEFAULT_LOAN_YEARS,
   DEFAULT_INTEREST
 } from '../../lib/finance';
-import { PremiumCard } from '../ui/PremiumCard';
-import { Slider } from '../ui/slider';
+import { PremiumCard } from '../../ui/PremiumCard';
+import { Slider } from '../../ui/slider';
 import { AlertTriangle, CheckCircle, TrendingUp, Wallet, Building, Calculator, Landmark, Home, RefreshCw } from 'lucide-react';
-import { cn } from '../ui/utils';
+import { cn } from '../../ui/utils';
 
 // Simple SVG Curve for goal progress
 const ProgressCurve = ({ progress }: { progress: number }) => {

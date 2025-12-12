@@ -12,20 +12,25 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+
+    /* React */
     "jsx": "react-jsx",
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
 
-    /* Path aliases */
-    "baseUrl": ".",
+    /* Correct alias config */
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["*"]
     }
   },
-  "include": ["src", "components", "lib", "utils", "supabase", "App.tsx"],
+
+  /* Only compile source code */
+  "include": ["src"],
+
   "references": [{ "path": "./tsconfig.node.json" }]
 }

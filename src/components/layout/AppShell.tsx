@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { useFinance } from '../store/FinanceContext';
+import { useFinance } from '../../store/FinanceContext';
 import { LayoutDashboard, User, Target, Settings, LogOut } from 'lucide-react';
-import { Button } from '../ui/button';
-import { cn } from '../ui/utils';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { Button } from '../../ui/button';
+import { cn } from '../../ui/utils';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface AppShellProps {
   children: React.ReactNode;

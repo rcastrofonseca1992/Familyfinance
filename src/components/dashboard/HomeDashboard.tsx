@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useFinance } from '../store/FinanceContext';
-import { cn } from '../ui/utils';
-import { PremiumCard } from '../ui/PremiumCard';
+import { useFinance } from '../../store/FinanceContext';
+import { cn } from '../../ui/utils';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { formatCurrency, HOUSE_TARGET, CASH_RATIO_FOR_HOUSE } from '../../lib/finance';
 import { AreaChart, Area, ResponsiveContainer } from 'recharts';
 import { ArrowUpRight, ArrowDownRight, ArrowRight, Wallet, PiggyBank, CreditCard, AlertCircle, PlayCircle, Calendar, TrendingUp, User, Users, Flame, Sunrise, ChevronRight, Info } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '../ui/dialog';
-import { Label } from '../ui/label';
-import { ProgressCurve } from '../ui/ProgressCurve';
-import { Switch } from '../ui/switch';
-import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '../../ui/dialog';
+import { Label } from '../../ui/label';
+import { ProgressCurve } from '../../ui/ProgressCurve';
+import { Switch } from '../../ui/switch';
+import { Tabs, TabsList, TabsTrigger } from '../../ui/tabs';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { FunFactCard } from './FunFactCard';
 
 interface HomeDashboardProps {

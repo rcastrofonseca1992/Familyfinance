@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
-import { useFinance } from '../store/FinanceContext';
-import { PremiumCard } from '../ui/PremiumCard';
+import { useFinance } from '../../store/FinanceContext';
+import { PremiumCard } from '../../ui/PremiumCard';
 import { formatCurrency } from '../../lib/finance';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ArrowLeft, TrendingUp, Wallet, Settings2 } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Slider } from '../ui/slider';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
-import { useLanguage } from '../../src/contexts/LanguageContext';
+import { Button } from '../../ui/button';
+import { Slider } from '../../ui/slider';
+import { Label } from '../../ui/label';
+import { Input } from '../../ui/input';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface InvestmentForecastViewProps {
     onBack: () => void;
